@@ -1,0 +1,56 @@
+From 7b8c6e6f766894f9b4500a3ca25dcaa8b51ae0a8 Mon Sep 17 00:00:00 2001
+From: Tomas Zeman <tzeman@volny.cz>
+Date: Sun, 4 Nov 2007 00:24:21 +0100
+Subject: [PATCH] execline-1.07-1-i686:
+ * added
+
+---
+ source/dietlibc/execline/FrugalBuild |   36 ++++++++++++++++++++++++++++++++++
+ 1 files changed, 36 insertions(+), 0 deletions(-)
+ create mode 100644 source/dietlibc/execline/FrugalBuild
+
+diff --git a/source/dietlibc/execline/FrugalBuild b/source/dietlibc/execline/FrugalBuild
+new file mode 100644
+index 0000000..ea37b63
+--- /dev/null
++++ b/source/dietlibc/execline/FrugalBuild
+@@ -0,0 +1,36 @@
++# Maintainer: Tomas Zeman <tzeman@volny.cz>
++
++pkgname=execline
++pkgver=1.07
++pkgrel=1
++pkgdesc="scripting language"
++url="http://www.skarnet.org/software/execline/"
++makedepends=(dietlibc 'skalibs>=0.46')
++archs=(i686)
++up2date='lynx -dump -nolist $url/install.html|grep $pkgname|grep tar.gz|head -1|sed -e "s/.*$pkgname-\(.*\)\.tar.gz.*$/\1/"'
++source=($url/$pkgname-$pkgver.tar.gz)
++sha1sums=('339761a2a018ec2e3821cb863cf1e7d7919038ac')
++
++build() {
++	Fmkdir package/admin
++	mv $Fsrcdir/admin/$pkgname-$pkgver $Fdestdir/package/admin || Fdie
++	cd $Fdestdir/package/admin || Fdie
++	ln -sf $pkgname-$pkgver $pkgname || Fdie
++	cd $Fdestdir/package/admin/$pkgname-$pkgver || Fdie
++	
++	echo "diet gcc -nostdinc $CFLAGS" > conf-compile/conf-cc
++	echo "diet gcc -s -static" > conf-compile/conf-ld
++	echo "" > conf-compile/conf-stripbins
++	echo "" > conf-compile/conf-striplibs
++	
++	package/compile || Fdie
++
++	Fmkdir command
++	for i in `cat package/command.exported`; do
++		ln -sf /package/admin/$pkgname/command/$i $Fdestdir/command/$i
++	done
++	
++	package/run || Fdie
++	chown -R root.root $Fdestdir/package/ || Fdie
++	rm -rf compile
++}
+-- 
+1.5.3.4
+

@@ -1,0 +1,22 @@
+From 9d4dac5327cd6cb2553c2379b36e141c93fd9cfd Mon Sep 17 00:00:00 2001
+From: Tomas Zeman <tzeman@volny.cz>
+Date: Tue, 25 Sep 2007 22:50:58 +0200
+Subject: [PATCH] .gitignore: ignore vim swap+backup files
+
+---
+ .gitignore |    2 ++
+ 1 files changed, 2 insertions(+), 0 deletions(-)
+
+diff --git a/.gitignore b/.gitignore
+index 8fec23a..ecc256f 100644
+--- a/.gitignore
++++ b/.gitignore
+@@ -23,3 +23,5 @@ pkg
+ src
+ frugalware-i686
+ frugalware-x86_64
++*~
++.*.swp
+-- 
+1.5.3.4
+

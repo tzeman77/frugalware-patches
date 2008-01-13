@@ -1,0 +1,52 @@
+From 3abefdd51bc395b46a6ae273f8043ea50cab5dc5 Mon Sep 17 00:00:00 2001
+From: Tomas Zeman <tzeman@volny.cz>
+Date: Tue, 30 Oct 2007 22:42:20 +0100
+Subject: [PATCH] diet-ucspi-ipc-0.67-1-i686
+ * added
+
+---
+ source/dietlibc/diet-ucspi-ipc/FrugalBuild |   32 ++++++++++++++++++++++++++++
+ 1 files changed, 32 insertions(+), 0 deletions(-)
+ create mode 100644 source/dietlibc/diet-ucspi-ipc/FrugalBuild
+
+diff --git a/source/dietlibc/diet-ucspi-ipc/FrugalBuild b/source/dietlibc/diet-ucspi-ipc/FrugalBuild
+new file mode 100644
+index 0000000..5271af3
+--- /dev/null
++++ b/source/dietlibc/diet-ucspi-ipc/FrugalBuild
+@@ -0,0 +1,32 @@
++# Maintainer: Tomas Zeman <tzeman@volny.cz>
++
++branch=diet
++pkgorig=ucspi-ipc
++pkgname=$branch-$pkgorig
++pkgver=0.67
++pkgrel=1
++pkgdesc="command-line tools for building local-domain client-server applications"
++makedepends=(dietlibc)
++url="http://www.superscript.com/ucspi-ipc/intro.html"
++source=(http://www.superscript.com/$pkgorig/$pkgorig-$pkgver.tar.gz)
++archs=(i686)
++up2date='lynx -dump http://www.superscript.com/ucspi-ipc/install.html|grep $pkgorig|grep tar.gz|head -1|sed -e "s/.*$pkgorig-\(.*\)\.tar.gz.*$/\1/"'
++sha1sums=('5f53c5fa487f4baa46eb071f40117454ee1eeef8')
++
++build() {
++	sPATH=host/superscript.com/net
++	Fcd $sPATH/$pkgorig-$pkgver
++	echo "diet gcc $CFLAGS" > src/conf-cc
++	echo "diet gcc -s -static" > src/conf-ld
++	package/compile base || Fdie
++	Fmkdir package/$sPATH/$pkgorig-$pkgver
++	cd $Fdestdir/package/$sPATH
++	rm -f $pkgorig
++	ln -s $pkgorig-$pkgver $pkgorig
++	mv $Fsrcdir/$sPATH/$pkgorig-$pkgver/command $Fdestdir/package/$sPATH/$pkgorig
++	Fmkdir command
++	for cmd in `cat $Fsrcdir/$sPATH/$pkgorig-$pkgver/package/commands-base`; do
++		ln -s /package/host/superscript.com/net/$pkgorig/command/$cmd $Fdestdir/command
++	done;
++}
++# vim: ft=sh
+-- 
+1.5.3.4
+

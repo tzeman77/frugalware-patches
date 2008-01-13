@@ -1,0 +1,55 @@
+From 2797c9f0aa1355d5c1404b050576895599d5e2a1 Mon Sep 17 00:00:00 2001
+From: Tomas Zeman <tzeman@volny.cz>
+Date: Sat, 3 Nov 2007 22:46:57 +0100
+Subject: [PATCH] diet-ucspi-ssl-0.70-1-i686:
+ * added
+
+---
+ source/dietlibc/diet-ucspi-ssl/FrugalBuild |   35 ++++++++++++++++++++++++++++
+ 1 files changed, 35 insertions(+), 0 deletions(-)
+ create mode 100644 source/dietlibc/diet-ucspi-ssl/FrugalBuild
+
+diff --git a/source/dietlibc/diet-ucspi-ssl/FrugalBuild b/source/dietlibc/diet-ucspi-ssl/FrugalBuild
+new file mode 100644
+index 0000000..8181e54
+--- /dev/null
++++ b/source/dietlibc/diet-ucspi-ssl/FrugalBuild
+@@ -0,0 +1,35 @@
++# Maintainer: Tomas Zeman <tzeman@volny.cz>
++
++branch=diet
++pkgorig=ucspi-ssl
++pkgname=$branch-$pkgorig
++pkgver=0.70
++pkgrel=1
++pkgdesc="command-line tools for building SSL client-server applications"
++makedepends=(dietlibc diet-openssl)
++url="http://www.superscript.com/$pkgorig/intro.html"
++archs=(i686)
++up2date='lynx -dump http://www.superscript.com/$pkgorig/install.html|grep $pkgorig|grep tar.gz|head -1|sed -e "s/.*$pkgorig-\(.*\)\.tar.gz.*$/\1/"'
++source=(http://www.superscript.com/$pkgorig/$pkgorig-$pkgver.tar.gz)
++sha1sums=('56466bc4a7272ebd937f4ae20dbdcce30235be27')
++provides=($pkgorig)
++
++build() {
++	export PKG=$startdir/pkg
++	export SRC=$startdir/src
++	sPATH=host/superscript.com/net
++
++	cd $SRC/$sPATH/$pkgorig-$pkgver
++	echo "diet gcc $CFLAGS" > src/conf-cc
++	echo "diet gcc -s -static" > src/conf-ld
++	echo "" > src/conf-ssl
++	echo "/usr/bin" > src/conf-tcpbin
++	package/compile base || Fdie
++	#package/rts base || return 1
++
++	mkdir -p $PKG/usr/bin
++	for cmd in `cat src/it-base\=d`; do
++		install -m755 -oroot -groot compile/$cmd $PKG/usr/bin
++	done
++}
++# vim: ft=sh
+-- 
+1.5.3.4
+

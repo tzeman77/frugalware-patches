@@ -1,0 +1,88 @@
+From dcb805c78db7a7bb9362fa38dc02ee44c3101b36 Mon Sep 17 00:00:00 2001
+From: Tomas Zeman <tzeman@volny.cz>
+Date: Fri, 26 Oct 2007 23:30:37 +0200
+Subject: [PATCH] diet-djbdns-1.05-1-i686.fpm
+ * added
+
+---
+ source/dietlibc/diet-djbdns/FrugalBuild    |   35 ++++++++++++++++++++++++++++
+ source/dietlibc/diet-djbdns/djbdns.install |   25 ++++++++++++++++++++
+ 2 files changed, 60 insertions(+), 0 deletions(-)
+ create mode 100644 source/dietlibc/diet-djbdns/FrugalBuild
+ create mode 100644 source/dietlibc/diet-djbdns/djbdns.install
+
+diff --git a/source/dietlibc/diet-djbdns/FrugalBuild b/source/dietlibc/diet-djbdns/FrugalBuild
+new file mode 100644
+index 0000000..eca28f5
+--- /dev/null
++++ b/source/dietlibc/diet-djbdns/FrugalBuild
+@@ -0,0 +1,35 @@
++# Maintainer: Tomas Zeman <tzeman@volny.cz>
++
++branch=diet
++pkgorig=djbdns
++pkgname=$branch-$pkgorig
++pkgver=1.05
++pkgrel=1
++pkgdesc="High-performant & secure DNS services."
++url="http://cr.yp.to/djbdns.html"
++archs=(i686)
++up2date='lynx -dump -nolist http://cr.yp.to/djbdns/install.html|grep $pkgorig|grep tar.gz|head -1|sed -e "s/.*$pkgorig-\(.*\)\.tar.gz.*$/\1/"'
++depends=('ucspi-tcp')
++makedepends=(dietlibc)
++install="$pkgorig.install"
++backup=(etc/dnsroots.global)
++source=(http://cr.yp.to/$pkgorig/$pkgorig-$pkgver.tar.gz)
++sha1sums=('2efdb3a039d0c548f40936aa9cb30829e0ce8c3d')
++provides=(djbdns)
++
++build() {
++	Fcd $pkgorig-$pkgver
++	echo "diet gcc ${CFLAGS}" > conf-cc
++	echo "diet gcc -s -static" > conf-ld
++	echo "/usr" > conf-home
++	make || Fdie
++
++	install -D -m 644 dnsroots.global $Fdestdir/pkg/etc/dnsroots.global
++	for bin in \
++		*-conf dnscache tinydns walldns rbldns pickdns axfrdns \
++		*-get *-data *-edit dnsip dnsipq dnsname dnstxt dnsmx \
++		dnsfilter random-ip dnsqr dnsq dnstrace dnstracesort; do
++		install -D -m 755 $bin $Fdestdir/usr/bin/$bin
++	done
++}
++# vim: ft=sh
+diff --git a/source/dietlibc/diet-djbdns/djbdns.install b/source/dietlibc/diet-djbdns/djbdns.install
+new file mode 100644
+index 0000000..af468e4
+--- /dev/null
++++ b/source/dietlibc/diet-djbdns/djbdns.install
+@@ -0,0 +1,25 @@
++post_install() {
++  id dnslog &>/dev/null || \
++    useradd -u 60 -g nobody -d /var/empty -c "djbdns log user" -s /bin/false dnslog
++  id dnscache &>/dev/null || \
++    useradd -u 61 -g nobody -d /var/empty -c "dnscache daemon" -s /bin/false dnscache
++  id tinydns &>/dev/null || \
++    useradd -u 62 -g nobody -d /var/empty -c "tinydns daemon" -s /bin/false tinydns
++  id axfrdns &>/dev/null || \
++    useradd -u 63 -g nobody -d /var/empty -c "axfrdns daemon" -s /bin/false axfrdns
++}
++
++post_upgrade() {
++  post_install $1
++}
++
++pre_remove() {
++  for user in dnslog dnscache tinydns axfrdns; do
++    userdel $user &> /dev/null
++  done
++}
++
++op=$1
++shift
++
++$op $*
+-- 
+1.5.3.4
+

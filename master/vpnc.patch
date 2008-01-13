@@ -1,0 +1,44 @@
+From 122ec78ff400fa04aba662b17bf5ff73366beaec Mon Sep 17 00:00:00 2001
+From: Tomas Zeman <tzeman@volny.cz>
+Date: Tue, 25 Sep 2007 22:49:46 +0200
+Subject: [PATCH] vpnc-0.5.1-1-i686
+  * added
+
+---
+ source/network-extra/vpnc/FrugalBuild |   24 ++++++++++++++++++++++++
+ 1 files changed, 24 insertions(+), 0 deletions(-)
+ create mode 100644 source/network-extra/vpnc/FrugalBuild
+
+diff --git a/source/network-extra/vpnc/FrugalBuild b/source/network-extra/vpnc/FrugalBuild
+new file mode 100644
+index 0000000..833169a
+--- /dev/null
++++ b/source/network-extra/vpnc/FrugalBuild
+@@ -0,0 +1,24 @@
++# Compiling Time: 0 SBU
++# Contributor: Tomas Zeman <tzeman@volny.cz>
++# Maintainer: Tomas Zeman <tzeman@volny.cz>
++
++pkgname=vpnc
++pkgver=0.5.1
++pkgrel=1
++pkgdesc="vpnc - client for cisco vpn concentrator"
++url="http://www.unix-ag.uni-kl.de/~massar/vpnc"
++groups=('network-extra')
++archs=('i686')
++depends=('libgcrypt')
++backup=('etc/vpnc/default.conf')
++source=($url/$pkgname-$pkgver.tar.gz)
++up2date="lynx -dump $url|grep 'vpnc-.*tar.gz'|head -1|sed 's/.*-\(.*\).t.*/\1/'"
++sha1sums=('efc71dba03aa40945af35e4b074d99f922ff7ffd')
++
++build() {
++	Fmake PREFIX=/usr
++	Fmakeinstall PREFIX=/usr
++}
++
++
++# optimization OK
+-- 
+1.5.3.4
+

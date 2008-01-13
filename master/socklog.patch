@@ -1,0 +1,52 @@
+From 6467bcea4931f562877726bf42a1dbf948cc1660 Mon Sep 17 00:00:00 2001
+From: Tomas Zeman <tzeman@volny.cz>
+Date: Tue, 6 Nov 2007 10:47:06 +0100
+Subject: [PATCH] socklog-2.1.0-1-i686
+ * added
+
+---
+ source/dietlibc/socklog/FrugalBuild |   32 ++++++++++++++++++++++++++++++++
+ 1 files changed, 32 insertions(+), 0 deletions(-)
+ create mode 100644 source/dietlibc/socklog/FrugalBuild
+
+diff --git a/source/dietlibc/socklog/FrugalBuild b/source/dietlibc/socklog/FrugalBuild
+new file mode 100644
+index 0000000..1f9a58b
+--- /dev/null
++++ b/source/dietlibc/socklog/FrugalBuild
+@@ -0,0 +1,32 @@
++# Maintainer: Tomas Zeman <tzeman@volny.cz>
++
++pkgname=socklog
++pkgver=2.1.0
++pkgrel=1
++pkgdesc="System and kernel logging services"
++url="http://smarden.org/socklog/"
++archs=(i686)
++up2date='lynx -dump -nolist $url/install.html|grep $pkgname|grep tar.gz|head -1|sed -e "s/.*$pkgname-\(.*\)\.tar.gz.*$/\1/"'
++makedepends=(dietlibc)
++source=($url/$pkgname-$pkgver.tar.gz)
++sha1sums=('27a117eae00105f491e6ef301206f7b92d7438ce')
++
++build() {
++	Fmkdir /package
++	mv admin $Fdestdir/package || Fdie
++	cd $Fdestdir/package/admin/$pkgname-$pkgver || Fdie
++	
++	echo "diet gcc -nostdinc $CFLAGS" > src/conf-cc
++	echo "diet gcc -s -static" > src/conf-ld
++	
++	package/compile || Fdie
++	package/check || Fdie
++	chown -R root.root $Fdestdir/package
++	Fmkdir /command
++	for i in command/*; do
++		ln -sf /package/admin/$pkgname/$i $Fdestdir/$i || Fdie
++	done
++	rm -rf compile || Fdie
++	cd $Fdestdir/package/admin || Fdie
++	ln -sf $pkgname-$pkgver $pkgname || Fdie
++}
+-- 
+1.5.3.4
+

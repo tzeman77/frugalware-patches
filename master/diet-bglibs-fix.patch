@@ -1,0 +1,25 @@
+From e77b7a8c68f264af3953fdac5afa9fe719d1ae2b Mon Sep 17 00:00:00 2001
+From: Tomas Zeman <tzeman@volny.cz>
+Date: Fri, 26 Oct 2007 22:24:33 +0200
+Subject: [PATCH] diet-bglibs-1.102-1-i686: die on failed patch
+
+---
+ source/dietlibc/diet-bglibs/FrugalBuild |    2 +-
+ 1 files changed, 1 insertions(+), 1 deletions(-)
+
+diff --git a/source/dietlibc/diet-bglibs/FrugalBuild b/source/dietlibc/diet-bglibs/FrugalBuild
+index 95d7e43..2930ed6 100644
+--- a/source/dietlibc/diet-bglibs/FrugalBuild
++++ b/source/dietlibc/diet-bglibs/FrugalBuild
+@@ -18,7 +18,7 @@ sha1sums=('45d0df13d35d5b162378314f354dde76aa704977' \
+ build() {
+ 	DDIR=/usr/lib/diet
+ 	Fcd $pkgorig-$pkgver
+-	patch -p0 < $Fsrcdir/libtool-tag.patch
++	patch -p0 < $Fsrcdir/libtool-tag.patch || Fdie
+ 	echo "diet gcc $CFLAGS" > conf-cc
+ 	echo "diet gcc -s -static" > conf-ld
+ 	echo "$DDIR/bglibs/include" > conf-include
+-- 
+1.5.3.4
+

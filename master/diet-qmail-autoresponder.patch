@@ -1,0 +1,55 @@
+From 4edfa8684fb804b16b489a7f9b584ac5710b71b2 Mon Sep 17 00:00:00 2001
+From: Tomas Zeman <tzeman@volny.cz>
+Date: Sat, 3 Nov 2007 23:19:20 +0100
+Subject: [PATCH] diet-qmail-autoresponder-0.96.2-1-i686:
+ * added
+
+---
+ .../dietlibc/diet-qmail-autoresponder/FrugalBuild  |   35 ++++++++++++++++++++
+ 1 files changed, 35 insertions(+), 0 deletions(-)
+ create mode 100644 source/dietlibc/diet-qmail-autoresponder/FrugalBuild
+
+diff --git a/source/dietlibc/diet-qmail-autoresponder/FrugalBuild b/source/dietlibc/diet-qmail-autoresponder/FrugalBuild
+new file mode 100644
+index 0000000..e5967fb
+--- /dev/null
++++ b/source/dietlibc/diet-qmail-autoresponder/FrugalBuild
+@@ -0,0 +1,35 @@
++# Maintainer: Tomas Zeman <tzeman@volny.cz>
++
++branch=diet
++pkgorig=qmail-autoresponder
++pkgname=$branch-$pkgorig
++pkgver=0.96.2
++pkgrel=1
++pkgdesc="simple program to automatically respond to emails"
++makedepends=(dietlibc diet-bglibs)
++url="http://untroubled.org/qmail-autoresponder/"
++archs=(i686)
++up2date='lynx -dump -nolist $url|grep $pkgorig|grep .tar.gz|head -1|sed -e "s/.*$pkgorig-\(.*\)\.tar.gz.*$/\1/"'
++source=($url/$pkgorig-$pkgver.tar.gz)
++sha1sums=('15f2983a4209c046c9db16282d94cc3aedc9e860')
++provides=($pkgorig)
++
++build() {
++	DDIR=/usr/lib/diet
++	Fcd $pkgorig-$pkgver
++	echo "$Fdestdir/usr/bin" > conf-bin
++	echo "$Fdestdir/usr/man" > conf-man
++	echo "diet gcc $CFLAGS" > conf-cc
++	echo "diet gcc -s -static" > conf-ld
++	echo "$DDIR/include/bglibs" > conf-bgincs
++	echo "$DDIR/lib" > conf-bglibs
++
++	# don't build qmail-autoresponder-mysql
++	make qmail-autoresponder || Fdie
++
++	Fmkdir usr/bin
++	install -m755 qmail-autoresponder $Fdestdir/usr/bin || Fdie
++	Fmkdir usr/man/man1
++	install -m644 qmail-autoresponder.1 $Fdestdir/usr/man/man1 || Fdie
++}
++# vim: ft=sh
+-- 
+1.5.3.4
+

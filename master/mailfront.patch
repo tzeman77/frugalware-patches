@@ -1,0 +1,47 @@
+From 6ed9cc4ad38dc55a6a4b19cfd029c961136f8234 Mon Sep 17 00:00:00 2001
+From: Tomas Zeman <tzeman@volny.cz>
+Date: Sun, 28 Oct 2007 23:31:21 +0100
+Subject: [PATCH] mailfront-1.11-1
+ * added
+
+---
+ source/custom/mailfront/FrugalBuild |   27 +++++++++++++++++++++++++++
+ 1 files changed, 27 insertions(+), 0 deletions(-)
+ create mode 100644 source/custom/mailfront/FrugalBuild
+
+diff --git a/source/custom/mailfront/FrugalBuild b/source/custom/mailfront/FrugalBuild
+new file mode 100644
+index 0000000..c57644a
+--- /dev/null
++++ b/source/custom/mailfront/FrugalBuild
+@@ -0,0 +1,27 @@
++# Maintainer: Tomas Zeman <tzeman@volny.cz>
++
++pkgname=mailfront
++pkgver=1.11
++pkgrel=1
++pkgdesc="Mail server network protocol front-ends"
++depends=('bglibs>=1.101' 'cvm>=0.81')
++url="http://untroubled.org/$pkgname/"
++archs=(i686)
++up2date='lynx -dump -nolist $url|grep $pkgname|grep .tar.gz|head -1|sed -e "s/.*$pkgname-\(.*\)\.tar.gz.*$/\1/"'
++source=($url/$pkgname-$pkgver.tar.gz)
++sha1sums=('2f102870f754291e431cfe343488cd0465352131')
++
++build() {
++	Fcd $pkgname-$pkgver
++	echo "/usr/include/bglibs" > conf-bgincs
++	echo "/usr/lib" > conf-bglibs
++	echo "/usr/bin" > conf-bin
++	echo "/usr/include" > conf-include
++	echo "/usr/lib/$pkgname" > conf-modules
++	echo "gcc -s -L/usr/lib" > conf-ld
++	echo "gcc -W -Wall -Wshadow -O -g  -fPIC -shared -L/usr/lib" > conf-ccso
++
++	make || Fdie
++	make install_prefix=$Fdestdir install
++}
++# vim: ft=sh
+-- 
+1.5.3.4
+

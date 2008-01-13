@@ -1,0 +1,49 @@
+From 9b0678c0052ccc968ddfbafc50e7cf4544e266ba Mon Sep 17 00:00:00 2001
+From: Tomas Zeman <tzeman@volny.cz>
+Date: Tue, 6 Nov 2007 13:47:20 +0100
+Subject: [PATCH] skaembutils-0.18-1-i686.fpm
+ * added
+
+---
+ source/dietlibc/skaembutils/FrugalBuild |   29 +++++++++++++++++++++++++++++
+ 1 files changed, 29 insertions(+), 0 deletions(-)
+ create mode 100644 source/dietlibc/skaembutils/FrugalBuild
+
+diff --git a/source/dietlibc/skaembutils/FrugalBuild b/source/dietlibc/skaembutils/FrugalBuild
+new file mode 100644
+index 0000000..3846171
+--- /dev/null
++++ b/source/dietlibc/skaembutils/FrugalBuild
+@@ -0,0 +1,29 @@
++# Maintainer: Tomas Zeman <tzeman@volny.cz>
++
++pkgname=skaembutils
++pkgver=0.18
++pkgrel=1
++pkgdesc="Tiny portable utilities"
++url="http://www.skarnet.org/software/skaembutils/"
++makedepends=(dietlibc 'skalibs>=0.45')
++archs=(i686)
++up2date='lynx -dump -nolist $url/install.html|grep $pkgname|grep tar.gz|head -1|sed -e "s/.*$pkgname-\(.*\)\.tar.gz.*$/\1/"'
++source=($url/$pkgname-$pkgver.tar.gz)
++sha1sums=('4dcb46630ac458e3135fe68ab0ca61e78d0798e6')
++
++build() {
++	Fmkdir /package
++	mv host $Fdestdir/package || Fdie
++	cd $Fdestdir/package/host/skarnet.org/$pkgname-$pkgver
++	
++	echo "diet gcc -nostdinc $CFLAGS" > conf-compile/conf-cc
++	echo "diet gcc -s -static" > conf-compile/conf-ld
++	
++	package/install || Fdie
++	chown -R root.root $Fdestdir/package
++	Fmkdir /command
++	for i in command/*; do
++		ln -sf /package/host/skarnet.org/$pkgname/$i $Fdestdir/$i || Fdie
++	done
++	rm -rf compile || Fdie
++}
+-- 
+1.5.3.4
+

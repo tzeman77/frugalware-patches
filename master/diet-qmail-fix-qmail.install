@@ -1,0 +1,101 @@
+From 8397f25eee7131dee872101241029bd26c8f55ca Mon Sep 17 00:00:00 2001
+From: Tomas Zeman <tzeman@volny.cz>
+Date: Tue, 6 Nov 2007 14:24:18 +0100
+Subject: [PATCH] diet-qmail-1.03-1-i686: add qmail.install to repo
+
+---
+ source/dietlibc/diet-qmail/qmail.install |   82 ++++++++++++++++++++++++++++++
+ 1 files changed, 82 insertions(+), 0 deletions(-)
+ create mode 100644 source/dietlibc/diet-qmail/qmail.install
+
+diff --git a/source/dietlibc/diet-qmail/qmail.install b/source/dietlibc/diet-qmail/qmail.install
+new file mode 100644
+index 0000000..1fa4a33
+--- /dev/null
++++ b/source/dietlibc/diet-qmail/qmail.install
+@@ -0,0 +1,82 @@
++post_install() {
++
++  # add required groups
++  if [ ! `grep qmail /etc/group` ]; then
++    groupadd -g 2107 qmail &>/dev/null
++  fi
++
++  if [ ! `grep nofiles /etc/group` ]; then
++    groupadd -g  2108 nofiles &>/dev/null
++  fi
++
++  # add required users
++  id alias &>/dev/null || \
++    useradd -u 7790 -g nofiles -d /var/qmail/alias -s /bin/false alias
++
++  id qmaild &>/dev/null || \
++    useradd -u 7791 -g nofiles -d /var/qmail -s /bin/false qmaild
++
++  id qmaill &>/dev/null || \
++    useradd -u 7792 -g nofiles -d /var/qmail -s /bin/false qmaill
++
++  id qmailp &>/dev/null || \
++    useradd -u 7793 -g nofiles -d /var/qmail -s /bin/false qmailp
++
++  id qmailq &>/dev/null || \
++    useradd -u 7794 -g qmail -d /var/qmail -s /bin/false qmailq
++
++  id qmailr &>/dev/null || \
++    useradd -u 7795 -g qmail -d /var/qmail -s /bin/false qmailr
++
++  id qmails &>/dev/null || \
++    useradd -u 7796 -g qmail -d /var/qmail -s /bin/false qmails
++  
++  # create FQDN file
++  if ! [ -f /var/qmail/control/me ]; then
++    /bin/hostname -f > /var/qmail/control/me
++    chmod 644 /var/qmail/control/me
++  fi
++
++  # create aliases
++  for i in postmaster mailer-daemon root; do
++    if ! [ -f ~alias/.qmail-${i} ]; then
++      touch ~alias/.qmail-${i}
++      chmod 644 ~alias/.qmail-${i}
++    fi
++  done
++
++  # create /var/qmail/queue
++  echo "==> Setting up message queue directory (/var/qmail/queue)"
++  /var/qmail/bin/queue-fix /var/qmail/queue &> /dev/null
++
++  cat << EOF
++
++Log out & back in (or source /etc/profile) before running qmail.
++To setup qmail run:
++  
++  $ config-fast FQDN
++replacing FQDN with your fully qualified domain.
++Then :
++$ ln -s /var/qmail/supervise/qmail-send /var/qmail/supervise/qmail-smtpd /service
++In order to create SSL certificates run make_cert.sh (use -h for more options).
++
++EOF
++}
++
++post_upgrade() {
++  post_install $1
++}
++
++pre_remove() {
++  for user in alias qmail{d,l,p,q,r,s}; do
++    userdel ${user} &> /dev/null
++  done
++  for group in nofiles qmail; do
++    groupdel ${group} &> /dev/null
++  done
++}
++
++op=$1
++shift
++
++$op $*
+-- 
+1.5.3.4
+

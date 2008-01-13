@@ -1,0 +1,50 @@
+From 661a66ae76f24e1f618458f1fda29ad442adafbd Mon Sep 17 00:00:00 2001
+From: Tomas Zeman <tzeman@volny.cz>
+Date: Fri, 21 Dec 2007 00:38:25 +0100
+Subject: [PATCH] vegadns-0.9.10-1-i686:
+ *added
+
+---
+ source/custom/vegadns/FrugalBuild |   30 ++++++++++++++++++++++++++++++
+ 1 files changed, 30 insertions(+), 0 deletions(-)
+ create mode 100644 source/custom/vegadns/FrugalBuild
+
+diff --git a/source/custom/vegadns/FrugalBuild b/source/custom/vegadns/FrugalBuild
+new file mode 100644
+index 0000000..5574128
+--- /dev/null
++++ b/source/custom/vegadns/FrugalBuild
+@@ -0,0 +1,30 @@
++# Maintainer: Tomas Zeman <tzeman@volny.cz>
++
++pkgname=vegadns
++pkgver=0.9.10
++pkgrel=1
++pkgdesc="tinydns administration tool"
++_F_sourceforge_dirname="vegadns"
++_F_sourceforge_ext=".tgz"
++Finclude sourceforge
++backup=(etc/vegadns/config.php)
++url="http://www.vegadns.org/"
++purl="http://sourceforge.net/project/showfiles.php?group_id=136918"
++depends=('php' 'libmysqlclient')
++archs=('i686')
++up2date="lynx -nolist -dump '$purl'|grep -m1 '$pkgname-stable'|sed 's/.*$pkgname-\([0-9.]*\) .*/\1/'"
++sha1sums=('18403649ca84743622defd79f37e5cbc6b21c822')
++
++build() {
++	www='/var/www'
++	Fmkdir $www/$pkgname /etc/$pkgname /usr/share/$pkgname
++	Fcd
++	mv .htaccess *.php images smarty src templates $Fdestdir$www/$pkgname || Fdie
++	mv update-data.sh $Fdestdir/usr/share/$pkgname/update-data || Fdie
++	Fmkdir /var/$pkgname/{templates_c,configs,cache,sessions}
++	chown -R nobody:nobody $Fdestdir/var/$pkgname || Fdie
++	chmod -R 770 $Fdestdir/var/$pkgname || Fdie
++	Fmv $www/$pkgname/src/config.php /etc/$pkgname/
++	Fsed '$private_dirs .*' "\$private_dirs = '/var/$pkgname';" $Fdestdir/etc/$pkgname/config.php
++	Fln /etc/$pkgname/config.php $www/$pkgname/src/config.php
++}
+-- 
+1.5.3.4
+

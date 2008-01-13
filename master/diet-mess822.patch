@@ -1,0 +1,53 @@
+From 46f681c045f1df4749234bc715b5a39d07dd9f3c Mon Sep 17 00:00:00 2001
+From: Tomas Zeman <tzeman@volny.cz>
+Date: Tue, 30 Oct 2007 22:31:23 +0100
+Subject: [PATCH] diet-mess822-0.58-1-i686
+ * added
+
+---
+ source/dietlibc/diet-mess822/FrugalBuild |   33 ++++++++++++++++++++++++++++++
+ 1 files changed, 33 insertions(+), 0 deletions(-)
+ create mode 100644 source/dietlibc/diet-mess822/FrugalBuild
+
+diff --git a/source/dietlibc/diet-mess822/FrugalBuild b/source/dietlibc/diet-mess822/FrugalBuild
+new file mode 100644
+index 0000000..abd9ee9
+--- /dev/null
++++ b/source/dietlibc/diet-mess822/FrugalBuild
+@@ -0,0 +1,33 @@
++# Maintainer: Tomas Zeman <tzeman@volny.cz>
++
++branch=diet
++pkgorig=mess822
++pkgname=$branch-$pkgorig
++pkgver=0.58
++pkgrel=1
++pkgdesc=""
++makedepends=(dietlibc)
++url="http://cr.yp.to/mess822.html"
++archs=(i686)
++up2date='lynx -dump -nolist $url|grep $pkgorig|grep tar.gz|head -1|sed -e "s/.*$pkgorig-\(.*\)\.tar.gz.*$/\1/"'
++source=(http://cr.yp.to/software/$pkgorig-$pkgver.tar.gz)
++sha1sums=('ef3380c793c852d40688c108d164234ecf8a5362')
++provides=(mess822)
++
++build() {
++	DDIR="/usr/lib/diet"
++	Fcd $pkgorig-$pkgver
++	echo "/usr" > conf-home
++	echo "diet gcc $CFLAGS" > conf-cc
++	echo "diet gcc -s -static" > conf-ld
++	make || Fdie
++	echo "$Fdestdir/usr" > conf-home
++	mkdir $Fdestdir/etc
++	sed -i -e "s{/etc{$Fdestdir/etc{" hier.c
++	make setup || Fdie
++	Frm usr/man/cat*
++	Fmkdir $DDIR/lib
++	Fmv usr/lib/mess822.a $DDIR/lib
++	Fmv usr/include $DDIR
++}
++# vim: ft=sh
+-- 
+1.5.3.4
+

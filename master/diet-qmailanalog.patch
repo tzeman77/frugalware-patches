@@ -1,0 +1,950 @@
+From bfad3b50c43499cfce28b403ba1a8d8e0bdee08c Mon Sep 17 00:00:00 2001
+From: Tomas Zeman <tzeman@volny.cz>
+Date: Tue, 6 Nov 2007 11:43:46 +0100
+Subject: [PATCH] diet-qmailanalog-0.70-1-i686
+ * added
+
+---
+ source/dietlibc/diet-qmailanalog/FrugalBuild       |   37 +
+ .../diet-qmailanalog/qmailanalog-multilog.patch    |  885 ++++++++++++++++++++
+ 2 files changed, 922 insertions(+), 0 deletions(-)
+ create mode 100644 source/dietlibc/diet-qmailanalog/FrugalBuild
+ create mode 100644 source/dietlibc/diet-qmailanalog/qmailanalog-multilog.patch
+
+diff --git a/source/dietlibc/diet-qmailanalog/FrugalBuild b/source/dietlibc/diet-qmailanalog/FrugalBuild
+new file mode 100644
+index 0000000..27908f9
+--- /dev/null
++++ b/source/dietlibc/diet-qmailanalog/FrugalBuild
+@@ -0,0 +1,37 @@
++# Maintainer: Tomas Zeman <tzeman@volny.cz>
++# Accepts tai64 format dates (lines starting with @....) + mlmatchup
++# 	see http://www.magma.com.ni/moin/TipsAnd/QmailAnalog
++
++branch=diet
++pkgorig=qmailanalog
++pkgname=$branch-$pkgorig
++pkgver=0.70
++pkgrel=1
++pkgdesc=""
++makedepends=(dietlibc)
++url="http://cr.yp.to/qmailanalog.html"
++archs=(i686)
++up2date='lynx -dump -nolist $url|grep $pkgorig|grep tar.gz|head -1|sed -e "s/.*$pkgorig-\(.*\)\.tar.gz.*$/\1/"'
++source=(http://cr.yp.to/software/$pkgorig-$pkgver.tar.gz \
++	qmailanalog-multilog.patch)
++sha1sums=('d9f47b6c5348759aeba3873b6b7653b823b2f92c' \
++          '05b9b7995e3bef33d8c9c2af239d9d23d95f813f')
++provides=(qmailanalog)
++
++build() {
++	qmail_dir=/var/qmail
++	Fcd $pkgorig-$pkgver
++	echo "$qmail_dir" > conf-home
++	echo "diet gcc $CFLAGS" > conf-cc
++	echo "diet gcc -s -static" > conf-ld
++	Fmkdir $qmail_dir
++	patch -p1 < $Fsrcdir/qmailanalog-multilog.patch || Fdie
++	sed -i -e "s{(auto_home,{(\"$Fdestdir$qmail_dir\",{" hier.c
++	make || Fdie
++	make setup || Fdie
++	Frm $qmail_dir/man/cat*
++	Fmkdir /usr/share/doc/$pkgname-$pkgver
++	Fmv $qmail_dir/doc/* /usr/share/doc/$pkgname-$pkgver
++	Frm $qmail_dir/doc
++}
++# vim: ft=sh
+diff --git a/source/dietlibc/diet-qmailanalog/qmailanalog-multilog.patch b/source/dietlibc/diet-qmailanalog/qmailanalog-multilog.patch
+new file mode 100644
+index 0000000..0b4505a
+--- /dev/null
++++ b/source/dietlibc/diet-qmailanalog/qmailanalog-multilog.patch
+@@ -0,0 +1,885 @@
++diff -x .svn -Naur qmailanalog-0.70/error.h qmailanalog/error.h
++--- qmailanalog-0.70/error.h	1998-08-30 23:39:27.000000000 +0200
+++++ qmailanalog/error.h	2007-04-30 20:57:24.000000000 +0200
++@@ -1,7 +1,8 @@
++ #ifndef ERROR_H
++ #define ERROR_H
++ 
++-extern int errno;
+++/* extern int errno; */
+++#include <errno.h>
++ 
++ extern int error_intr;
++ extern int error_nomem;
++diff -x .svn -Naur qmailanalog-0.70/FILES qmailanalog/FILES
++--- qmailanalog-0.70/FILES	1998-08-30 23:39:26.000000000 +0200
+++++ qmailanalog/FILES	2007-04-30 20:57:24.000000000 +0200
++@@ -132,3 +132,6 @@
++ case.3
++ case.h
++ case_lowers.c
+++mlmatchup.8
+++mlmatchup.c
+++mlmatchup
++diff -x .svn -Naur qmailanalog-0.70/hier.c qmailanalog/hier.c
++--- qmailanalog-0.70/hier.c	1998-08-30 23:39:27.000000000 +0200
+++++ qmailanalog/hier.c	2007-06-13 11:09:42.000000000 +0200
++@@ -9,12 +9,16 @@
++   d(auto_home,"man",-1,-1,02755);
++   d(auto_home,"man/man1",-1,-1,02755);
++   d(auto_home,"man/cat1",-1,-1,02755);
+++  d(auto_home,"man/man8",-1,-1,02755);
+++  d(auto_home,"man/cat8",-1,-1,02755);
++ 
++   c(auto_home,"doc","MATCHUP",-1,-1,0644);
++   c(auto_home,"doc","ACCOUNTING",-1,-1,0644);
++ 
++   c(auto_home,"man/man1","matchup.1",-1,-1,0644);
++   c(auto_home,"man/cat1","matchup.0",-1,-1,0644);
+++  c(auto_home,"man/man8","mlmatchup.8",-1,-1,0644);
+++  c(auto_home,"man/cat8","mlmatchup.0",-1,-1,0644);
++   c(auto_home,"man/man1","xqp.1",-1,-1,0644);
++   c(auto_home,"man/cat1","xqp.0",-1,-1,0644);
++   c(auto_home,"man/man1","xsender.1",-1,-1,0644);
++@@ -25,6 +29,7 @@
++   c(auto_home,"man/cat1","columnt.0",-1,-1,0644);
++ 
++   c(auto_home,"bin","matchup",-1,-1,0755);
+++  c(auto_home,"bin","mlmatchup",-1,-1,0755);
++   c(auto_home,"bin","columnt",-1,-1,0755);
++   c(auto_home,"bin","zoverall",-1,-1,0755);
++   c(auto_home,"bin","zsendmail",-1,-1,0755);
++diff -x .svn -Naur qmailanalog-0.70/Makefile qmailanalog/Makefile
++--- qmailanalog-0.70/Makefile	1998-08-30 23:39:26.000000000 +0200
+++++ qmailanalog/Makefile	2007-05-03 00:15:12.000000000 +0200
++@@ -243,7 +243,7 @@
++ 	chmod 755 makelib
++ 
++ man: \
++-matchup.0 columnt.0 xqp.0 xsender.0 xrecipient.0 alloc.0 case.0 \
+++matchup.0 mlmatchup.0 columnt.0 xqp.0 xsender.0 xrecipient.0 alloc.0 case.0 \
++ error.0 error_str.0 getln2.0 getln.0 stralloc.0
++ 
++ matchup: \
++@@ -275,7 +275,7 @@
++ 	./compile open_trunc.c
++ 
++ prog: \
++-matchup columnt zoverall zsendmail xqp xsender xrecipient ddist \
+++matchup mlmatchup columnt zoverall zsendmail xqp xsender xrecipient ddist \
++ deferrals failures successes rhosts recipients rxdelay senders suids \
++ zddist zdeferrals zfailures zsuccesses zrhosts zrecipients zrxdelay \
++ zsenders zsuids
++@@ -566,3 +566,22 @@
++ 	| sed s}HOME}"`head -1 conf-home`"}g \
++ 	> zsuids
++ 	chmod 755 zsuids
+++
+++mlmatchup: \
+++load mlmatchup.o strerr.a getln.a substdio.a stralloc.a alloc.a error.a \
+++str.a fs.a case.a
+++	./load mlmatchup strerr.a getln.a substdio.a stralloc.a \
+++	alloc.a error.a str.a fs.a case.a 
+++
+++mlmatchup.0: \
+++mlmatchup.8
+++	nroff -man mlmatchup.8 > mlmatchup.0
+++
+++mlmatchup.o: \
+++compile mlmatchup.c stralloc.h gen_alloc.h gen_alloc.h gen_allocdefs.h \
+++strerr.h getln.h substdio.h subfd.h substdio.h readwrite.h exit.h \
+++str.h fmt.h scan.h case.h
+++	./compile mlmatchup.c
+++
+++clean:
+++	rm -f `cat TARGETS`
++diff -x .svn -Naur qmailanalog-0.70/man.do qmailanalog/man.do
++--- qmailanalog-0.70/man.do	1998-08-30 23:39:27.000000000 +0200
+++++ qmailanalog/man.do	2007-04-30 20:57:24.000000000 +0200
++@@ -1,4 +1,4 @@
++ dependon \
++-matchup.0 columnt.0 \
+++matchup.0 mlmatchup.0 columnt.0 \
++ xqp.0 xsender.0 xrecipient.0 \
++ alloc.0 case.0 error.0 error_str.0 getln2.0 getln.0 stralloc.0
++diff -x .svn -Naur qmailanalog-0.70/matchup.1 qmailanalog/matchup.1
++--- qmailanalog-0.70/matchup.1	1998-08-30 23:39:27.000000000 +0200
+++++ qmailanalog/matchup.1	2007-04-30 20:57:24.000000000 +0200
++@@ -7,7 +7,9 @@
++ .B matchup
++ reads a series of lines from
++ .BR qmail-send ,
++-with a numeric timestamp in front of each line.
+++with a numeric timestamp in the format seconds.nanoseconds or a TAI64N timestamps
+++in front of each line, allowing either splogger(8) or multilog(8) to produce the
+++logfiles.
++ .B matchup
++ matches the end of each delivery attempt with the start of the delivery attempt
++ and with the relevant message information;
++@@ -108,4 +110,6 @@
++ xsender(1),
++ accustamp(1),
++ qmail-log(5),
++-splogger(8)
+++splogger(8),
+++multilog(8),
+++mlmatchup(1)
++diff -x .svn -Naur qmailanalog-0.70/matchup.c qmailanalog/matchup.c
++--- qmailanalog-0.70/matchup.c	1998-08-30 23:39:27.000000000 +0200
+++++ qmailanalog/matchup.c	2007-04-30 20:57:24.000000000 +0200
++@@ -183,6 +183,47 @@
++   poolbytes = pool.len; /* redundant, but doesn't hurt */
++ }
++ 
+++/* turn TAI date into old fashioned date */
+++/* dates without @ are left alone */
+++
+++static char datebuf[FMT_ULONG+FMT_ULONG+2]; /* ssssssssss.ffffffffff\n */
+++
+++char *
+++datize(s)
+++char *s;
+++{
+++  int c;
+++  int len;
+++  unsigned long u;
+++  unsigned long seconds = 0;
+++  unsigned long nanoseconds = 0;
+++
+++  if(*s != '@') return s;
+++  s++;
+++
+++  while ((c = *s++)) {
+++    u = c - '0';
+++    if (u >= 10) {
+++      u = c - 'a';
+++      if (u >= 6) break;
+++      u += 10;
+++    }
+++    seconds <<= 4;
+++    seconds += nanoseconds >> 28;
+++    nanoseconds &= 0xfffffff;
+++    nanoseconds <<= 4;
+++    nanoseconds += u;
+++  }
+++  seconds -= 4611686018427387914ULL;
+++
+++  len = fmt_ulong(datebuf, seconds);
+++  datebuf[len++] = '.';
+++  len += fmt_uint0(datebuf+len, nanoseconds, 9);
+++  datebuf[len] = 0;
+++
+++  return datebuf;
+++}
+++
++ stralloc line = {0};
++ int match;
++ 
++@@ -209,7 +250,7 @@
++   dmsg.u[dpos] = m;
++ 
++   dstart.u[dpos] = pool.len;
++-  if (!stralloc_cats(&pool,line.s + field[0])) nomem();
+++  if (!stralloc_cats(&pool,datize(line.s + field[0]))) nomem();
++   if (!stralloc_0(&pool)) nomem();
++ 
++   dchan.u[dpos] = pool.len;
++@@ -267,7 +308,7 @@
++   if (mpos != -1) {
++     outs(pool.s + birth.u[mpos]);
++     outs(" "); outs(pool.s + dstart.u[dpos]);
++-    outs(" "); outs(line.s + field[0]);
+++    outs(" "); outs(datize(line.s + field[0]));
++     outs(" "); out(strnum,fmt_ulong(strnum,bytes.u[mpos]));
++     outs(" "); outs(pool.s + sender.u[mpos]);
++     outs(" "); outs(pool.s + dchan.u[dpos]);
++@@ -279,7 +320,7 @@
++   else {
++     outs(pool.s + dstart.u[dpos]);
++     outs(" "); outs(pool.s + dstart.u[dpos]);
++-    outs(" "); outs(line.s + field[0]);
+++    outs(" "); outs(datize(line.s + field[0]));
++     outs(" 0 ? "); outs(pool.s + dchan.u[dpos]);
++     outs("."); outs(pool.s + drecip.u[dpos]);
++     outs(" ? ? "); outs(reason);
++@@ -313,7 +354,7 @@
++   if (mpos == -1) return;
++ 
++   outs("m "); outs(pool.s + birth.u[mpos]);
++-  outs(" "); outs(line.s + field[0]);
+++  outs(" "); outs(datize(line.s + field[0]));
++   outs(" "); out(strnum,fmt_ulong(strnum,bytes.u[mpos]));
++   outs(" "); out(strnum,fmt_ulong(strnum,numk.u[mpos]));
++   outs(" "); out(strnum,fmt_ulong(strnum,numd.u[mpos]));
++@@ -344,7 +385,7 @@
++   numz.u[mpos] = 0;
++ 
++   birth.u[mpos] = pool.len;
++-  if (!stralloc_cats(&pool,line.s + field[0])) nomem();
+++  if (!stralloc_cats(&pool,datize(line.s + field[0]))) nomem();
++   if (!stralloc_0(&pool)) nomem();
++ 
++   sender.u[mpos] = pool.len;
++diff -x .svn -Naur qmailanalog-0.70/mlmatchup.8 qmailanalog/mlmatchup.8
++--- qmailanalog-0.70/mlmatchup.8	1970-01-01 01:00:00.000000000 +0100
+++++ qmailanalog/mlmatchup.8	2007-04-30 20:57:24.000000000 +0200
++@@ -0,0 +1,33 @@
+++.TH mlmatchup 8
+++.SH NAME
+++mlmatchup \- collect information on messages and deliveries through multilog
+++.SH SYNTAX
+++.B mlmatchup
+++.SH DESCRIPTION
+++.B mlmatchup
+++behaves exactly like
+++.BR matchup(1)
+++with the difference, that it first reads (pending delivery) lines
+++from file descriptor 4.  This makes
+++.B mlmatchup
+++suitable as a procesor action for multilog.
+++
+++If you use multilog to process
+++.B qmail-send
+++logfiles expand the run file of qmail-send's log services like this:
+++
+++.EX
+++   exec setuidgid qmaill multilog t ./main \\
+++.br
+++     !/usr/local/qmailanalog/bin/mlmatchup ./qmailanalog
+++.EE
+++
+++.SH "SEE ALSO"
+++multilog(8),
+++matchup(1),
+++xqp(1),
+++xrecipient(1),
+++xsender(1),
+++accustamp(1),
+++qmail-log(5),
+++splogger(8)
++diff -x .svn -Naur qmailanalog-0.70/mlmatchup.c qmailanalog/mlmatchup.c
++--- qmailanalog-0.70/mlmatchup.c	1970-01-01 01:00:00.000000000 +0100
+++++ qmailanalog/mlmatchup.c	2007-04-30 20:57:24.000000000 +0200
++@@ -0,0 +1,536 @@
+++#include "stralloc.h"
+++#include "gen_alloc.h"
+++#include "gen_allocdefs.h"
+++#include "strerr.h"
+++#include "getln.h"
+++#include "substdio.h"
+++#include "subfd.h"
+++#include "readwrite.h"
+++#include "exit.h"
+++#include "str.h"
+++#include "fmt.h"
+++#include "scan.h"
+++#include "case.h"
+++
+++#define FATAL "matchup: fatal: "
+++
+++void nomem() { strerr_die2x(111,FATAL,"out of memory"); }
+++void die_read() { strerr_die2sys(111,FATAL,"unable to read input: "); }
+++void die_write() { strerr_die2sys(111,FATAL,"unable to write output: "); }
+++void die_write5() { strerr_die2sys(111,FATAL,"unable to write fd 5: "); }
+++
+++void out(buf,len) char *buf; int len;
+++{ if (substdio_put(subfdout,buf,len) == -1) die_write(); }
+++void outs(buf) char *buf;
+++{ if (substdio_puts(subfdout,buf) == -1) die_write(); }
+++
+++char buf5[512];
+++substdio ss5 = SUBSTDIO_FDBUF(write,5,buf5,sizeof buf5);
+++
+++void out5(buf,len) char *buf; int len;
+++{ if (substdio_put(&ss5,buf,len) == -1) die_write5(); }
+++void outs5(buf) char *buf;
+++{ if (substdio_puts(&ss5,buf) == -1) die_write5(); }
+++
+++GEN_ALLOC_typedef(ulongalloc,unsigned long,u,len,a)
+++GEN_ALLOC_ready(ulongalloc,unsigned long,u,len,a,i,n,x,30,ulongalloc_ready)
+++GEN_ALLOC_readyplus(ulongalloc,unsigned long,u,len,a,i,n,x,30,ulongalloc_readyplus)
+++
+++char strnum[FMT_ULONG];
+++
+++stralloc pool = {0};
+++unsigned int poolbytes = 0;
+++
+++int nummsg = 0;
+++ulongalloc msg = {0};
+++ulongalloc bytes = {0};
+++ulongalloc qp = {0};
+++ulongalloc uid = {0};
+++ulongalloc numk = {0};
+++ulongalloc numd = {0};
+++ulongalloc numz = {0};
+++ulongalloc sender = {0};
+++ulongalloc birth = {0};
+++
+++int msg_find(m)
+++unsigned long m;
+++{
+++  int i;
+++  for (i = 0;i < nummsg;++i) if (msg.u[i] == m) return i;
+++  return -1;
+++}
+++
+++int msg_add(m)
+++unsigned long m;
+++{
+++  int i;
+++  for (i = 0;i < nummsg;++i) if (msg.u[i] == m) return i;
+++  i = nummsg++;
+++  if (!ulongalloc_ready(&msg,nummsg)) nomem();
+++  if (!ulongalloc_ready(&bytes,nummsg)) nomem();
+++  if (!ulongalloc_ready(&qp,nummsg)) nomem();
+++  if (!ulongalloc_ready(&uid,nummsg)) nomem();
+++  if (!ulongalloc_ready(&numk,nummsg)) nomem();
+++  if (!ulongalloc_ready(&numd,nummsg)) nomem();
+++  if (!ulongalloc_ready(&numz,nummsg)) nomem();
+++  if (!ulongalloc_ready(&sender,nummsg)) nomem();
+++  if (!ulongalloc_ready(&birth,nummsg)) nomem();
+++  msg.u[i] = m;
+++  return i;
+++}
+++
+++int msg_kill(i)
+++int i;
+++{
+++  poolbytes -= str_len(pool.s + sender.u[i]) + 1;
+++  poolbytes -= str_len(pool.s + birth.u[i]) + 1;
+++
+++  --nummsg;
+++  msg.u[i] = msg.u[nummsg];
+++  bytes.u[i] = bytes.u[nummsg];
+++  qp.u[i] = qp.u[nummsg];
+++  uid.u[i] = uid.u[nummsg];
+++  numk.u[i] = numk.u[nummsg];
+++  numd.u[i] = numd.u[nummsg];
+++  numz.u[i] = numz.u[nummsg];
+++  sender.u[i] = sender.u[nummsg];
+++  birth.u[i] = birth.u[nummsg];
+++}
+++
+++int numdel = 0;
+++ulongalloc del = {0};
+++ulongalloc dmsg = {0};
+++ulongalloc dchan = {0};
+++ulongalloc drecip = {0};
+++ulongalloc dstart = {0};
+++
+++int del_find(d)
+++unsigned long d;
+++{
+++  int i;
+++  for (i = 0;i < numdel;++i) if (del.u[i] == d) return i;
+++  return -1;
+++}
+++
+++int del_add(d)
+++unsigned long d;
+++{
+++  int i;
+++  for (i = 0;i < numdel;++i) if (del.u[i] == d) return i;
+++  i = numdel++;
+++  if (!ulongalloc_ready(&del,numdel)) nomem();
+++  if (!ulongalloc_ready(&dmsg,numdel)) nomem();
+++  if (!ulongalloc_ready(&dchan,numdel)) nomem();
+++  if (!ulongalloc_ready(&drecip,numdel)) nomem();
+++  if (!ulongalloc_ready(&dstart,numdel)) nomem();
+++  del.u[i] = d;
+++  return i;
+++}
+++
+++void del_kill(i)
+++int i;
+++{
+++  poolbytes -= str_len(pool.s + dchan.u[i]) + 1;
+++  poolbytes -= str_len(pool.s + drecip.u[i]) + 1;
+++  poolbytes -= str_len(pool.s + dstart.u[i]) + 1;
+++  --numdel;
+++  del.u[i] = del.u[numdel];
+++  dmsg.u[i] = dmsg.u[numdel];
+++  dchan.u[i] = dchan.u[numdel];
+++  drecip.u[i] = drecip.u[numdel];
+++  dstart.u[i] = dstart.u[numdel];
+++}
+++
+++stralloc pool2 = {0};
+++
+++void garbage()
+++{
+++  int i;
+++  char *x;
+++
+++  if (pool.len - poolbytes < poolbytes + 4096) return;
+++
+++  if (!stralloc_copys(&pool2,"")) nomem();
+++
+++  for (i = 0;i < nummsg;++i) {
+++    x = pool.s + birth.u[i];
+++    birth.u[i] = pool2.len;
+++    if (!stralloc_cats(&pool2,x)) nomem();
+++    if (!stralloc_0(&pool2)) nomem();
+++    x = pool.s + sender.u[i];
+++    sender.u[i] = pool2.len;
+++    if (!stralloc_cats(&pool2,x)) nomem();
+++    if (!stralloc_0(&pool2)) nomem();
+++  }
+++
+++  for (i = 0;i < numdel;++i) {
+++    x = pool.s + dstart.u[i];
+++    dstart.u[i] = pool2.len;
+++    if (!stralloc_cats(&pool2,x)) nomem();
+++    if (!stralloc_0(&pool2)) nomem();
+++    x = pool.s + dchan.u[i];
+++    dchan.u[i] = pool2.len;
+++    if (!stralloc_cats(&pool2,x)) nomem();
+++    if (!stralloc_0(&pool2)) nomem();
+++    x = pool.s + drecip.u[i];
+++    drecip.u[i] = pool2.len;
+++    if (!stralloc_cats(&pool2,x)) nomem();
+++    if (!stralloc_0(&pool2)) nomem();
+++  }
+++
+++  if (!stralloc_copy(&pool,&pool2)) nomem();
+++
+++  poolbytes = pool.len; /* redundant, but doesn't hurt */
+++}
+++
+++/* turn TAI date into old fashioned date */
+++/* dates without @ are left alone */
+++
+++static char datebuf[FMT_ULONG+FMT_ULONG+2]; /* ssssssssss.ffffffffff\n */
+++
+++char *
+++datize(s)
+++char *s;
+++{
+++  int c;
+++  int len;
+++  unsigned long u;
+++  unsigned long seconds = 0;
+++  unsigned long nanoseconds = 0;
+++
+++  if(*s != '@') return s;
+++  s++;
+++
+++  while ((c = *s++)) {
+++    u = c - '0';
+++    if (u >= 10) {
+++      u = c - 'a';
+++      if (u >= 6) break;
+++      u += 10;
+++    }
+++    seconds <<= 4;
+++    seconds += nanoseconds >> 28;
+++    nanoseconds &= 0xfffffff;
+++    nanoseconds <<= 4;
+++    nanoseconds += u;
+++  }
+++  seconds -= 4611686018427387914ULL;
+++
+++  len = fmt_ulong(datebuf, seconds);
+++  datebuf[len++] = '.';
+++  len += fmt_uint0(datebuf+len, nanoseconds, 9);
+++  datebuf[len] = 0;
+++
+++  return datebuf;
+++}
+++
+++stralloc line = {0};
+++int match;
+++
+++#define FIELDS 20
+++int field[FIELDS];
+++
+++void clear()
+++{
+++  while (numdel > 0) del_kill(0);
+++  garbage();
+++}
+++
+++void starting()
+++{
+++  unsigned long d;
+++  unsigned long m;
+++  int dpos;
+++
+++  scan_ulong(line.s + field[3],&d);
+++  scan_ulong(line.s + field[5],&m);
+++
+++  dpos = del_add(d);
+++
+++  dmsg.u[dpos] = m;
+++
+++  dstart.u[dpos] = pool.len;
+++  if (!stralloc_cats(&pool,datize(line.s + field[0]))) nomem();
+++  if (!stralloc_0(&pool)) nomem();
+++
+++  dchan.u[dpos] = pool.len;
+++  if (!stralloc_cats(&pool,line.s + field[7])) nomem();
+++  if (!stralloc_0(&pool)) nomem();
+++
+++  drecip.u[dpos] = pool.len;
+++  if (!stralloc_cats(&pool,line.s + field[8])) nomem();
+++  if (!stralloc_0(&pool)) nomem();
+++  case_lowers(pool.s + drecip.u[dpos]);
+++
+++  poolbytes += pool.len - dstart.u[dpos];
+++}
+++
+++void delivery()
+++{
+++  unsigned long d;
+++  unsigned long m;
+++  int dpos;
+++  int mpos;
+++  char *result = "?";
+++  char *reason = "";
+++
+++  scan_ulong(line.s + field[2],&d);
+++
+++  dpos = del_find(d);
+++  if (dpos == -1) return;
+++
+++  m = dmsg.u[dpos];
+++  mpos = msg_find(m);
+++
+++  if (str_start(line.s + field[3],"succ")) {
+++    if (mpos != -1) ++numk.u[mpos];
+++    result = "d k ";
+++    reason = line.s + field[4];
+++  }
+++  else if (str_start(line.s + field[3],"fail")) {
+++    if (mpos != -1) ++numd.u[mpos];
+++    result = "d d ";
+++    reason = line.s + field[4];
+++  }
+++  else if (str_start(line.s + field[3],"defer")) {
+++    if (mpos != -1) ++numz.u[mpos];
+++    result = "d z ";
+++    reason = line.s + field[4];
+++  }
+++  else if (str_start(line.s + field[3],"report")) {
+++    if (mpos != -1) ++numz.u[mpos];
+++    result = "d z ";
+++    reason = "report_mangled";
+++  }
+++
+++  outs(result);
+++
+++  if (mpos != -1) {
+++    outs(pool.s + birth.u[mpos]);
+++    outs(" "); outs(pool.s + dstart.u[dpos]);
+++    outs(" "); outs(datize(line.s + field[0]));
+++    outs(" "); out(strnum,fmt_ulong(strnum,bytes.u[mpos]));
+++    outs(" "); outs(pool.s + sender.u[mpos]);
+++    outs(" "); outs(pool.s + dchan.u[dpos]);
+++    outs("."); outs(pool.s + drecip.u[dpos]);
+++    outs(" "); out(strnum,fmt_ulong(strnum,qp.u[mpos]));
+++    outs(" "); out(strnum,fmt_ulong(strnum,uid.u[mpos]));
+++    outs(" "); outs(reason);
+++  }
+++  else {
+++    outs(pool.s + dstart.u[dpos]);
+++    outs(" "); outs(pool.s + dstart.u[dpos]);
+++    outs(" "); outs(datize(line.s + field[0]));
+++    outs(" 0 ? "); outs(pool.s + dchan.u[dpos]);
+++    outs("."); outs(pool.s + drecip.u[dpos]);
+++    outs(" ? ? "); outs(reason);
+++  }
+++
+++  outs("\n");
+++
+++  del_kill(dpos);
+++  garbage();
+++}
+++
+++void newmsg()
+++{
+++  unsigned long m;
+++  int mpos;
+++
+++  scan_ulong(line.s + field[3],&m);
+++  mpos = msg_find(m);
+++  if (mpos == -1) return;
+++  msg_kill(mpos);
+++  garbage();
+++}
+++
+++void endmsg()
+++{
+++  unsigned long m;
+++  int mpos;
+++
+++  scan_ulong(line.s + field[3],&m);
+++  mpos = msg_find(m);
+++  if (mpos == -1) return;
+++
+++  outs("m "); outs(pool.s + birth.u[mpos]);
+++  outs(" "); outs(datize(line.s + field[0]));
+++  outs(" "); out(strnum,fmt_ulong(strnum,bytes.u[mpos]));
+++  outs(" "); out(strnum,fmt_ulong(strnum,numk.u[mpos]));
+++  outs(" "); out(strnum,fmt_ulong(strnum,numd.u[mpos]));
+++  outs(" "); out(strnum,fmt_ulong(strnum,numz.u[mpos]));
+++  outs(" "); outs(pool.s + sender.u[mpos]);
+++  outs(" "); out(strnum,fmt_ulong(strnum,qp.u[mpos]));
+++  outs(" "); out(strnum,fmt_ulong(strnum,uid.u[mpos]));
+++  outs("\n");
+++
+++  msg_kill(mpos);
+++  garbage();
+++}
+++
+++void info()
+++{
+++  unsigned long m;
+++  int mpos;
+++
+++  scan_ulong(line.s + field[3],&m);
+++  mpos = msg_add(m);
+++
+++  scan_ulong(line.s + field[5],&bytes.u[mpos]);
+++  scan_ulong(line.s + field[9],&qp.u[mpos]);
+++  scan_ulong(line.s + field[11],&uid.u[mpos]);
+++
+++  numk.u[mpos] = 0;
+++  numd.u[mpos] = 0;
+++  numz.u[mpos] = 0;
+++
+++  birth.u[mpos] = pool.len;
+++  if (!stralloc_cats(&pool,datize(line.s + field[0]))) nomem();
+++  if (!stralloc_0(&pool)) nomem();
+++
+++  sender.u[mpos] = pool.len;
+++  if (!stralloc_cats(&pool,line.s + field[7])) nomem();
+++  if (!stralloc_0(&pool)) nomem();
+++  case_lowers(pool.s + sender.u[mpos]);
+++
+++  poolbytes += pool.len - birth.u[mpos];
+++}
+++
+++void extra()
+++{
+++  unsigned long m;
+++  int mpos;
+++
+++  scan_ulong(line.s + field[2],&m);
+++  mpos = msg_find(m);
+++  if (mpos == -1) return;
+++
+++  scan_ulong(line.s + field[3],&numk.u[mpos]);
+++  scan_ulong(line.s + field[4],&numz.u[mpos]);
+++  scan_ulong(line.s + field[5],&numd.u[mpos]);
+++}
+++
+++void pending()
+++{
+++  int i;
+++
+++  for (i = 0;i < nummsg;++i) {
+++    outs5(pool.s + birth.u[i]);
+++    outs5(" info msg ");
+++    out5(strnum,fmt_ulong(strnum,msg.u[i]));
+++    outs5(": bytes ");
+++    out5(strnum,fmt_ulong(strnum,bytes.u[i]));
+++    outs5(" from ");
+++    outs5(pool.s + sender.u[i]);
+++    outs5(" qp ");
+++    out5(strnum,fmt_ulong(strnum,qp.u[i]));
+++    outs5(" uid ");
+++    out5(strnum,fmt_ulong(strnum,uid.u[i]));
+++    outs5("\n");
+++    outs5(pool.s + birth.u[i]);
+++    outs5(" extra ");
+++    out5(strnum,fmt_ulong(strnum,msg.u[i]));
+++    outs5(" ");
+++    out5(strnum,fmt_ulong(strnum,numk.u[i]));
+++    outs5(" ");
+++    out5(strnum,fmt_ulong(strnum,numz.u[i]));
+++    outs5(" ");
+++    out5(strnum,fmt_ulong(strnum,numd.u[i]));
+++    outs5("\n");
+++  }
+++
+++  for (i = 0;i < numdel;++i) {
+++    outs5(pool.s + dstart.u[i]);
+++    outs5(" starting delivery ");
+++    out5(strnum,fmt_ulong(strnum,del.u[i]));
+++    outs5(": msg ");
+++    out5(strnum,fmt_ulong(strnum,dmsg.u[i]));
+++    outs5(" to ");
+++    outs5(pool.s + dchan.u[i]);
+++    outs5(" ");
+++    outs5(pool.s + drecip.u[i]);
+++    outs5("\n");
+++  }
+++
+++  out5(line.s,line.len);
+++  if (substdio_flush(&ss5) == -1) die_write5();
+++}
+++
+++stralloc outline = {0};
+++
+++void matchup(substdio *ssin)
+++{
+++    int i;
+++    int j;
+++    char ch;
+++
+++  for (;;) {
+++    if (getln(ssin,&line,&match,'\n') == -1) die_read();
+++    if (!match) break;
+++
+++    if (!stralloc_copy(&outline,&line)) nomem();
+++
+++    for (i = 0;i < line.len;++i) {
+++      ch = line.s[i];
+++      if ((ch == '\n') || (ch == ' ') || (ch == '\t')) line.s[i] = 0;
+++    }
+++    j = 0;
+++    for (i = 0;i < FIELDS;++i) {
+++      while (j < line.len) if (line.s[j]) break; else ++j;
+++      field[i] = j;
+++      while (j < line.len) if (!line.s[j]) break; else ++j;
+++    }
+++    if (!stralloc_0(&line)) nomem();
+++
+++    if (str_equal(line.s + field[1],"status:")) ;
+++    else if (str_equal(line.s + field[1],"starting")) starting();
+++    else if (str_equal(line.s + field[1],"delivery")) delivery();
+++    else if (str_equal(line.s + field[1],"new")) newmsg();
+++    else if (str_equal(line.s + field[1],"end")) endmsg();
+++    else if (str_equal(line.s + field[1],"info")) info();
+++    else if (str_equal(line.s + field[1],"extra")) extra();
+++    else if (str_equal(line.s + field[1],"running")) clear();
+++    else if (str_equal(line.s + field[1],"exiting")) clear();
+++    else if (str_equal(line.s + field[1],"number")) ;
+++    else if (str_equal(line.s + field[1],"local")) ;
+++    else if (str_equal(line.s + field[1],"remote")) ;
+++    else if (str_equal(line.s + field[1],"warning:")) out(outline.s,outline.len);
+++    else if (str_equal(line.s + field[1],"alert:")) out(outline.s,outline.len);
+++    else {
+++      outs("? ");
+++      out(outline.s,outline.len);
+++    }
+++  }
+++}
+++
+++char subfd4_input[SUBSTDIO_INSIZE];
+++static substdio i4t = SUBSTDIO_FDBUF(subfd_read,4,subfd4_input,sizeof subfd4_input);
+++substdio *subfd4in = &i4t;
+++
+++void main()
+++{
+++  int i;
+++  int j;
+++  char ch;
+++
+++  if (!stralloc_copys(&pool,"")) nomem();
+++
+++  if (!ulongalloc_ready(&msg,1)) nomem();
+++  if (!ulongalloc_ready(&bytes,1)) nomem();
+++  if (!ulongalloc_ready(&qp,1)) nomem();
+++  if (!ulongalloc_ready(&uid,1)) nomem();
+++  if (!ulongalloc_ready(&numk,1)) nomem();
+++  if (!ulongalloc_ready(&numd,1)) nomem();
+++  if (!ulongalloc_ready(&numz,1)) nomem();
+++  if (!ulongalloc_ready(&del,1)) nomem();
+++  if (!ulongalloc_ready(&dmsg,1)) nomem();
+++
+++  matchup(subfd4in);
+++  matchup(subfdin);
+++
+++  if (substdio_flush(subfdout) == -1) die_write();
+++
+++  pending();
+++
+++  _exit(0);
+++}
++diff -x .svn -Naur qmailanalog-0.70/prog.do qmailanalog/prog.do
++--- qmailanalog-0.70/prog.do	1998-08-30 23:39:27.000000000 +0200
+++++ qmailanalog/prog.do	2007-04-30 20:57:24.000000000 +0200
++@@ -1,5 +1,6 @@
++ dependon \
++ matchup \
+++mlmatchup \
++ columnt \
++ zoverall \
++ zsendmail \
++diff -x .svn -Naur qmailanalog-0.70/TARGETS qmailanalog/TARGETS
++--- qmailanalog-0.70/TARGETS	1998-08-30 23:39:26.000000000 +0200
+++++ qmailanalog/TARGETS	2007-05-03 00:14:59.000000000 +0200
++@@ -70,6 +70,9 @@
++ case_lowers.o
++ case.a
++ matchup
+++mlmatchup
+++mlmatchup.o
+++mlmatchup.0
++ columnt.o
++ slurpclose.o
++ columnt
++diff -x .svn -Naur qmailanalog-0.70/zdeferrals.sh qmailanalog/zdeferrals.sh
++--- qmailanalog-0.70/zdeferrals.sh	1998-08-30 23:39:27.000000000 +0200
+++++ qmailanalog/zdeferrals.sh	2007-04-30 20:57:24.000000000 +0200
++@@ -5,4 +5,4 @@
++ * xdelay is the total xdelay on those deliveries.
++ '
++ ( echo del xdelay reason
++-HOME/bin/deferrals | sort +2 ) | HOME/bin/columnt | tr _ ' '
+++HOME/bin/deferrals | sort -k2 ) | HOME/bin/columnt | tr _ ' '
++diff -x .svn -Naur qmailanalog-0.70/zfailures.sh qmailanalog/zfailures.sh
++--- qmailanalog-0.70/zfailures.sh	1998-08-30 23:39:27.000000000 +0200
+++++ qmailanalog/zfailures.sh	2007-04-30 20:57:24.000000000 +0200
++@@ -5,4 +5,4 @@
++ * xdelay is the total xdelay on those deliveries.
++ '
++ ( echo del xdelay reason
++-HOME/bin/failures | sort +2 ) | HOME/bin/columnt | tr _ ' '
+++HOME/bin/failures | sort -k2 ) | HOME/bin/columnt | tr _ ' '
++diff -x .svn -Naur qmailanalog-0.70/zrecipients.sh qmailanalog/zrecipients.sh
++--- qmailanalog-0.70/zrecipients.sh	1998-08-30 23:39:27.000000000 +0200
+++++ qmailanalog/zrecipients.sh	2007-04-30 20:57:24.000000000 +0200
++@@ -7,4 +7,4 @@
++ * xdelay is the total xdelay incurred by this recipient.
++ '
++ ( echo sbytes mess tries xdelay recipient
++-HOME/bin/recipients | sort +4 ) | HOME/bin/columnt
+++HOME/bin/recipients | sort -k4 ) | HOME/bin/columnt
++diff -x .svn -Naur qmailanalog-0.70/zrhosts.sh qmailanalog/zrhosts.sh
++--- qmailanalog-0.70/zrhosts.sh	1998-08-30 23:39:27.000000000 +0200
+++++ qmailanalog/zrhosts.sh	2007-04-30 20:57:24.000000000 +0200
++@@ -7,4 +7,4 @@
++ * xdelay is the total xdelay incurred by this host.
++ '
++ ( echo sbytes mess tries xdelay host
++-HOME/bin/rhosts | sort +4 ) | HOME/bin/columnt
+++HOME/bin/rhosts | sort -k4 ) | HOME/bin/columnt
++diff -x .svn -Naur qmailanalog-0.70/zsenders.sh qmailanalog/zsenders.sh
++--- qmailanalog-0.70/zsenders.sh	1998-08-30 23:39:27.000000000 +0200
+++++ qmailanalog/zsenders.sh	2007-04-30 20:57:24.000000000 +0200
++@@ -10,4 +10,4 @@
++ * xdelay is the total xdelay incurred by this sender.
++ '
++ ( echo mess bytes sbytes rbytes recips tries xdelay sender
++-HOME/bin/senders | sort -n +7 ) | HOME/bin/columnt
+++HOME/bin/senders | sort -k7,7n ) | HOME/bin/columnt
++diff -x .svn -Naur qmailanalog-0.70/zsuccesses.sh qmailanalog/zsuccesses.sh
++--- qmailanalog-0.70/zsuccesses.sh	1998-08-30 23:39:27.000000000 +0200
+++++ qmailanalog/zsuccesses.sh	2007-04-30 20:57:24.000000000 +0200
++@@ -5,4 +5,4 @@
++ * xdelay is the total xdelay on those deliveries.
++ '
++ ( echo del xdelay reason
++-HOME/bin/successes | sort +2 ) | HOME/bin/columnt | tr _ ' '
+++HOME/bin/successes | sort -k2 ) | HOME/bin/columnt | tr _ ' '
++diff -x .svn -Naur qmailanalog-0.70/zsuids.sh qmailanalog/zsuids.sh
++--- qmailanalog-0.70/zsuids.sh	1998-08-30 23:39:27.000000000 +0200
+++++ qmailanalog/zsuids.sh	2007-04-30 20:57:24.000000000 +0200
++@@ -10,4 +10,4 @@
++ * xdelay is the total xdelay incurred by this uid.
++ '
++ ( echo mess bytes sbytes rbytes recips tries xdelay uid
++-HOME/bin/suids | sort -n +7 ) | HOME/bin/columnt
+++HOME/bin/suids | sort -k7,7n ) | HOME/bin/columnt
+-- 
+1.5.3.4
+

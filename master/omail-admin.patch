@@ -1,0 +1,49 @@
+From 8ca5ccf45da1875cc595a3adec0a841fa5063828 Mon Sep 17 00:00:00 2001
+From: Tomas Zeman <tzeman@volny.cz>
+Date: Fri, 21 Dec 2007 10:49:47 +0100
+Subject: [PATCH] omail-admin-1.2rc1-1-i686.fpm:
+ *added
+
+---
+ source/custom/omail-admin/FrugalBuild |   29 +++++++++++++++++++++++++++++
+ 1 files changed, 29 insertions(+), 0 deletions(-)
+ create mode 100644 source/custom/omail-admin/FrugalBuild
+
+diff --git a/source/custom/omail-admin/FrugalBuild b/source/custom/omail-admin/FrugalBuild
+new file mode 100644
+index 0000000..5f08d43
+--- /dev/null
++++ b/source/custom/omail-admin/FrugalBuild
+@@ -0,0 +1,29 @@
++# Maintainer: Tomas Zeman <tzeman@volny.cz>
++
++pkgname=omail-admin
++pkgver=1.2rc1
++pkgrel=1
++pkgdesc="PHP4 based qmail+vmailmgrd Web interface"
++_F_sourceforge_dirname="omail"
++Finclude sourceforge
++backup=(etc/$pkgname/config.php etc/$pkgname/vmailmgrquotas)
++url="http://omail.omnis.ch/omail-admin/"
++purl="http://sourceforge.net/project/showfiles.php?group_id=3658"
++depends=('php' 'libmysqlclient' 'qmail-autoresponder')
++archs=('i686')
++up2date="lynx -nolist -dump '$purl'|grep -i '$pkgname'|grep .tar.gz|head -1|sed 's/.*$pkgname-\(.*\).tar.gz .*/\1/'"
++sha1sums=('7f652ba56f6b4064efbbae57204f5d661fbe937a')
++
++build() {
++	www='/var/www'
++	Fmkdir $www/$pkgname /etc/$pkgname/vmailmgrd-tcp-hosts /usr/sbin /var/vmailstats
++	Fcd
++	find . -name 'CVS' |xargs rm -fr || Fdie
++	mv *.php *.inc images templates $Fdestdir$www/$pkgname || Fdie
++	cp scripts/README* . || Fdie
++	cp scripts/vmailstats.pl $Fdestdir/usr/sbin/vmailstats || Fdie
++	chmod 755 $Fdestdir/usr/sbin/vmailstats || Fdie
++	Fmv $www/$pkgname/config.php /etc/$pkgname/
++	Fsed '^$vmailmgrquota_file .*' "\$vmailmgrquota_file = '/etc/$pkgname/vmailmgrquotas';" $Fdestdir/etc/$pkgname/config.php
++	Fln /etc/$pkgname/config.php $www/$pkgname/config.php
++}
+-- 
+1.5.3.4
+

@@ -1,0 +1,46 @@
+From 1fe8d9875967ec89f54382eec6a1a2b8a317eab9 Mon Sep 17 00:00:00 2001
+From: Tomas Zeman <tzeman@volny.cz>
+Date: Sun, 21 Oct 2007 21:43:36 +0200
+Subject: [PATCH] drbd-tools-8.0.6-1-i686
+ * added
+
+---
+ source/custom/drbd-tools/FrugalBuild |   26 ++++++++++++++++++++++++++
+ 1 files changed, 26 insertions(+), 0 deletions(-)
+ create mode 100644 source/custom/drbd-tools/FrugalBuild
+
+diff --git a/source/custom/drbd-tools/FrugalBuild b/source/custom/drbd-tools/FrugalBuild
+new file mode 100644
+index 0000000..6b0dff4
+--- /dev/null
++++ b/source/custom/drbd-tools/FrugalBuild
+@@ -0,0 +1,26 @@
++# Maintainer: Tomas Zeman <tzeman@volny.cz>
++
++pkgorig=drbd
++pkgname=$pkgorig-tools
++pkgver=8.0.6
++pkgrel=1
++pkgdesc="block device mirroring a whole block device via network; network raid-1 implementation"
++url="http://www.drbd.org"
++license="GPL"
++archs=(i686)
++depends=(glibc)
++makedepends=(gcc bison flex m4)
++backup=(etc/drbd.conf)
++up2date="lynx -dump -nolist http://oss.linbit.com/drbd/|grep drbd-8.0|grep tar.gz|head -1|sed -e 's/^.*drbd-\(.*\)\.tar\.gz.*$/\1/'"
++source=(http://oss.linbit.com/drbd/8.0/$pkgorig-$pkgver.tar.gz)
++sha1sums=('6c19883b19813ee0a3d02a07d89e6ba21517edb9')
++
++
++build() {
++	Fcd $pkgorig-$pkgver
++	make clean tools || Fdie
++	make install-tools PREFIX=$startdir/pkg INITD=$startdir/pkg/etc/rc.d/ || Fdie
++	Fmv etc/rc.d/drbd etc/rc.d/rc.drbd
++}
++
++# vim: ft=sh
+-- 
+1.5.3.4
+

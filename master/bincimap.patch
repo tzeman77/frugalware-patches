@@ -1,0 +1,81 @@
+From 577622cdbeed98322b7a5468e0ffa4f464fef003 Mon Sep 17 00:00:00 2001
+From: Tomas Zeman <tzeman@volny.cz>
+Date: Thu, 29 Nov 2007 10:23:19 +0100
+Subject: [PATCH] bincimap-1.2.13-1-i686.fpm:
+ * added
+
+---
+ source/custom/bincimap/FrugalBuild      |   30 ++++++++++++++++++++++++++++++
+ source/custom/bincimap/bincimap.install |   23 +++++++++++++++++++++++
+ 2 files changed, 53 insertions(+), 0 deletions(-)
+ create mode 100644 source/custom/bincimap/FrugalBuild
+ create mode 100644 source/custom/bincimap/bincimap.install
+
+diff --git a/source/custom/bincimap/FrugalBuild b/source/custom/bincimap/FrugalBuild
+new file mode 100644
+index 0000000..74900bf
+--- /dev/null
++++ b/source/custom/bincimap/FrugalBuild
+@@ -0,0 +1,30 @@
++# Maintainer: Tomas Zeman <tzeman@volny.cz>
++
++pkgname=bincimap
++pkgver=1.2.13
++pkgrel=1
++pkgdesc="A well designed, modular IMAP server for Maildir."
++url="http://www.bincimap.org"
++archs=(i686)
++up2date="lynx $url -dump -nolist|grep 'latest stable'|head -1|sed -e 's/.*is \([0-9].*[0-9]\) .*$/\1/'"
++depends=('openssl')
++install="$pkgname.install"
++backup=(etc/bincimap/bincimap.conf)
++source=($url/dl/tarballs/1.2/$pkgname-${pkgver}final.tar.bz2)
++sha1sums=('cdbc1bf95decbe76e0a218025c351b8174b4b485')
++provides=('imap-server')
++
++build() {
++	Fcd $pkgname-${pkgver}final
++	./configure --prefix=/usr --sysconfdir=/etc/bincimap \
++		--localstatedir=/var --with-ssl
++	make || Fdie
++	make DESTDIR=$Fdestdir install || Fdie
++
++	# clean up the files
++	Fmkdir /usr/lib/bincimap
++	Fmv /usr/libexec /usr/lib/bincimap/scripts
++	Fmv /var/service /usr/lib/bincimap/supervise
++	Frm /etc/bincimap/xinetd
++}
++# vim: ft=sh
+diff --git a/source/custom/bincimap/bincimap.install b/source/custom/bincimap/bincimap.install
+new file mode 100644
+index 0000000..ca80118
+--- /dev/null
++++ b/source/custom/bincimap/bincimap.install
+@@ -0,0 +1,23 @@
++post_install() {
++  cat << EOF
++
++NOTE
++----
++bincimap must be invoked through either xinetd or daemontools.
++Check the documentation on its webpage for more details.
++
++EOF
++}
++
++post_upgrade() {
++  /bin/true
++}
++
++pre_remove() {
++  /bin/true
++}
++
++op=$1
++shift
++
++$op $*
+-- 
+1.5.3.4
+

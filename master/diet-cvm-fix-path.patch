@@ -1,0 +1,42 @@
+From 0f0cf3df56cce86bb8643e2989b451aa8504013e Mon Sep 17 00:00:00 2001
+From: Tomas Zeman <tzeman@volny.cz>
+Date: Sun, 28 Oct 2007 23:29:42 +0100
+Subject: [PATCH] diet-cvm-0.82-1: fix installation paths
+
+---
+ source/dietlibc/diet-cvm/FrugalBuild |    8 +++-----
+ 1 files changed, 3 insertions(+), 5 deletions(-)
+
+diff --git a/source/dietlibc/diet-cvm/FrugalBuild b/source/dietlibc/diet-cvm/FrugalBuild
+index ee85a0e..6f389ab 100644
+--- a/source/dietlibc/diet-cvm/FrugalBuild
++++ b/source/dietlibc/diet-cvm/FrugalBuild
+@@ -1,4 +1,3 @@
+-# $Id: PKGBUILD 335 2006-06-02 11:47:37Z zeman $
+ # Maintainer: Tomas Zeman <tzeman@volny.cz>
+ 
+ branch=diet
+@@ -8,7 +7,6 @@ pkgver=0.82
+ pkgrel=1
+ pkgdesc="Credential Validation Modules"
+ makedepends=(dietlibc gcc 'diet-bglibs>=1.100')
+-provides=(cvm)
+ url="http://untroubled.org/cvm/"
+ archs=(i686)
+ up2date='lynx -dump -nolist $url|grep $pkgorig|grep .tar.gz|head -1|sed -e "s/.*$pkgorig-\(.*\)\.tar.gz.*$/\1/"'
+@@ -22,9 +20,9 @@ build() {
+ 	patch -p0 < $Fsrcdir/libtool-tag.patch || Fdie
+ 	echo "diet gcc $CFLAGS" > conf-cc
+ 	echo "diet gcc -s -static" > conf-ld
+-	echo "$DDIR/bglibs/include" > conf-bgincs
+-	echo "$DDIR/bglibs/lib" > conf-bglibs
+-	echo "/usr/bin" > conf-bin
++	echo "$DDIR/include/bglibs" > conf-bgincs
++	echo "$DDIR/lib" > conf-bglibs
++	echo "$DDIR/bin" > conf-bin
+ 	echo "$DDIR/include" > conf-include
+ 	echo "$DDIR/lib" > conf-lib
+ 
+-- 
+1.5.3.4
+

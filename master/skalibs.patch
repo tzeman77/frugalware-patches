@@ -1,0 +1,45 @@
+From 662bed7bb29a2e5461911a475a80dad151225a72 Mon Sep 17 00:00:00 2001
+From: Tomas Zeman <tzeman@volny.cz>
+Date: Sun, 4 Nov 2007 00:10:52 +0100
+Subject: [PATCH] skalibs-0.46-1-i686:
+ * added
+
+---
+ source/dietlibc/skalibs/FrugalBuild |   25 +++++++++++++++++++++++++
+ 1 files changed, 25 insertions(+), 0 deletions(-)
+ create mode 100644 source/dietlibc/skalibs/FrugalBuild
+
+diff --git a/source/dietlibc/skalibs/FrugalBuild b/source/dietlibc/skalibs/FrugalBuild
+new file mode 100644
+index 0000000..c55ce00
+--- /dev/null
++++ b/source/dietlibc/skalibs/FrugalBuild
+@@ -0,0 +1,25 @@
++# Maintainer: Tomas Zeman <tzeman@volny.cz>
++
++pkgname=skalibs
++pkgver=0.46
++pkgrel=1
++pkgdesc="package centralizing the public-domain C development files"
++url="http://www.skarnet.org/software/skalibs/"
++makedepends=(dietlibc)
++archs=(i686)
++up2date='lynx -dump -nolist $url/install.html|grep $pkgname|grep tar.gz|head -1|sed -e "s/.*$pkgname-\(.*\)\.tar.gz.*$/\1/"'
++source=($url/$pkgname-$pkgver.tar.gz)
++sha1sums=('57647785f3c0564f1fe67aa4a002eea983f379b2')
++
++build() {
++	Fmkdir package/prog
++	mv $Fsrcdir/prog/$pkgname-$pkgver $Fdestdir/package/prog
++	cd $Fdestdir/package/prog/$pkgname-$pkgver || Fdie
++	
++	echo "diet gcc -nostdinc $CFLAGS" > conf-compile/conf-cc
++	echo "diet gcc -s -static" > conf-compile/conf-ld
++	
++	package/install || Fdie
++	chown -R root.root $Fdestdir/package/
++	rm -rf compile
++}
+-- 
+1.5.3.4
+

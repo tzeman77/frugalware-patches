@@ -1,0 +1,71 @@
+From 79fdfdf8c906da690b889c754a47ef696db6d555 Mon Sep 17 00:00:00 2001
+From: Tomas Zeman <tzeman@volny.cz>
+Date: Thu, 25 Oct 2007 00:13:17 +0200
+Subject: [PATCH] diet-bglibs-1.102-1-i686
+ * added
+
+---
+ source/dietlibc/diet-bglibs/FrugalBuild       |   32 +++++++++++++++++++++++++
+ source/dietlibc/diet-bglibs/libtool-tag.patch |   11 ++++++++
+ 2 files changed, 43 insertions(+), 0 deletions(-)
+ create mode 100644 source/dietlibc/diet-bglibs/FrugalBuild
+ create mode 100644 source/dietlibc/diet-bglibs/libtool-tag.patch
+
+diff --git a/source/dietlibc/diet-bglibs/FrugalBuild b/source/dietlibc/diet-bglibs/FrugalBuild
+new file mode 100644
+index 0000000..95d7e43
+--- /dev/null
++++ b/source/dietlibc/diet-bglibs/FrugalBuild
+@@ -0,0 +1,32 @@
++# Maintainer: Tomas Zeman <tzeman@volny.cz>
++
++branch=diet
++pkgorig=bglibs
++pkgname=$branch-$pkgorig
++pkgver=1.102
++pkgrel=1
++pkgdesc="One stop library package"
++makedepends=(dietlibc gcc)
++provides=(bglibs)
++url="http://untroubled.org/bglibs/"
++archs=(i686)
++up2date='lynx -dump -nolist $url|grep $pkgorig|grep .tar.gz|head -1|sed -e "s/.*$pkgorig-\(.*\)\.tar.gz.*$/\1/"'
++source=($url/$pkgorig-$pkgver.tar.gz libtool-tag.patch)
++sha1sums=('45d0df13d35d5b162378314f354dde76aa704977' \
++          '63bbea48243e7e442e54701e90adcd5e89cb76bf')
++
++build() {
++	DDIR=/usr/lib/diet
++	Fcd $pkgorig-$pkgver
++	patch -p0 < $Fsrcdir/libtool-tag.patch
++	echo "diet gcc $CFLAGS" > conf-cc
++	echo "diet gcc -s -static" > conf-ld
++	echo "$DDIR/bglibs/include" > conf-include
++	echo "$DDIR/bglibs/lib" > conf-lib
++	echo "$DDIR/bin" > conf-bin
++	echo "$DDIR/man" > conf-man
++
++	make || Fdie
++	make install_prefix=$Fdestdir install || Fdie
++}
++# vim: ft=sh
+diff --git a/source/dietlibc/diet-bglibs/libtool-tag.patch b/source/dietlibc/diet-bglibs/libtool-tag.patch
+new file mode 100644
+index 0000000..2172023
+--- /dev/null
++++ b/source/dietlibc/diet-bglibs/libtool-tag.patch
+@@ -0,0 +1,11 @@
++--- Makefile.orig	2006-10-30 22:11:21.000000000 +0100
+++++ Makefile	2007-10-25 00:00:46.000000000 +0200
++@@ -991,7 +991,7 @@
++ 	  echo '#!/bin/sh'; \
++ 	  echo 'source=$$1; shift'; \
++ 	  echo 'base=`echo "$$source" | sed -e s:\\\\.c$$::`'; \
++-	  echo exec libtool --mode=compile --silent `head -n 1 conf-cc` -I.  '-o $${base}.lo -c $$source $${1+"$$@"}'; \
+++	  echo exec libtool --mode=compile --tag=CC --silent `head -n 1 conf-cc` -I.  '-o $${base}.lo -c $$source $${1+"$$@"}'; \
++ 	) >libcompile
++ 	chmod 755 libcompile
++ 
+-- 
+1.5.3.4
+

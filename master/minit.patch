@@ -1,0 +1,177 @@
+From 79715802ed5a69fed419b9042407b73231424734 Mon Sep 17 00:00:00 2001
+From: Tomas Zeman <tzeman@volny.cz>
+Date: Sun, 4 Nov 2007 12:50:46 +0100
+Subject: [PATCH] minit-0.10-2-i686:
+ * added
+
+---
+ source/dietlibc/minit/FrugalBuild                |   31 +++++++++++++++++++
+ source/dietlibc/minit/minit-scripts-other.tar.gz |  Bin 0 -> 3770 bytes
+ source/dietlibc/minit/minit.install              |   36 ++++++++++++++++++++++
+ 3 files changed, 67 insertions(+), 0 deletions(-)
+ create mode 100644 source/dietlibc/minit/FrugalBuild
+ create mode 100644 source/dietlibc/minit/minit-scripts-other.tar.gz
+ create mode 100644 source/dietlibc/minit/minit.install
+
+diff --git a/source/dietlibc/minit/FrugalBuild b/source/dietlibc/minit/FrugalBuild
+new file mode 100644
+index 0000000..a733f3c
+--- /dev/null
++++ b/source/dietlibc/minit/FrugalBuild
+@@ -0,0 +1,31 @@
++# Maintainer: Tomas Zeman <tzeman@volny.cz>
++
++pkgname=minit
++pkgver=0.10
++pkgrel=2
++pkgdesc="a small yet feature-complete init"
++url="http://www.fefe.de/minit/"
++makedepends=(dietlibc)
++archs=(i686)
++up2date='lynx -dump -nolist $url|grep $pkgname|grep tar.bz2|head -1|sed -e "s/.*$pkgname-\([0-9\.]\+\)\.tar\.bz2.*$/\1/"'
++source=(http://dl.fefe.de/$pkgname-$pkgver.tar.bz2 \
++	http://icculus.org/~boris/data/$pkgname-scripts.tar.bz2 \
++	minit-scripts-other.tar.gz)
++sha1sums=('f4ca32bafb3e9567bbc21f13f2f06fe009fe64db' \
++          '32bce667773a26008d5de0e08cb8060f6065e735' \
++          '1d8c5e4f7b07a08f51df3ead29d8d05d1b65b395')
++install=$pkgname.install
++
++build() {
++	Fcd
++	make || Fdie
++	make install-files DESTDIR=$Fdestdir || Fdie
++	install -m 700 killall5 $Fdestdir/sbin/killall5.minit || Fdie
++	Fmkdir /usr/share/$pkgname
++	mv $Fsrcdir/$pkgname-scripts $Fdestdir/usr/share/$pkgname || Fdie
++	mv $Fsrcdir/$pkgname-scripts-other $Fdestdir/usr/share/$pkgname || Fdie
++	mv $Fsrcdir/$pkgname-$pkgver/contrib $Fdestdir/usr/share/$pkgname || Fdie
++	Fmv /sbin/shutdown /sbin/shutdown.minit
++	chmod 700 $Fdestdir/sbin/shutdown.minit || Fdie
++	Frm /sbin/init
++}
+diff --git a/source/dietlibc/minit/minit-scripts-other.tar.gz b/source/dietlibc/minit/minit-scripts-other.tar.gz
+new file mode 100644
+index 0000000000000000000000000000000000000000..b38450a05c71fc586aa12f9711ab33087856a99b
+GIT binary patch
+literal 3770
+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
+E0U0|+-v9sr
+
+literal 0
+HcmV?d00001
+
+diff --git a/source/dietlibc/minit/minit.install b/source/dietlibc/minit/minit.install
+new file mode 100644
+index 0000000..0330a23
+--- /dev/null
++++ b/source/dietlibc/minit/minit.install
+@@ -0,0 +1,36 @@
++# arg 1:  the new package version
++post_install() {
++  post_upgrade
++}
++
++# arg 1:  the new package version
++# arg 2:  the old package version
++post_upgrade() {
++  if [ ! -L /sbin/shutdown -a ! -e /sbin/shutdown.sysv ]; then
++  	mv /sbin/shutdown /sbin/shutdown.sysv
++	ln -sf /sbin/shutdown.minit /sbin/shutdown
++  fi
++  for i in in out; do
++  	if [ ! -p /etc/minit/$i ]; then
++		rm -f /etc/minit/$i
++		mkfifo -m 600 /etc/minit/$i
++	fi
++  done
++  /bin/true
++}
++
++# arg 1:  the old package version
++pre_remove() {
++  if [ -L /sbin/shutdown -a -e /sbin/shutdown.sysv ]; then
++	rm /sbin/shutdown && mv /sbin/shutdown.sysv /sbin/shutdown
++  fi
++}
++
++# arg 1:  the old package version
++post_remove() {
++  /bin/true
++}
++
++op=$1
++shift
++$op $*
+-- 
+1.5.3.4
+

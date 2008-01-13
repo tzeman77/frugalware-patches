@@ -1,0 +1,53 @@
+From 1a3c412bdc1ba648a543563a965effcb47746582 Mon Sep 17 00:00:00 2001
+From: Tomas Zeman <tzeman@volny.cz>
+Date: Tue, 6 Nov 2007 13:55:38 +0100
+Subject: [PATCH] conn-tools-0.21-1-i686
+ * added
+
+---
+ source/dietlibc/conn-tools/FrugalBuild |   33 ++++++++++++++++++++++++++++++++
+ 1 files changed, 33 insertions(+), 0 deletions(-)
+ create mode 100644 source/dietlibc/conn-tools/FrugalBuild
+
+diff --git a/source/dietlibc/conn-tools/FrugalBuild b/source/dietlibc/conn-tools/FrugalBuild
+new file mode 100644
+index 0000000..04e4891
+--- /dev/null
++++ b/source/dietlibc/conn-tools/FrugalBuild
+@@ -0,0 +1,33 @@
++# Maintainer: Tomas Zeman <tzeman@volny.cz>
++
++pkgname=conn-tools
++pkgver=0.21
++pkgrel=1
++pkgdesc="collection of miscellaneous utilities designed to help managing connections and communication between processes"
++url="http://www.skarnet.org/software/conn-tools/"
++depends=('execline>=1.06' 'skaembutils>=0.17')
++makedepends=(dietlibc 'skalibs>=0.45' 'execline>=1.06')
++archs=(i686)
++up2date='lynx -dump -nolist $url/install.html|grep $pkgname|grep tar.gz|head -1|sed -e "s/.*$pkgname-\(.*\)\.tar.gz.*$/\1/"'
++source=($url/$pkgname-$pkgver.tar.gz)
++sha1sums=('be448c57f7c5195a2bd14c0f7e0e69573407893c')
++
++build() {
++	sPATH=net
++	cd $Fsrcdir/$sPATH/$pkgname-$pkgver
++
++	echo "diet gcc -nostdinc $CFLAGS" > conf-compile/conf-cc
++	echo "diet gcc -s -static" > conf-compile/conf-ld
++
++	package/compile || Fdie
++	Fmkdir /package/$sPATH/$pkgname-$pkgver
++	cd $Fdestdir/package/$sPATH
++	rm -f $pkgname
++	ln -sf $pkgname-$pkgver $pkgname || Fdie
++	mv $Fsrcdir/$sPATH/$pkgname-$pkgver/command $Fdestdir/package/$sPATH/$pkgname || Fdie
++	Fmkdir /command
++	for cmd in `cat $Fsrcdir/$sPATH/$pkgname-$pkgver/package/command.exported`; do
++		ln -sf /package/$sPATH/$pkgname/command/$cmd $Fdestdir/command || Fdie
++	done;
++	mv $Fsrcdir/$sPATH/$pkgname-$pkgver/doc $Fdestdir/package/$sPATH/$pkgname || Fdie
++}
+-- 
+1.5.3.4
+

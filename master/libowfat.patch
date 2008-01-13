@@ -1,0 +1,40 @@
+From 0e67eeb8cafaef06736a7aa298dee574c0bfb444 Mon Sep 17 00:00:00 2001
+From: Tomas Zeman <tzeman@volny.cz>
+Date: Sun, 4 Nov 2007 11:57:31 +0100
+Subject: [PATCH] libowfat-0.26-1-i686
+ * added
+
+---
+ source/dietlibc/libowfat/FrugalBuild |   20 ++++++++++++++++++++
+ 1 files changed, 20 insertions(+), 0 deletions(-)
+ create mode 100644 source/dietlibc/libowfat/FrugalBuild
+
+diff --git a/source/dietlibc/libowfat/FrugalBuild b/source/dietlibc/libowfat/FrugalBuild
+new file mode 100644
+index 0000000..7a79cec
+--- /dev/null
++++ b/source/dietlibc/libowfat/FrugalBuild
+@@ -0,0 +1,20 @@
++# Maintainer: Tomas Zeman <tzeman@volny.cz>
++
++pkgname=libowfat
++pkgver=0.26
++pkgrel=1
++pkgdesc="reimplement libdjb under GPL"
++depends=(dietlibc)
++url="http://www.fefe.de/libowfat/"
++license=GPL
++archs=(i686)
++up2date='lynx -dump -nolist $url|grep Version|head -1|sed -e "s/.*Version \([0-9\.]\+\).*$/\1/"'
++source=(http://dl.fefe.de/$pkgname-$pkgver.tar.bz2)
++sha1sums=('5dca6d7eb70a0e65d827dc7bf583df62bf752ec2')
++
++build() {
++	DDIR=/usr/lib/diet
++	Fcd
++	make prefix=$DDIR || Fdie
++	make install prefix=$Fdestdir/$DDIR LIBDIR=$Fdestdir/$DDIR/lib
++}
+-- 
+1.5.3.4
+

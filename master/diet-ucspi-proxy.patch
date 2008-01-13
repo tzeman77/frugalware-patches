@@ -1,0 +1,51 @@
+From 8272ede6f6bef869f0d714f4f6dd97e648b5cd2e Mon Sep 17 00:00:00 2001
+From: Tomas Zeman <tzeman@volny.cz>
+Date: Sat, 3 Nov 2007 23:38:45 +0100
+Subject: [PATCH] diet-ucspi-proxy-0.97-1-i686:
+ * added
+
+---
+ source/dietlibc/diet-ucspi-proxy/FrugalBuild |   31 ++++++++++++++++++++++++++
+ 1 files changed, 31 insertions(+), 0 deletions(-)
+ create mode 100644 source/dietlibc/diet-ucspi-proxy/FrugalBuild
+
+diff --git a/source/dietlibc/diet-ucspi-proxy/FrugalBuild b/source/dietlibc/diet-ucspi-proxy/FrugalBuild
+new file mode 100644
+index 0000000..c310b9e
+--- /dev/null
++++ b/source/dietlibc/diet-ucspi-proxy/FrugalBuild
+@@ -0,0 +1,31 @@
++# Maintainer: Tomas Zeman <tzeman@volny.cz>
++
++branch=diet
++pkgorig=ucspi-proxy
++pkgname=$branch-$pkgorig
++pkgver=0.97
++pkgrel=1
++pkgdesc="Connection proxy for UCSPI tools"
++makedepends=(dietlibc 'diet-bglibs>=1.025')
++url="http://untroubled.org/ucspi-proxy"
++archs=(i686)
++up2date='lynx -dump -nolist $url|grep $pkgorig|grep .tar.gz|head -1|sed -e "s/.*$pkgorig-\(.*\)\.tar.gz.*$/\1/"'
++source=($url/$pkgorig-$pkgver.tar.gz)
++sha1sums=('750b0ac0fe09a682e6f36e3f1e97dcc230b57f0e')
++provides=($pkgorig)
++
++build() {
++	DDIR=/usr/lib/diet
++	Fcd $pkgorig-$pkgver
++	echo "$Fdestdir/usr" > conf-home
++	echo "diet gcc $CFLAGS" > conf-cc
++	echo "diet gcc -s -static" > conf-ld
++	echo "$DDIR/include/bglibs" > conf-bgincs
++	echo "$DDIR/lib" > conf-bglibs
++	echo "$Fdestdir/usr/man" > conf-man
++	echo "$Fdestdir/usr/bin" > conf-bin
++	make || Fdie
++	make install || Fdie
++	install -m755 ucspi-proxy $Fdestdir/usr/bin
++}
++# vim: ft=sh
+-- 
+1.5.3.4
+

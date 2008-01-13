@@ -1,0 +1,39 @@
+From fec5f43160d215f171f2c461967e0fa7afc59fd2 Mon Sep 17 00:00:00 2001
+From: Tomas Zeman <tzeman@volny.cz>
+Date: Sun, 4 Nov 2007 12:04:50 +0100
+Subject: [PATCH] fgetty-0.6-1-i686:
+ * added
+
+---
+ source/dietlibc/fgetty/FrugalBuild |   19 +++++++++++++++++++
+ 1 files changed, 19 insertions(+), 0 deletions(-)
+ create mode 100644 source/dietlibc/fgetty/FrugalBuild
+
+diff --git a/source/dietlibc/fgetty/FrugalBuild b/source/dietlibc/fgetty/FrugalBuild
+new file mode 100644
+index 0000000..13a5cda
+--- /dev/null
++++ b/source/dietlibc/fgetty/FrugalBuild
+@@ -0,0 +1,19 @@
++# Maintainer: Tomas Zeman <tzeman@volny.cz>
++
++pkgname=fgetty
++pkgver=0.6
++pkgrel=1
++pkgdesc="a very small getty for Linux"
++url="http://www.fefe.de/fgetty/"
++makedepends=(dietlibc)
++archs=(i686)
++up2date='lynx -dump -nolist $url|grep $pkgname|grep tar.bz2|head -1|sed -e "s/.*$pkgname-\([0-9\.]\+\)\.tar\.bz2.*$/\1/"'
++source=($url/$pkgname-$pkgver.tar.bz2)
++sha1sums=('fc1ee8bd1b85c4f44c8d494aadd49476244bdb39')
++
++build() {
++	Fcd
++	make || Fdie
++	Fmkdir /usr/man/man8
++	make install DESTDIR=$Fdestdir || Fdie
++}
+-- 
+1.5.3.4
+

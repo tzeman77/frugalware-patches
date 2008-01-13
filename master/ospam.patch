@@ -1,0 +1,135 @@
+From aad149d8eae95620d3ed9a2bd0cd81c8a01ce79d Mon Sep 17 00:00:00 2001
+From: Tomas Zeman <tzeman@volny.cz>
+Date: Sun, 16 Dec 2007 00:18:44 +0100
+Subject: [PATCH] ospam-0.01-1-i686:
+ *added
+
+---
+ source/custom/ospam/FrugalBuild |   25 ++++++++++++
+ source/custom/ospam/ospam.patch |   82 +++++++++++++++++++++++++++++++++++++++
+ 2 files changed, 107 insertions(+), 0 deletions(-)
+ create mode 100644 source/custom/ospam/FrugalBuild
+ create mode 100644 source/custom/ospam/ospam.patch
+
+diff --git a/source/custom/ospam/FrugalBuild b/source/custom/ospam/FrugalBuild
+new file mode 100644
+index 0000000..d1191b7
+--- /dev/null
++++ b/source/custom/ospam/FrugalBuild
+@@ -0,0 +1,25 @@
++# Maintainer: Tomas Zeman <tzeman@volny.cz>
++
++pkgname=ospam
++pkgver=0.01
++pkgrel=1
++pkgdesc=""
++url="http://omail.omnis.ch/ospam/"
++archs=(i686)
++up2date="lynx $url?M=D -dump -nolist|grep 'tar.gz'|head -1|sed -e 's/.*$pkgname-\(.*\)\.tar\.gz.*$/\1/'"
++depends=('spamassassin' 'clamav' 'conn-tools' 'qmail' 'perl-dbd-mysql' 'mess822')
++backup=(etc/ospam/ospam-dotqmail etc/ospam/spamclam)
++source=($url/$pkgname-$pkgver.tar.gz spamclam ospam.patch)
++sha1sums=('7a47fbdedddc16d8fe04ca400daee00a962408da' \
++          'acd24f2b9daa5f15e2e9360050d9ea0bd96c1dbc' \
++          '7e8aa8d7d8b9a0ac5e88e5304a0f69d4b267a784')
++
++build() {
++	Fcd
++	Fpatchall
++	Fmkdir /usr/bin /usr/share/$pkgname /etc/$pkgname
++	Finstall 755 $pkgname-$pkgver/ospam-dotqmail.pl /usr/bin/ospam-dotqmail
++	Finstall 755 spamclam /usr/bin
++	Finstall 644 $pkgname-$pkgver/sql/nospam.sql /usr/share/ospam/dbschema.sql
++}
++# vim: ft=sh
+diff --git a/source/custom/ospam/ospam.patch b/source/custom/ospam/ospam.patch
+new file mode 100644
+index 0000000..36535a7
+--- /dev/null
++++ b/source/custom/ospam/ospam.patch
+@@ -0,0 +1,82 @@
++diff -u ospam-0.01.orig/ospam-dotqmail.pl ospam-0.01/ospam-dotqmail.pl
++--- ospam-0.01.orig/ospam-dotqmail.pl	2003-05-04 04:21:26.000000000 +0200
+++++ ospam-0.01/ospam-dotqmail.pl	2007-12-16 00:13:19.000000000 +0100
++@@ -32,50 +32,52 @@
++ 
++ # SETUP:
++ 
++-my $debug = 1;  
+++our $debug = 1;  
++ 
++ # emails:
++ 
++-my $debug_bcc_mail = '';  # keep empty after testing
++-my $admin_mail = '';  # for error notices
++-my $mail_sender = 'oSpam system <ospam@your-domain-here.ext>';
+++our $debug_bcc_mail = '';  # keep empty after testing
+++our $admin_mail = '';  # for error notices
+++our $mail_sender = 'oSpam system <ospam@your-domain-here.ext>';
++ 
++ # database:
++ 
++-my $db_username = "nospam";
++-my $db_password = "*********";
++-my $db_hostname = "localhost";
++-my $db_database = "nospam";
+++our $db_username = "nospam";
+++our $db_password = "*********";
+++our $db_hostname = "localhost";
+++our $db_database = "nospam";
++ 
++-my $tb_userpref = "userpref";	# SA sql table
++-my $tb_dotqmail = "dotqmail";	# ospam data
+++our $tb_userpref = "userpref";	# SA sql table
+++our $tb_dotqmail = "dotqmail";	# ospam data
++ 
++ # file & cmd path:
++ 
++-my $cmd_preline = "/var/qmail/bin/preline";
++-my $cmd_spamc = "/usr/bin/spamc";
++-my $cmd_vdeliver = "/usr/local/bin/vdeliver";
++-my $cmd_filepipe = "/usr/local/nospam/filepipe";
++-my $cmd_ifspamh = "/usr/local/nospam/ifspamh";
++-my $spamc_options = "-f";
++-my $cmd_md5sum = "/usr/bin/md5sum";
++-my $cmd_chown = "/bin/chown";
++-my $cmd_chmod = "/bin/chmod";
++-my $cmd_sendmail = "/usr/sbin/sendmail";
++-my $sendmail_opt = "-oem -oi -t";
+++our $cmd_preline = "/var/qmail/bin/preline";
+++our $cmd_spamc = "/usr/bin/spamc";
+++our $cmd_vdeliver = "/usr/local/bin/vdeliver";
+++our $cmd_filepipe = "/usr/local/nospam/filepipe";
+++our $cmd_ifspamh = "/usr/local/nospam/ifspamh";
+++our $spamc_options = "-f";
+++our $cmd_md5sum = "/usr/bin/md5sum";
+++our $cmd_chown = "/bin/chown";
+++our $cmd_chmod = "/bin/chmod";
+++our $cmd_sendmail = "/usr/sbin/sendmail";
+++our $sendmail_opt = "-oem -oi -t";
++ 
++ # qmail setup: 
++ 
++-my $cfg_virtualdomains = "/var/qmail/control/virtualdomains";
++-my $cfg_rcpthosts = "/var/qmail/control/rcpthosts";
++-my $dot_qmail_prefix = ".qmail-"; 
+++our $cfg_virtualdomains = "/var/qmail/control/virtualdomains";
+++our $cfg_rcpthosts = "/var/qmail/control/rcpthosts";
+++our $dot_qmail_prefix = ".qmail-"; 
++ 
++ # internal values
++ 
++ my $version = 1; 		# integer
++ my $internal_version = 1000; 	# incrementing this number will force re-generation of all .qmail-files
++ 
+++my $cfg_file = "/etc/ospam/ospam-dotqmail";
++ 
+++do $cfg_file if (-f $cfg_file);
++ 
++ #################################################
++ 
++Only in ospam-0.01: ospam-dotqmail.pl~
++Common subdirectories: ospam-0.01.orig/sql and ospam-0.01/sql
+-- 
+1.5.3.4
+

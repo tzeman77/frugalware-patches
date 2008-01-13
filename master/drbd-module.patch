@@ -1,0 +1,96 @@
+From 4853c86a80d071ab2171b1c9d77831f292ebf00a Mon Sep 17 00:00:00 2001
+From: Tomas Zeman <tzeman@volny.cz>
+Date: Sun, 21 Oct 2007 12:33:08 +0200
+Subject: [PATCH] drbd-module-8.0.6-1-i686
+ * added
+
+---
+ source/custom/drbd-module/FrugalBuild  |   25 ++++++++++++++++++
+ source/custom/drbd-module/drbd.install |   43 ++++++++++++++++++++++++++++++++
+ 2 files changed, 68 insertions(+), 0 deletions(-)
+ create mode 100644 source/custom/drbd-module/FrugalBuild
+ create mode 100644 source/custom/drbd-module/drbd.install
+
+diff --git a/source/custom/drbd-module/FrugalBuild b/source/custom/drbd-module/FrugalBuild
+new file mode 100644
+index 0000000..6eadd82
+--- /dev/null
++++ b/source/custom/drbd-module/FrugalBuild
+@@ -0,0 +1,25 @@
++# Maintainer: Tomas Zeman <tzeman@volny.cz>
++
++pkgorig=drbd
++pkgname=$pkgorig-module
++pkgver=8.0.6
++pkgrel=1
++pkgdesc="block device mirroring a whole block device via network; network raid-1 implementation"
++url="http://www.drbd.org"
++license="GPL"
++depends=(kernel-source gcc make)
++archs=(i686)
++install=drbd.install
++up2date="lynx -dump -nolist http://oss.linbit.com/drbd/|grep drbd-8.0|grep tar.gz|head -1|sed -e 's/^.*drbd-\(.*\)\.tar\.gz.*$/\1/'"
++source=(http://oss.linbit.com/drbd/8.0/$pkgorig-$pkgver.tar.gz)
++sha1sums=(6c19883b19813ee0a3d02a07d89e6ba21517edb9)
++
++
++build() {
++	Fcd $pkgorig-$pkgver
++	mkdir -p $startdir/pkg/usr/src/$pkgname
++	cp -aR drbd $startdir/pkg/usr/src/$pkgname
++	cp -aR scripts $startdir/pkg/usr/src/$pkgname
++}
++
++# vim: ft=sh
+diff --git a/source/custom/drbd-module/drbd.install b/source/custom/drbd-module/drbd.install
+new file mode 100644
+index 0000000..3bb4f68
+--- /dev/null
++++ b/source/custom/drbd-module/drbd.install
+@@ -0,0 +1,43 @@
++# This is a default template for a post-install scriptlet.  You can
++# remove any functions you don't need (and this header).
++
++# arg 1:  the new package version
++pre_install() {
++  /bin/true
++}
++
++# arg 1:  the new package version
++post_install() {
++  post_upgrade $1
++}
++
++# arg 1:  the new package version
++# arg 2:  the old package version
++pre_upgrade() {
++  /bin/true
++}
++
++# arg 1:  the new package version
++# arg 2:  the old package version
++post_upgrade() {
++  cd /usr/src/drbd-module/drbd
++  make clean
++  make KDIR=/usr/src/linux-`uname -r` all || /bin/false
++  make install || /bin/false
++  /bin/true
++}
++
++# arg 1:  the old package version
++pre_remove() {
++  /bin/true
++}
++
++# arg 1:  the old package version
++post_remove() {
++  /bin/true
++}
++
++op=$1
++shift
++$op $*
++
+-- 
+1.5.3.4
+

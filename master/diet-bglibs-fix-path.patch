@@ -1,0 +1,35 @@
+From ab75b9c964bf3af0ffe45c028dfd1419356e8484 Mon Sep 17 00:00:00 2001
+From: Tomas Zeman <tzeman@volny.cz>
+Date: Sun, 28 Oct 2007 23:29:08 +0100
+Subject: [PATCH] diet-bglibs-1.102-1: fix installation paths
+
+---
+ source/dietlibc/diet-bglibs/FrugalBuild |    5 ++---
+ 1 files changed, 2 insertions(+), 3 deletions(-)
+
+diff --git a/source/dietlibc/diet-bglibs/FrugalBuild b/source/dietlibc/diet-bglibs/FrugalBuild
+index 2930ed6..088d632 100644
+--- a/source/dietlibc/diet-bglibs/FrugalBuild
++++ b/source/dietlibc/diet-bglibs/FrugalBuild
+@@ -7,7 +7,6 @@ pkgver=1.102
+ pkgrel=1
+ pkgdesc="One stop library package"
+ makedepends=(dietlibc gcc)
+-provides=(bglibs)
+ url="http://untroubled.org/bglibs/"
+ archs=(i686)
+ up2date='lynx -dump -nolist $url|grep $pkgorig|grep .tar.gz|head -1|sed -e "s/.*$pkgorig-\(.*\)\.tar.gz.*$/\1/"'
+@@ -21,8 +20,8 @@ build() {
+ 	patch -p0 < $Fsrcdir/libtool-tag.patch || Fdie
+ 	echo "diet gcc $CFLAGS" > conf-cc
+ 	echo "diet gcc -s -static" > conf-ld
+-	echo "$DDIR/bglibs/include" > conf-include
+-	echo "$DDIR/bglibs/lib" > conf-lib
++	echo "$DDIR/include/bglibs" > conf-include
++	echo "$DDIR/lib" > conf-lib
+ 	echo "$DDIR/bin" > conf-bin
+ 	echo "$DDIR/man" > conf-man
+ 
+-- 
+1.5.3.4
+

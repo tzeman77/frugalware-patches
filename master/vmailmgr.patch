@@ -1,0 +1,91 @@
+From d53eaf175f4ccfebfc244020445694baedaa1cec Mon Sep 17 00:00:00 2001
+From: Tomas Zeman <tzeman@volny.cz>
+Date: Sun, 21 Oct 2007 23:00:03 +0200
+Subject: [PATCH] vmailmgr-0.97-1-i686
+ * added
+
+---
+ source/custom/vmailmgr/FrugalBuild      |   40 +++++++++++++++++++++++++++++++
+ source/custom/vmailmgr/vmailmgr.install |   23 +++++++++++++++++
+ 2 files changed, 63 insertions(+), 0 deletions(-)
+ create mode 100644 source/custom/vmailmgr/FrugalBuild
+ create mode 100644 source/custom/vmailmgr/vmailmgr.install
+
+diff --git a/source/custom/vmailmgr/FrugalBuild b/source/custom/vmailmgr/FrugalBuild
+new file mode 100644
+index 0000000..a13ffa5
+--- /dev/null
++++ b/source/custom/vmailmgr/FrugalBuild
+@@ -0,0 +1,40 @@
++# Maintainer: Tomas Zeman <tzeman@volny.cz>
++
++pkgname=vmailmgr
++pkgver=0.97
++pkgrel=1
++pkgdesc="Virtual e-mail domains/users management programs."
++url="http://www.vmailmgr.org"
++makedepends=('python' 'gcc' 'sed') # it's not required for running it,
++                       # plus python pkg requires xfree86.
++archs=(i686)
++up2date='lynx -dump -nolist $url/current|grep $pkgname|grep .tar.gz|head -1|sed -e "s/.*$pkgname-\(.*\)\.tar.gz.*$/\1/"'
++install="$pkgname.install"
++source=($url/current/$pkgname-$pkgver.tar.gz )
++sha1sums=('0d97c8fd6df79001dd4f3b842a145089333eae8c')
++Finclude python
++
++build() {
++	echo $_F_python_libdir
++	Fcd
++	sed -i -e "s{phpdir=.*\${phpdir=\"/var/www/php\"{" configure
++	local_cv_python_lib_dir=/$_F_python_libdir ./configure \
++		--prefix=/usr --sysconfdir=/etc/vmailmgr \
++		--localstatedir=/var
++	make || Fdie
++	make DESTDIR=$startdir/pkg install || Fdie
++
++	# install some conf files
++	confdir=$startdir/pkg/etc/vmailmgr
++	install -D -m 755 scripts/vmailmgrd.run \
++	$confdir/supervise/vmailmgrd/run
++	install -D -m 755 scripts/vmailmgrd-log.run \
++	$confdir/supervise/vmailmgrd/log/run
++	install -D -m 755 scripts/autoresponder.sh \
++	$confdir/vdeliver-postdeliver
++	echo "@:%" > $confdir/separators
++}
++
++# vim: ft=sh
++
++# optimization OK
+diff --git a/source/custom/vmailmgr/vmailmgr.install b/source/custom/vmailmgr/vmailmgr.install
+new file mode 100644
+index 0000000..9b9b1e5
+--- /dev/null
++++ b/source/custom/vmailmgr/vmailmgr.install
+@@ -0,0 +1,23 @@
++post_install() {
++  cat << EOF
++
++NOTE
++----
++To start vmailmgr you need to create the symlink:
++ln -s /etc/vmailmgr/supervise/vmailmgrd /service
++
++EOF
++}
++
++post_upgrade() {
++  /bin/true
++}
++
++pre_remove() {
++  /bin/true
++}
++
++op=$1
++shift
++
++$op $*
+-- 
+1.5.3.4
+
