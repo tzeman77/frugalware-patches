@@ -1,46 +1,36 @@
-From d53eaf175f4ccfebfc244020445694baedaa1cec Mon Sep 17 00:00:00 2001
-From: Tomas Zeman <tzeman@volny.cz>
-Date: Sun, 21 Oct 2007 23:00:03 +0200
-Subject: [PATCH] vmailmgr-0.97-1-i686
- * added
-
----
- source/custom/vmailmgr/FrugalBuild      |   40 +++++++++++++++++++++++++++++++
- source/custom/vmailmgr/vmailmgr.install |   23 +++++++++++++++++
- 2 files changed, 63 insertions(+), 0 deletions(-)
- create mode 100644 source/custom/vmailmgr/FrugalBuild
- create mode 100644 source/custom/vmailmgr/vmailmgr.install
+vmailmgr-0.96.9-1-i686
 
 diff --git a/source/custom/vmailmgr/FrugalBuild b/source/custom/vmailmgr/FrugalBuild
 new file mode 100644
-index 0000000..a13ffa5
+index 0000000..6e076d3
 --- /dev/null
 +++ b/source/custom/vmailmgr/FrugalBuild
-@@ -0,0 +1,40 @@
+@@ -0,0 +1,41 @@
 +# Maintainer: Tomas Zeman <tzeman@volny.cz>
 +
 +pkgname=vmailmgr
-+pkgver=0.97
++pkgver=0.96.9
 +pkgrel=1
 +pkgdesc="Virtual e-mail domains/users management programs."
 +url="http://www.vmailmgr.org"
-+makedepends=('python' 'gcc' 'sed') # it's not required for running it,
-+                       # plus python pkg requires xfree86.
++makedepends=('python' 'sed' 'linuxdoc-tools' 'texi2html')
 +archs=(i686)
 +up2date='lynx -dump -nolist $url/current|grep $pkgname|grep .tar.gz|head -1|sed -e "s/.*$pkgname-\(.*\)\.tar.gz.*$/\1/"'
 +install="$pkgname.install"
-+source=($url/current/$pkgname-$pkgver.tar.gz )
-+sha1sums=('0d97c8fd6df79001dd4f3b842a145089333eae8c')
++source=($url/archive/$pkgname-$pkgver.tar.gz compile-0.96.9.patch)
++sha1sums=('42e4410c29482d9a5c0490a1f5a71899b2f75d94' \
++          'b999a450671602ebdc1fa4fc58c17e2f08be8861')
 +Finclude python
 +
 +build() {
 +	echo $_F_python_libdir
 +	Fcd
++	Fpatchall
 +	sed -i -e "s{phpdir=.*\${phpdir=\"/var/www/php\"{" configure
 +	local_cv_python_lib_dir=/$_F_python_libdir ./configure \
 +		--prefix=/usr --sysconfdir=/etc/vmailmgr \
 +		--localstatedir=/var
-+	make || Fdie
++	make CXX=g++ || Fdie
 +	make DESTDIR=$startdir/pkg install || Fdie
 +
 +	# install some conf files
@@ -57,6 +47,356 @@ index 0000000..a13ffa5
 +# vim: ft=sh
 +
 +# optimization OK
+diff --git a/source/custom/vmailmgr/compile-0.96.9.patch b/source/custom/vmailmgr/compile-0.96.9.patch
+new file mode 100644
+index 0000000..35ffcd5
+--- /dev/null
++++ b/source/custom/vmailmgr/compile-0.96.9.patch
+@@ -0,0 +1,344 @@
++string.h fix
++
++diff -r 6f7a81934006 authenticate/Makefile.in
++--- a/authenticate/Makefile.in	Wed Jan 16 22:39:43 2008 +0100
+++++ b/authenticate/Makefile.in	Sun Jan 20 01:57:01 2008 +0100
++@@ -93,7 +93,7 @@ CLEANFILES = $(man_MANS) $(noinst_HTMLS)
++ 
++ EXTRA_DIST = $(man_MANS) $(noinst_HTMLS) $(noinst_PODS)
++ 
++-CXXLINK = $(CC) $(CXXFLAGS) $(LDFLAGS) -o $@
+++CXXLINK = $(CXX) $(CXXFLAGS) $(LDFLAGS) -o $@
++ INCLUDES = $(CIINCLUDES) -I../lib
++ 
++ checkvpw_SOURCES = checkvpw.cc authvlib.cc authvlib.h
++diff -r 6f7a81934006 authenticate/authvmailmgr.cc
++--- a/authenticate/authvmailmgr.cc	Wed Jan 16 22:39:43 2008 +0100
+++++ b/authenticate/authvmailmgr.cc	Sun Jan 20 01:57:01 2008 +0100
++@@ -15,6 +15,8 @@
++ // Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
++ 
++ #include <config.h>
+++#include <stdlib.h>
+++#include <string.h>
++ #include "misc/exec.h"
++ #include "authvlib.h"
++ // Courier-IMAP includes
++diff -r 6f7a81934006 authenticate/checkvpw.cc
++--- a/authenticate/checkvpw.cc	Wed Jan 16 22:39:43 2008 +0100
+++++ b/authenticate/checkvpw.cc	Sun Jan 20 01:57:01 2008 +0100
++@@ -16,6 +16,7 @@
++ 
++ #include <config.h>
++ #include <errno.h>
+++#include <stdlib.h>
++ #include <string.h>
++ #include <sys/types.h>
++ #include "config/configrc.h"
++diff -r 6f7a81934006 authenticate/vauthenticate.cc
++--- a/authenticate/vauthenticate.cc	Wed Jan 16 22:39:43 2008 +0100
+++++ b/authenticate/vauthenticate.cc	Sun Jan 20 01:57:01 2008 +0100
++@@ -16,6 +16,7 @@
++ 
++ #include <config.h>
++ #include <errno.h>
+++#include <stdlib.h>
++ #include <unistd.h>
++ #include "authvlib.h"
++ #include "fdbuf/fdbuf.h"
++diff -r 6f7a81934006 cgi/Makefile.in
++--- a/cgi/Makefile.in	Wed Jan 16 22:39:43 2008 +0100
+++++ b/cgi/Makefile.in	Sun Jan 20 01:57:01 2008 +0100
++@@ -86,7 +86,7 @@ cgi_PROGRAMS = vpasswd vadduser vdeluser
++ cgi_PROGRAMS = vpasswd vadduser vdeluser vaddalias vchattr vchforwards 	listvdomain
++ 
++ 
++-CXXLINK = $(CC) $(CXXFLAGS) $(LDFLAGS) -o $@
+++CXXLINK = $(CXX) $(CXXFLAGS) $(LDFLAGS) -o $@
++ INCLUDES = -I../lib
++ 
++ vpasswd_SOURCES = vpasswd.cc
++diff -r 6f7a81934006 commands/Makefile.in
++--- a/commands/Makefile.in	Wed Jan 16 22:39:43 2008 +0100
+++++ b/commands/Makefile.in	Sun Jan 20 01:57:01 2008 +0100
++@@ -99,7 +99,7 @@ EXTRA_PROGRAMS = vpasswd2cdb vrehash
++ EXTRA_PROGRAMS = vpasswd2cdb vrehash
++ EXTRA_SCRIPTS = allvpasswd2cdb
++ 
++-CXXLINK = $(CC) $(CXXFLAGS) $(LDFLAGS) -o $@
+++CXXLINK = $(CXX) $(CXXFLAGS) $(LDFLAGS) -o $@
++ INCLUDES = -I../lib -DBINDIR=\"@bindir@\"
++ 
++ listvdomain_SOURCES = listvdomain.cc vcommand.cc
++diff -r 6f7a81934006 commands/vcheckquota.cc
++--- a/commands/vcheckquota.cc	Wed Jan 16 22:39:43 2008 +0100
+++++ b/commands/vcheckquota.cc	Sun Jan 20 01:57:01 2008 +0100
++@@ -31,10 +31,10 @@
++ 
++ const char* cli_program = "vcheckquota";
++ const char* cli_help_prefix = "vmailmgr quota enforcement program\n";
++-const char* cli_help_suffix = "
++-Warning: the soft-message is linked into the users maildir once for each
++-message that is received while the account is over its soft quota.  This may
++-result in multiple warning messages.\n";
+++const char* cli_help_suffix =
+++"Warning: the soft-message is linked into the users maildir once for each"
+++"message that is received while the account is over its soft quota.  This may"
+++"result in multiple warning messages.\n";
++ const char* cli_args_usage = "";
++ const int cli_args_min = 0;
++ const int cli_args_max = 0;
++diff -r 6f7a81934006 commands/vchforwards.cc
++--- a/commands/vchforwards.cc	Wed Jan 16 22:39:43 2008 +0100
+++++ b/commands/vchforwards.cc	Sun Jan 20 01:57:01 2008 +0100
++@@ -25,8 +25,7 @@ const char* cli_help_prefix =
++ const char* cli_help_prefix =
++ "Change virtual user forwarding addresses.\n";
++ const char* cli_help_suffix =
++-"If no forwarding addresses are given, forwarding is disabled.
++-";
+++"If no forwarding addresses are given, forwarding is disabled.";
++ const char* cli_args_usage = "USERNAME [DESTINATION1 ...]";
++ const int cli_args_min = 1;
++ const int cli_args_max = -1;
++diff -r 6f7a81934006 commands/vpasswd2cdb.cc
++--- a/commands/vpasswd2cdb.cc	Wed Jan 16 22:39:43 2008 +0100
+++++ b/commands/vpasswd2cdb.cc	Sun Jan 20 01:57:01 2008 +0100
++@@ -27,9 +27,9 @@ const char* cli_program = "vpasswd2cdb";
++ const char* cli_program = "vpasswd2cdb";
++ const char* cli_help_prefix = "Converts text password tables to CDB format\n";
++ const char* cli_help_suffix =
++-"Reads in a standard virtual password table in the current directory,
++-and writes it out to a CDB table.  The file names for the text and CDB
++-tables are determined from the configuration file.";
+++"Reads in a standard virtual password table in the current directory,"
+++"and writes it out to a CDB table.  The file names for the text and CDB"
+++"tables are determined from the configuration file.";
++ const char* cli_args_usage = "";
++ const int cli_args_min = 0;
++ const int cli_args_max = 0;
++diff -r 6f7a81934006 commands/vpasswd2db.cc
++--- a/commands/vpasswd2db.cc	Wed Jan 16 22:39:43 2008 +0100
+++++ b/commands/vpasswd2db.cc	Sun Jan 20 01:57:01 2008 +0100
++@@ -26,9 +26,9 @@ const char* cli_program = "vpasswd2db";
++ const char* cli_program = "vpasswd2db";
++ const char* cli_help_prefix = "Converts text password tables to current vpwtable DB format\n";
++ const char* cli_help_suffix =
++-"Reads in a standard virtual password table in the current directory,
++-and writes it out to a table.  The file names for the input and output
++-tables are determined from the configuration file.";
+++"Reads in a standard virtual password table in the current directory,"
+++"and writes it out to a table.  The file names for the input and output"
+++"tables are determined from the configuration file.";
++ const char* cli_args_usage = "";
++ const int cli_args_min = 0;
++ const int cli_args_max = 0;
++diff -r 6f7a81934006 daemon/Makefile.in
++--- a/daemon/Makefile.in	Wed Jan 16 22:39:43 2008 +0100
+++++ b/daemon/Makefile.in	Sun Jan 20 01:57:01 2008 +0100
++@@ -91,7 +91,7 @@ CLEANFILES = $(man_MANS) $(noinst_HTMLS)
++ 
++ EXTRA_DIST = $(man_MANS) $(noinst_HTMLS) $(noinst_PODS)
++ 
++-CXXLINK = $(CC) $(CXXFLAGS) $(LDFLAGS) -o $@
+++CXXLINK = $(CXX) $(CXXFLAGS) $(LDFLAGS) -o $@
++ INCLUDES = -I../lib
++ 
++ vmailmgrd_SOURCES = daemon.h 	adduser2.cc 	autoresponse.cc 	chattr.cc 	check.cc 	command.h command.cc 	deluser.cc 	dispatch.cc 	listdomain.cc 	log.h log.cc 	lookup.cc 	main.cc 	state.h state.cc
++diff -r 6f7a81934006 lib/courier-authlib/changeuidgid.c
++--- a/lib/courier-authlib/changeuidgid.c	Wed Jan 16 22:39:43 2008 +0100
+++++ b/lib/courier-authlib/changeuidgid.c	Sun Jan 20 01:57:01 2008 +0100
++@@ -12,6 +12,7 @@
++ #endif
++ #include	<stdio.h>
++ #include	<stdlib.h>
+++#include	<string.h>
++ #include	<grp.h>
++ #include	<pwd.h>
++ #include	<errno.h>
++diff -r 6f7a81934006 lib/misc/crc32.h
++--- a/lib/misc/crc32.h	Wed Jan 16 22:39:43 2008 +0100
+++++ b/lib/misc/crc32.h	Sun Jan 20 01:57:01 2008 +0100
++@@ -45,4 +45,4 @@ public:
++         (unsigned char)(octet) ] ^ ( ((crc32)>>8) & 0x00FFFFFFL ) )
++ #endif
++ 
++-#endif CRC32INIT
+++#endif /* CRC32INIT */
++diff -r 6f7a81934006 lib/misc/exec.cc
++--- a/lib/misc/exec.cc	Wed Jan 16 22:39:43 2008 +0100
+++++ b/lib/misc/exec.cc	Sun Jan 20 01:57:01 2008 +0100
++@@ -17,10 +17,12 @@
++ #include <config.h>
++ #include <errno.h>
++ #include <stdlib.h>
+++#include <string.h>
++ #include <sys/stat.h>
++ #include <sys/types.h>
++ #include <sys/wait.h>
++ #include <unistd.h>
+++#include <string.h>
++ #include "exec.h"
++ #include "config/configrc.h"
++ 
++diff -r 6f7a81934006 lib/misc/keystrlist.cc
++--- a/lib/misc/keystrlist.cc	Wed Jan 16 22:39:43 2008 +0100
+++++ b/lib/misc/keystrlist.cc	Sun Jan 20 01:57:01 2008 +0100
++@@ -15,6 +15,7 @@
++ // Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
++ 
++ #include <config.h>
+++#include <string.h>
++ #include "strlist.h"
++ 
++ void keystrlist::set(const mystring& var, const mystring& val)
++diff -r 6f7a81934006 lib/misc/md5-crypt.c
++--- a/lib/misc/md5-crypt.c	Wed Jan 16 22:39:43 2008 +0100
+++++ b/lib/misc/md5-crypt.c	Sun Jan 20 01:57:01 2008 +0100
++@@ -32,7 +32,7 @@ static const char md5_salt_prefix[] = "$
++ static const char md5_salt_prefix[] = "$1$";
++ 
++ /* Table with characters for base64 transformation.  */
++-static const char b64t[64] =
+++static const char b64t[] =
++ "./0123456789ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz";
++ 
++ 
++@@ -53,11 +53,7 @@ extern char *md5_crypt __P ((const char 
++ /* This entry point is equivalent to the `crypt' function in Unix
++    libcs.  */
++ char *
++-md5_crypt_r (key, salt, buffer, buflen)
++-     const char *key;
++-     const char *salt;
++-     char *buffer;
++-     int buflen;
+++md5_crypt_r (const char *key, const char *salt, char *buffer, int buflen)
++ {
++   unsigned char alt_result[16];
++   struct md5_ctx ctx;
++@@ -213,9 +209,7 @@ md5_crypt_r (key, salt, buffer, buflen)
++ 
++ 
++ char *
++-md5_crypt (key, salt)
++-     const char *key;
++-     const char *salt;
+++md5_crypt (const char *key, const char *salt)
++ {
++   /* We don't want to have an arbitrary limit in the size of the
++      password.  We can compute the size of the result in advance and
++@@ -227,7 +221,7 @@ md5_crypt (key, salt)
++   if (buflen < needed)
++     {
++       buflen = needed;
++-      if ((buffer = realloc (buffer, buflen)) == NULL)
+++      if ((buffer = (char *)realloc (buffer, buflen)) == NULL)
++ 	return NULL;
++     }
++ 
++diff -r 6f7a81934006 lib/misc/md5.c
++--- a/lib/misc/md5.c	Wed Jan 16 22:39:43 2008 +0100
+++++ b/lib/misc/md5.c	Sun Jan 20 01:57:01 2008 +0100
++@@ -69,8 +69,7 @@ static const unsigned char fillbuf[64] =
++ /* Initialize structure containing state of computation.
++    (RFC 1321, 3.3: Step 3)  */
++ void
++-md5_init_ctx (ctx)
++-     struct md5_ctx *ctx;
+++md5_init_ctx (struct md5_ctx *ctx)
++ {
++   ctx->A = 0x67452301;
++   ctx->B = 0xefcdab89;
++@@ -87,9 +86,7 @@ md5_init_ctx (ctx)
++    IMPORTANT: On some systems it is required that RESBUF is correctly
++    aligned for a 32 bits value.  */
++ void *
++-md5_read_ctx (ctx, resbuf)
++-     const struct md5_ctx *ctx;
++-     void *resbuf;
+++md5_read_ctx (const struct md5_ctx *ctx, void *resbuf)
++ {
++   ((md5_uint32 *) resbuf)[0] = SWAP (ctx->A);
++   ((md5_uint32 *) resbuf)[1] = SWAP (ctx->B);
++@@ -105,9 +102,7 @@ md5_read_ctx (ctx, resbuf)
++    IMPORTANT: On some systems it is required that RESBUF is correctly
++    aligned for a 32 bits value.  */
++ void *
++-md5_finish_ctx (ctx, resbuf)
++-     struct md5_ctx *ctx;
++-     void *resbuf;
+++md5_finish_ctx (struct md5_ctx *ctx, void *resbuf)
++ {
++   /* Take yet unprocessed bytes into account.  */
++   md5_uint32 bytes = ctx->buflen;
++@@ -136,9 +131,7 @@ md5_finish_ctx (ctx, resbuf)
++    resulting message digest number will be written into the 16 bytes
++    beginning at RESBLOCK.  */
++ int
++-md5_stream (stream, resblock)
++-     FILE *stream;
++-     void *resblock;
+++md5_stream (FILE *stream, void *resblock)
++ {
++   /* Important: BLOCKSIZE must be a multiple of 64.  */
++ #define BLOCKSIZE 4096
++@@ -193,10 +186,7 @@ md5_stream (stream, resblock)
++    output yields to the wanted ASCII representation of the message
++    digest.  */
++ void *
++-md5_buffer (buffer, len, resblock)
++-     const char *buffer;
++-     size_t len;
++-     void *resblock;
+++md5_buffer (const char *buffer, size_t len, void *resblock)
++ {
++   struct md5_ctx ctx;
++ 
++@@ -212,10 +202,7 @@ md5_buffer (buffer, len, resblock)
++ 
++ 
++ void
++-md5_process_bytes (buffer, len, ctx)
++-     const void *buffer;
++-     size_t len;
++-     struct md5_ctx *ctx;
+++md5_process_bytes (const void *buffer, size_t len, struct md5_ctx *ctx)
++ {
++   /* When we already have some bits in our internal buffer concatenate
++      both inputs first.  */
++@@ -270,13 +257,10 @@ md5_process_bytes (buffer, len, ctx)
++    It is assumed that LEN % 64 == 0.  */
++ 
++ void
++-md5_process_block (buffer, len, ctx)
++-     const void *buffer;
++-     size_t len;
++-     struct md5_ctx *ctx;
+++md5_process_block (const void *buffer, size_t len, struct md5_ctx *ctx)
++ {
++   md5_uint32 correct_words[16];
++-  const md5_uint32 *words = buffer;
+++  const md5_uint32 *words = (const md5_uint32 *)buffer;
++   size_t nwords = len / sizeof (md5_uint32);
++   const md5_uint32 *endp = words + nwords;
++   md5_uint32 A = ctx->A;
++diff -r 6f7a81934006 lib/misc/strlist.cc
++--- a/lib/misc/strlist.cc	Wed Jan 16 22:39:43 2008 +0100
+++++ b/lib/misc/strlist.cc	Sun Jan 20 01:57:01 2008 +0100
++@@ -15,6 +15,7 @@
++ // Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
++ 
++ #include <config.h>
+++#include <string.h>
++ #include "strlist.h"
++ 
++ static const char* compare(const char* ptr, const char* end,
++diff -r 6f7a81934006 lib/mystring/append.cc
++--- a/lib/mystring/append.cc	Wed Jan 16 22:39:43 2008 +0100
+++++ b/lib/mystring/append.cc	Sun Jan 20 01:57:01 2008 +0100
++@@ -1,3 +1,4 @@
+++#include <string.h>
++ #include "mystring.h"
++ #include "trace.h"
++ 
 diff --git a/source/custom/vmailmgr/vmailmgr.install b/source/custom/vmailmgr/vmailmgr.install
 new file mode 100644
 index 0000000..9b9b1e5
@@ -86,6 +426,3 @@ index 0000000..9b9b1e5
 +shift
 +
 +$op $*
--- 
-1.5.3.4
-
