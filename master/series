@@ -43,3 +43,5 @@ diet-pure-ftpd.patch
 vegadns.patch
 omail-admin.patch
 omail-admin-htaccess.patch
+perl-appconfig.patch
+perl-template-toolkit.patch

@@ -1,0 +1,19 @@
+AppConfig-1.66
+
+diff --git a/source/custom/perl-appconfig/FrugalBuild b/source/custom/perl-appconfig/FrugalBuild
+new file mode 100644
+index 0000000..6db5b9c
+--- /dev/null
++++ b/source/custom/perl-appconfig/FrugalBuild
+@@ -0,0 +1,11 @@
++# Maintainer: Tomas Zeman <tzeman@volny.cz>
++
++_F_perl_name=AppConfig
++_F_perl_author=A/AB/ABW
++pkgver=1.66
++pkgrel=1
++pkgdesc="Template processing system"
++Finclude perl
++archs=('i686' 'x86_64')
++groups=('custom')
++sha1sums=('177d362530b532ee70dd59ab899eb83664b7bbda')
