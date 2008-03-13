@@ -2,7 +2,7 @@ guilt-0.28
 
 diff --git a/source/custom/guilt/FrugalBuild b/source/custom/guilt/FrugalBuild
 new file mode 100644
-index 0000000..478578f
+index 0000000..a89eccb
 --- /dev/null
 +++ b/source/custom/guilt/FrugalBuild
 @@ -0,0 +1,20 @@
@@ -14,7 +14,7 @@ index 0000000..478578f
 +pkgdesc="A Quilt-like interface on top of Git"
 +url="http://www.kernel.org/pub/linux/kernel/people/jsipek/guilt/"
 +depends=('git')
-+makedepends=('asciidoc')
++makedepends=('asciidoc' 'xmlto')
 +groups=('custom')
 +archs=('i686' 'x86_64')
 +up2date="lynx -dump $url|Flasttar"
