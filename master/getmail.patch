@@ -1,0 +1,50 @@
+getmail
+
+diff --git a/source/custom/getmail/FrugalBuild b/source/custom/getmail/FrugalBuild
+new file mode 100644
+index 0000000..04de308
+--- /dev/null
++++ b/source/custom/getmail/FrugalBuild
+@@ -0,0 +1,26 @@
++# Maintainer: Tomas Zeman <tzeman@volny.cz>
++
++pkgname=getmail
++pkgver=4.8.0
++pkgrel=1
++pkgdesc="Email retriever (POP3, IMAP)"
++url="http://pyropus.ca/software/getmail"
++Finclude python
++# neccessary because of the .egg file
++depends=("python")
++groups=('custom')
++archs=('i686' 'x86_64')
++up2date="lynx -dump $url |grep tar.gz$ |Fsort |Flasttar"
++source=(http://pyropus.ca/software/$pkgname/old-versions/$pkgname-$pkgver.tar.gz
++	$pkgname.patch)
++sha1sums=('eac507edd5c190fa3278b37fd034b9a0f85cd8e5' \
++          'dde9238bddd77af0941109d438a8b357cd8a33c2')
++
++#build()
++#{
++#	Fmake
++#	rm Makefile
++#	Fmakeinstall
++#	Fexerel contrib/hgk /usr/bin/hgk
++#	Fsplit mercurial-hgk usr/bin/hgk
++#}
+diff --git a/source/custom/getmail/getmail.patch b/source/custom/getmail/getmail.patch
+new file mode 100644
+index 0000000..f1dd2fb
+--- /dev/null
++++ b/source/custom/getmail/getmail.patch
+@@ -0,0 +1,10 @@
++--- setup.py.orig	2008-03-13 12:02:10.000000000 +0100
+++++ setup.py	2008-03-13 12:02:27.000000000 +0100
++@@ -100,7 +100,6 @@
++     data_files=[
++         (GETMAILDOCDIR, [
++             './README',
++-            './getmail.spec',
++             'docs/BUGS',
++             'docs/COPYING',
++             'docs/CHANGELOG',
