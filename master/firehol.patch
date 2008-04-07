@@ -1,0 +1,75 @@
+firehol: iptables firewall builder
+
+diff --git a/source/custom/firehol/FrugalBuild b/source/custom/firehol/FrugalBuild
+new file mode 100644
+index 0000000..4cddcec
+--- /dev/null
++++ b/source/custom/firehol/FrugalBuild
+@@ -0,0 +1,35 @@
++# Maintainer: Tomas Zeman <tzeman@volny.cz>
++# Ported from:
++# 	http://aur.archlinux.org/packages/firehol/firehol/PKGBUILD
++# 	Contributor: Filip Dvorak <fila@pruda.com>
++pkgname=firehol
++pkgver=1.256
++pkgrel=1
++pkgdesc="The iptables stateful packet filtering firewall builder."
++_F_sourceforge_dirname="firehol"
++Finclude sourceforge
++url="http://firehol.sourceforge.net"
++purl="http://sourceforge.net/project/showfiles.php?group_id=58425"
++archs=('i686' 'x86_64')
++license=('GPL')
++groups=('custom')
++depends=('iptables' 'gawk' 'iproute2')
++makedepends=()
++conflicts=()
++replaces=()
++backup=('etc/firehol/firehol.conf')
++install=('firehol.install')
++up2date="lynx -dump '$purl'|grep tar.bz2|grep -m1 '$pkgname-'|sed 's/.*-\(.*\).tar.bz2 .*/\1/'"
++source=(http://dl.sourceforge.net/sourceforge/firehol/$pkgname-$pkgver.tar.bz2)
++sha1sums=('1fc4adb067d0d0ad4d79149710b9db003ffbbf31')
++
++build() {
++  cd $startdir/src/$pkgname-$pkgver
++  install -D -m755 firehol.sh $startdir/pkg/etc/rc.d/rc.firehol
++  mkdir $startdir/pkg/etc/firehol/
++  
++  cp get-iana.sh $startdir/pkg/etc/firehol/
++  cp adblock.sh $startdir/pkg/etc/firehol/
++  cd examples
++  cp *.conf $startdir/pkg/etc/firehol/
++}
+diff --git a/source/custom/firehol/firehol.install b/source/custom/firehol/firehol.install
+new file mode 100644
+index 0000000..b8871b3
+--- /dev/null
++++ b/source/custom/firehol/firehol.install
+@@ -0,0 +1,26 @@
++#!/bin/bash
++
++# arg 1:  the new package version
++post_install() {
++    /etc/firehol/get-iana.sh
++    echo 'Autodetecting networks and creating initial firehol.conf file...'
++    /etc/rc.d/rc.firehol helpme >/etc/firehol/firehol.conf.default
++    echo '###########################'
++    echo ' '
++    echo 'Autodetection of network setup has been done, however'
++    echo 'you will need to configure firehol by checking out'
++    echo 'the tutorials on http://firehol.sourceforge.net/ and'
++    echo 'editing the /etc/firehol/firehol.conf file. Some'
++    echo 'example configurations have been placed in /etc/firehol.'
++    echo ' '
++    echo 'Firehol can be manipulated via:'
++    echo ' '
++    echo '/etc/rc.d/rc.firehol <command>'
++    echo ' '
++    echo '###########################'
++    echo ' '
++
++}
++op=$1
++shift
++$op $*
