@@ -48,3 +48,4 @@ perl-appconfig.patch
 perl-template-toolkit.patch
 getmail.patch
 firehol.patch
+vim.patch
