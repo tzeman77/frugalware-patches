@@ -4,16 +4,9 @@ Date: Sun, 21 Oct 2007 12:33:08 +0200
 Subject: [PATCH] drbd-module-8.0.6-1-i686
  * added
 
----
- source/custom/drbd-module/FrugalBuild  |   25 ++++++++++++++++++
- source/custom/drbd-module/drbd.install |   43 ++++++++++++++++++++++++++++++++
- 2 files changed, 68 insertions(+), 0 deletions(-)
- create mode 100644 source/custom/drbd-module/FrugalBuild
- create mode 100644 source/custom/drbd-module/drbd.install
-
 diff --git a/source/custom/drbd-module/FrugalBuild b/source/custom/drbd-module/FrugalBuild
 new file mode 100644
-index 0000000..6eadd82
+index 0000000..bfb8ae4
 --- /dev/null
 +++ b/source/custom/drbd-module/FrugalBuild
 @@ -0,0 +1,25 @@
@@ -21,7 +14,7 @@ index 0000000..6eadd82
 +
 +pkgorig=drbd
 +pkgname=$pkgorig-module
-+pkgver=8.0.6
++pkgver=0.7.25
 +pkgrel=1
 +pkgdesc="block device mirroring a whole block device via network; network raid-1 implementation"
 +url="http://www.drbd.org"
@@ -29,9 +22,9 @@ index 0000000..6eadd82
 +depends=(kernel-source gcc make)
 +archs=(i686)
 +install=drbd.install
-+up2date="lynx -dump -nolist http://oss.linbit.com/drbd/|grep drbd-8.0|grep tar.gz|head -1|sed -e 's/^.*drbd-\(.*\)\.tar\.gz.*$/\1/'"
-+source=(http://oss.linbit.com/drbd/8.0/$pkgorig-$pkgver.tar.gz)
-+sha1sums=(6c19883b19813ee0a3d02a07d89e6ba21517edb9)
++up2date="lynx -dump -nolist http://oss.linbit.com/drbd/|grep drbd-0.7|grep tar.gz|head -1|sed -e 's/^.*drbd-\(.*\)\.tar\.gz.*$/\1/'"
++source=(http://oss.linbit.com/drbd/0.7/$pkgorig-$pkgver.tar.gz)
++sha1sums=('9f507ffd41306409357e1eb4e6f73e3671acad28')
 +
 +
 +build() {
@@ -91,6 +84,3 @@ index 0000000..3bb4f68
 +shift
 +$op $*
 +
--- 
-1.5.3.4
-
