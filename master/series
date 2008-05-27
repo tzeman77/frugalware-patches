@@ -14,7 +14,6 @@ diet-cvm-fix-path.patch
 bglibs.patch
 cvm.patch
 diet-ucspi-tcp.patch
-diet-ucspi-tcp-fix-provides.patch
 diet-djbdns.patch
 mailfront.patch
 diet-runit.patch

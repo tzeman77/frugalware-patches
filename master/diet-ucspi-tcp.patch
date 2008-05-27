@@ -1,17 +1,8 @@
-From ba13ad56091f19679347a67ba5a4216deb9cb960 Mon Sep 17 00:00:00 2001
-From: Tomas Zeman <tzeman@volny.cz>
-Date: Sun, 28 Oct 2007 23:49:41 +0100
-Subject: [PATCH] diet-ucspi-tcp-0.88-1-i686
- * added
-
----
- source/dietlibc/diet-ucspi-tcp/FrugalBuild |   29 ++++++++++++++++++++++++++++
- 1 files changed, 29 insertions(+), 0 deletions(-)
- create mode 100644 source/dietlibc/diet-ucspi-tcp/FrugalBuild
+diet-ucspi-tcp
 
 diff --git a/source/dietlibc/diet-ucspi-tcp/FrugalBuild b/source/dietlibc/diet-ucspi-tcp/FrugalBuild
 new file mode 100644
-index 0000000..8e65323
+index 0000000..e368e1e
 --- /dev/null
 +++ b/source/dietlibc/diet-ucspi-tcp/FrugalBuild
 @@ -0,0 +1,29 @@
@@ -29,7 +20,7 @@ index 0000000..8e65323
 +up2date='lynx -dump -nolist http://cr.yp.to/$pkgorig/install.html|grep $pkgorig|grep tar.gz|head -1|sed -e "s/.*$pkgorig-\(.*\)\.tar.gz.*$/\1/"'
 +source=(http://cr.yp.to/$pkgorig/$pkgorig-$pkgver.tar.gz)
 +sha1sums=('793b4189795b563085602c030dd8aa0d206ddc0e')
-+
++provides=($pkgorig)
 +
 +build() {
 +	Fcd $pkgorig-$pkgver
@@ -44,6 +35,3 @@ index 0000000..8e65323
 +	done
 +}
 +# vim: ft=sh
--- 
-1.5.3.4
-
