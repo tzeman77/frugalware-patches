@@ -4,36 +4,27 @@ Date: Sun, 28 Oct 2007 23:30:41 +0100
 Subject: [PATCH] cvm-0.82-1
  * added
 
----
- source/custom/cvm/FrugalBuild       |   28 ++++++++++++++++++++++++++++
- source/custom/cvm/libtool-tag.patch |   11 +++++++++++
- 2 files changed, 39 insertions(+), 0 deletions(-)
- create mode 100644 source/custom/cvm/FrugalBuild
- create mode 100644 source/custom/cvm/libtool-tag.patch
-
 diff --git a/source/custom/cvm/FrugalBuild b/source/custom/cvm/FrugalBuild
 new file mode 100644
-index 0000000..c9e0a4c
+index 0000000..a9dee8b
 --- /dev/null
 +++ b/source/custom/cvm/FrugalBuild
-@@ -0,0 +1,28 @@
+@@ -0,0 +1,26 @@
 +# Maintainer: Tomas Zeman <tzeman@volny.cz>
 +
 +pkgname=cvm
-+pkgver=0.82
++pkgver=0.90
 +pkgrel=1
 +pkgdesc="Credential Validation Modules"
 +depends=('bglibs>=1.100')
 +url="http://untroubled.org/cvm/"
 +archs=(i686)
 +up2date='lynx -dump -nolist $url|grep $pkgname|grep .tar.gz|head -1|sed -e "s/.*$pkgname-\(.*\)\.tar.gz.*$/\1/"'
-+source=($url/$pkgname-$pkgver.tar.gz libtool-tag.patch)
-+sha1sums=('ee66c6b987655fc9c43fe303cf339dd7d4a7dfae' \
-+          '391f6ea9ac261acf8f22d58f83381cd91b927ab4')
++source=($url/$pkgname-$pkgver.tar.gz)
++sha1sums=('659c0bc349460cf19442b0bcdc06fad439d57491')
 +
 +build() {
 +	Fcd $pkgname-$pkgver
-+	patch -p0 < $Fsrcdir/libtool-tag.patch || Fdie
 +	echo "/usr/include/bglibs" > conf-bgincs
 +	echo "/usr/lib" > conf-bglibs
 +	echo "/usr/bin" > conf-bin
@@ -45,23 +36,3 @@ index 0000000..c9e0a4c
 +	make install_prefix=$Fdestdir install || Fdie
 +}
 +# vim: ft=sh
-diff --git a/source/custom/cvm/libtool-tag.patch b/source/custom/cvm/libtool-tag.patch
-new file mode 100644
-index 0000000..c26bbcc
---- /dev/null
-+++ b/source/custom/cvm/libtool-tag.patch
-@@ -0,0 +1,11 @@
-+--- Makefile.orig	2006-09-07 00:41:57.000000000 +0200
-++++ Makefile	2007-10-26 22:16:53.000000000 +0200
-+@@ -186,7 +186,7 @@
-+ 	  echo '#!/bin/sh'; \
-+ 	  echo 'source=$$1; shift'; \
-+ 	  echo 'base=`echo "$$source" | sed -e s:\\\\.c$$::`'; \
-+-	  echo exec libtool --mode=compile --silent `head -n 1 conf-cc` -I. "-I'$${bgincs}'" '-o $${base}.lo -c $$source $${1+"$$@"}'; \
-++	  echo exec libtool --mode=compile --tag=CC --silent `head -n 1 conf-cc` -I. "-I'$${bgincs}'" '-o $${base}.lo -c $$source $${1+"$$@"}'; \
-+ 	) >libcompile
-+ 	chmod 755 libcompile
-+ 
--- 
-1.5.3.4
-
