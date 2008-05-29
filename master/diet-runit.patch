@@ -1,17 +1,8 @@
-From 75311c3bd2ccd1d82d189c44fccc2ee9e142dda2 Mon Sep 17 00:00:00 2001
-From: Tomas Zeman <tzeman@volny.cz>
-Date: Sun, 28 Oct 2007 23:43:16 +0100
-Subject: [PATCH] diet-runit-1.8.0-1-i686
- * added
-
----
- source/dietlibc/diet-runit/FrugalBuild |   51 ++++++++++++++++++++++++++++++++
- 1 files changed, 51 insertions(+), 0 deletions(-)
- create mode 100644 source/dietlibc/diet-runit/FrugalBuild
+diet-runit-1.9.0
 
 diff --git a/source/dietlibc/diet-runit/FrugalBuild b/source/dietlibc/diet-runit/FrugalBuild
 new file mode 100644
-index 0000000..b827f83
+index 0000000..c207822
 --- /dev/null
 +++ b/source/dietlibc/diet-runit/FrugalBuild
 @@ -0,0 +1,51 @@
@@ -20,7 +11,7 @@ index 0000000..b827f83
 +branch=diet
 +pkgorig=runit
 +pkgname=$branch-$pkgorig
-+pkgver=1.8.0
++pkgver=1.9.0
 +pkgrel=1
 +pkgdesc="init replacement"
 +url="http://smarden.org/runit/"
@@ -28,8 +19,8 @@ index 0000000..b827f83
 +up2date='lynx -dump -nolist $url/install.html|grep $pkgorig|grep tar.gz|head -1|sed -e "s/.*$pkgorig-\(.*\)\.tar.gz.*$/\1/"'
 +makedepends=(dietlibc)
 +source=($url/$pkgorig-$pkgver.tar.gz)
-+sha1sums=('a8a968cd8f17f78fcf9db36a3ac9107e3e68d86c')
 +provides=(runit)
++sha1sums=('a5f6974ba2f5571e1d18eefb659140451840943c')
 +
 +build() {
 +	mkdir -p $Fdestdir/package/admin
@@ -66,6 +57,3 @@ index 0000000..b827f83
 +	chmod 755 $Fdestdir/sbin/runsvdir-start
 +}
 +# vim: ft=sh
--- 
-1.5.3.4
-
