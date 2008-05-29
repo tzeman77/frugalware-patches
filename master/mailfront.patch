@@ -1,8 +1,4 @@
-From 6ed9cc4ad38dc55a6a4b19cfd029c961136f8234 Mon Sep 17 00:00:00 2001
-From: Tomas Zeman <tzeman@volny.cz>
-Date: Sun, 28 Oct 2007 23:31:21 +0100
-Subject: [PATCH] mailfront-1.11-1
- * added
+mailfront-1.11
 
 ---
  source/custom/mailfront/FrugalBuild |   27 +++++++++++++++++++++++++++
