@@ -1,8 +1,4 @@
-From 3abefdd51bc395b46a6ae273f8043ea50cab5dc5 Mon Sep 17 00:00:00 2001
-From: Tomas Zeman <tzeman@volny.cz>
-Date: Tue, 30 Oct 2007 22:42:20 +0100
-Subject: [PATCH] diet-ucspi-ipc-0.67-1-i686
- * added
+diet-ucspi-ipc-0.67
 
 ---
  source/dietlibc/diet-ucspi-ipc/FrugalBuild |   32 ++++++++++++++++++++++++++++
