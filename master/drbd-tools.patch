@@ -1,9 +1,4 @@
-From 1fe8d9875967ec89f54382eec6a1a2b8a317eab9 Mon Sep 17 00:00:00 2001
-From: Tomas Zeman <tzeman@volny.cz>
-Date: Sun, 21 Oct 2007 21:43:36 +0200
-Subject: [PATCH] drbd-tools-8.0.6-1-i686
- * added
-
+drbd-tools-0.7
 diff --git a/source/custom/drbd-tools/FrugalBuild b/source/custom/drbd-tools/FrugalBuild
 new file mode 100644
 index 0000000..24ad938
