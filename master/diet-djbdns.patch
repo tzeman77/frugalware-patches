@@ -1,8 +1,4 @@
-From dcb805c78db7a7bb9362fa38dc02ee44c3101b36 Mon Sep 17 00:00:00 2001
-From: Tomas Zeman <tzeman@volny.cz>
-Date: Fri, 26 Oct 2007 23:30:37 +0200
-Subject: [PATCH] diet-djbdns-1.05-1-i686.fpm
- * added
+diet-djbdns-1.05
 
 ---
  source/dietlibc/diet-djbdns/FrugalBuild    |   35 ++++++++++++++++++++++++++++
