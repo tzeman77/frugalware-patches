@@ -1,46 +1,53 @@
-From 4853c86a80d071ab2171b1c9d77831f292ebf00a Mon Sep 17 00:00:00 2001
-From: Tomas Zeman <tzeman@volny.cz>
-Date: Sun, 21 Oct 2007 12:33:08 +0200
-Subject: [PATCH] drbd-module-8.0.6-1-i686
- * added
-
+drbd-module-0.7
 diff --git a/source/custom/drbd-module/FrugalBuild b/source/custom/drbd-module/FrugalBuild
 new file mode 100644
-index 0000000..bfb8ae4
+index 0000000..49eaf89
 --- /dev/null
 +++ b/source/custom/drbd-module/FrugalBuild
-@@ -0,0 +1,25 @@
+@@ -0,0 +1,36 @@
 +# Maintainer: Tomas Zeman <tzeman@volny.cz>
 +
 +pkgorig=drbd
 +pkgname=$pkgorig-module
 +pkgver=0.7.25
-+pkgrel=1
++pkgrel=2
 +pkgdesc="block device mirroring a whole block device via network; network raid-1 implementation"
 +url="http://www.drbd.org"
 +license="GPL"
-+depends=(kernel-source gcc make)
++depends=(kernel-source gcc make "kernel=2.6.24")
 +archs=(i686)
 +install=drbd.install
-+up2date="lynx -dump -nolist http://oss.linbit.com/drbd/|grep drbd-0.7|grep tar.gz|head -1|sed -e 's/^.*drbd-\(.*\)\.tar\.gz.*$/\1/'"
-+source=(http://oss.linbit.com/drbd/0.7/$pkgorig-$pkgver.tar.gz)
-+sha1sums=('9f507ffd41306409357e1eb4e6f73e3671acad28')
++_F_scm_type="git"
++_F_scm_url="git://git.drbd.org/drbd-0.7.git"
++_F_scm_tag="fe0c05db16a4dbdc6cfcb20c68b2f61a7793df1a"
++Finclude scm
++
++#up2date="lynx -dump -nolist http://oss.linbit.com/drbd/|grep drbd-0.7|grep tar.gz|head -1|sed -e 's/^.*drbd-\(.*\)\.tar\.gz.*$/\1/'"
++#source=(http://oss.linbit.com/drbd/0.7/$pkgorig-$pkgver.tar.gz 'http://git.drbd.org/?p=drbd-0.7.git;a=commitdiff_plain;h=fe0c05db16a4dbdc6cfcb20c68b2f61a7793df1a')
++#sha1sums=('9f507ffd41306409357e1eb4e6f73e3671acad28')
 +
 +
 +build() {
-+	Fcd $pkgorig-$pkgver
-+	mkdir -p $startdir/pkg/usr/src/$pkgname
-+	cp -aR drbd $startdir/pkg/usr/src/$pkgname
-+	cp -aR scripts $startdir/pkg/usr/src/$pkgname
++	Funpack_scm
++	#Fcd $pkgorig-$pkgver
++	#mkdir -p $startdir/pkg/usr/src/$pkgname
++	#cp -aR drbd $startdir/pkg/usr/src/$pkgname
++	#cp -aR scripts $startdir/pkg/usr/src/$pkgname
++	Fcd || Fdie
++	cd drbd
++	make clean
++	make KDIR=/usr/src/linux-`uname -r` || Fdie
++	make install PREFIX=$startdir/pkg || Fdie
 +}
 +
 +# vim: ft=sh
 diff --git a/source/custom/drbd-module/drbd.install b/source/custom/drbd-module/drbd.install
 new file mode 100644
-index 0000000..3bb4f68
+index 0000000..06437f2
 --- /dev/null
 +++ b/source/custom/drbd-module/drbd.install
-@@ -0,0 +1,43 @@
+@@ -0,0 +1,41 @@
++
 +# This is a default template for a post-install scriptlet.  You can
 +# remove any functions you don't need (and this header).
 +
@@ -63,11 +70,8 @@ index 0000000..3bb4f68
 +# arg 1:  the new package version
 +# arg 2:  the old package version
 +post_upgrade() {
-+  cd /usr/src/drbd-module/drbd
-+  make clean
-+  make KDIR=/usr/src/linux-`uname -r` all || /bin/false
-+  make install || /bin/false
-+  /bin/true
++  DRBD_OBJ=/lib/modules/`uname -r`/kernel/drivers/block/drbd.ko
++  /sbin/depmod -a || /sbin/depmod -e $DRBD_OBJ
 +}
 +
 +# arg 1:  the old package version
@@ -77,7 +81,7 @@ index 0000000..3bb4f68
 +
 +# arg 1:  the old package version
 +post_remove() {
-+  /bin/true
++  /sbin/depmod -a
 +}
 +
 +op=$1
