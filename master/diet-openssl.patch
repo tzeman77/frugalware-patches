@@ -1,17 +1,8 @@
-From 3ef82030023b31aebb401e53175852b36b850d94 Mon Sep 17 00:00:00 2001
-From: Tomas Zeman <tzeman@volny.cz>
-Date: Tue, 30 Oct 2007 23:06:26 +0100
-Subject: [PATCH] diet-openssl-0.9.8g-1-i686
- *added
-
----
- source/dietlibc/diet-openssl/FrugalBuild |   44 ++++++++++++++++++++++++++++++
- 1 files changed, 44 insertions(+), 0 deletions(-)
- create mode 100644 source/dietlibc/diet-openssl/FrugalBuild
+diet-openssl
 
 diff --git a/source/dietlibc/diet-openssl/FrugalBuild b/source/dietlibc/diet-openssl/FrugalBuild
 new file mode 100644
-index 0000000..ec2e2a5
+index 0000000..b3ce39c
 --- /dev/null
 +++ b/source/dietlibc/diet-openssl/FrugalBuild
 @@ -0,0 +1,44 @@
@@ -20,7 +11,7 @@ index 0000000..ec2e2a5
 +branch=diet
 +pkgorig=openssl
 +pkgname=$branch-$pkgorig
-+pkgver=0.9.8g
++pkgver=0.9.8h
 +pkgrel=1
 +pkgdesc="The Open Source toolkit for Secure Sockets Layer and Transport Layer Security; dietlibc version"
 +makedepends=(dietlibc gcc sed)
@@ -28,7 +19,7 @@ index 0000000..ec2e2a5
 +archs=(i686)
 +up2date='lynx -dump -nolist $url/source|grep $pkgorig|grep .tar.gz|head -1|sed -e "s/.*$pkgorig-\(.*\)\.tar.gz.*$/\1/"'
 +source=($url/source/$pkgorig-$pkgver.tar.gz)
-+sha1sums=('4e9c5ced466715d18fd924de79bde5c15da80fa1')
++sha1sums=('ced4f2da24a202e01ea22bef30ebc8aee274de86')
 +
 +build() {
 +	DDIR=/usr/lib/diet
@@ -59,6 +50,3 @@ index 0000000..ec2e2a5
 +	Frm $DDIR/lib/pkgconfig
 +}
 +# vim: ft=sh
--- 
-1.5.3.4
-
