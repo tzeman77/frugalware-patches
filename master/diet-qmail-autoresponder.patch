@@ -1,17 +1,8 @@
-From 4edfa8684fb804b16b489a7f9b584ac5710b71b2 Mon Sep 17 00:00:00 2001
-From: Tomas Zeman <tzeman@volny.cz>
-Date: Sat, 3 Nov 2007 23:19:20 +0100
-Subject: [PATCH] diet-qmail-autoresponder-0.96.2-1-i686:
- * added
-
----
- .../dietlibc/diet-qmail-autoresponder/FrugalBuild  |   35 ++++++++++++++++++++
- 1 files changed, 35 insertions(+), 0 deletions(-)
- create mode 100644 source/dietlibc/diet-qmail-autoresponder/FrugalBuild
+qmail-autoresponder
 
 diff --git a/source/dietlibc/diet-qmail-autoresponder/FrugalBuild b/source/dietlibc/diet-qmail-autoresponder/FrugalBuild
 new file mode 100644
-index 0000000..e5967fb
+index 0000000..3042e9c
 --- /dev/null
 +++ b/source/dietlibc/diet-qmail-autoresponder/FrugalBuild
 @@ -0,0 +1,35 @@
@@ -20,7 +11,7 @@ index 0000000..e5967fb
 +branch=diet
 +pkgorig=qmail-autoresponder
 +pkgname=$branch-$pkgorig
-+pkgver=0.96.2
++pkgver=0.97
 +pkgrel=1
 +pkgdesc="simple program to automatically respond to emails"
 +makedepends=(dietlibc diet-bglibs)
@@ -28,8 +19,8 @@ index 0000000..e5967fb
 +archs=(i686)
 +up2date='lynx -dump -nolist $url|grep $pkgorig|grep .tar.gz|head -1|sed -e "s/.*$pkgorig-\(.*\)\.tar.gz.*$/\1/"'
 +source=($url/$pkgorig-$pkgver.tar.gz)
-+sha1sums=('15f2983a4209c046c9db16282d94cc3aedc9e860')
 +provides=($pkgorig)
++sha1sums=('49d3a1f8fc960cb43229dff0e40f176b61a3b18b')
 +
 +build() {
 +	DDIR=/usr/lib/diet
@@ -50,6 +41,3 @@ index 0000000..e5967fb
 +	install -m644 qmail-autoresponder.1 $Fdestdir/usr/man/man1 || Fdie
 +}
 +# vim: ft=sh
--- 
-1.5.3.4
-
