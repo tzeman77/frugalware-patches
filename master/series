@@ -22,7 +22,6 @@ diet-ucspi-ipc.patch
 diet-openssl.patch
 diet-ucspi-ssl.patch
 diet-qmail.patch
-diet-qmail-fix-qmail.install
 diet-qmail-autoresponder.patch
 diet-ucspi-proxy.patch
 embutils.patch
