@@ -1,24 +1,15 @@
-From 452e7c11ea7a78848ce58e46c76be2e6b9e06216 Mon Sep 17 00:00:00 2001
-From: Tomas Zeman <tzeman@volny.cz>
-Date: Tue, 27 Nov 2007 11:07:02 +0100
-Subject: [PATCH] ipsvd-0.13.0-1-i686.fpm:
- *added
-
----
- source/dietlibc/ipsvd/FrugalBuild |   36 ++++++++++++++++++++++++++++++++++++
- 1 files changed, 36 insertions(+), 0 deletions(-)
- create mode 100644 source/dietlibc/ipsvd/FrugalBuild
+ipsvd
 
 diff --git a/source/dietlibc/ipsvd/FrugalBuild b/source/dietlibc/ipsvd/FrugalBuild
 new file mode 100644
-index 0000000..09a6db9
+index 0000000..f5b382b
 --- /dev/null
 +++ b/source/dietlibc/ipsvd/FrugalBuild
 @@ -0,0 +1,36 @@
 +# Maintainer: Tomas Zeman <tzeman@volny.cz>
 +
 +pkgname=ipsvd
-+pkgver=0.13.0
++pkgver=0.14.0
 +pkgrel=1
 +pkgdesc="internet protocol service daemons"
 +url="http://smarden.org/$pkgname/"
@@ -26,7 +17,7 @@ index 0000000..09a6db9
 +up2date='lynx -dump -nolist $url/install.html|grep $pkgname|grep tar.gz|head -1|sed -e "s/.*$pkgname-\(.*\)\.tar.gz.*$/\1/"'
 +makedepends=(dietlibc)
 +source=($url/$pkgname-$pkgver.tar.gz)
-+sha1sums=('d8a602ba32c0af35091cd90ebe17709c7ea9ea7f')
++sha1sums=('b43fe1c8ed6d75c6e143ef7e667cf37b54ec3d47')
 +
 +build() {
 +	mkdir -p $Fdestdir/package/net
@@ -51,6 +42,3 @@ index 0000000..09a6db9
 +	for i in `ls $Fdestdir/package/net/$pkgname/command`; do ln -sf /package/net/$pkgname/command/$i $i; done
 +}
 +# vim: ft=sh
--- 
-1.5.3.4
-
