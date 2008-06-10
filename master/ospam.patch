@@ -1,15 +1,4 @@
-From aad149d8eae95620d3ed9a2bd0cd81c8a01ce79d Mon Sep 17 00:00:00 2001
-From: Tomas Zeman <tzeman@volny.cz>
-Date: Sun, 16 Dec 2007 00:18:44 +0100
-Subject: [PATCH] ospam-0.01-1-i686:
- *added
-
----
- source/custom/ospam/FrugalBuild |   25 ++++++++++++
- source/custom/ospam/ospam.patch |   82 +++++++++++++++++++++++++++++++++++++++
- 2 files changed, 107 insertions(+), 0 deletions(-)
- create mode 100644 source/custom/ospam/FrugalBuild
- create mode 100644 source/custom/ospam/ospam.patch
+ospam
 
 diff --git a/source/custom/ospam/FrugalBuild b/source/custom/ospam/FrugalBuild
 new file mode 100644
@@ -130,6 +119,106 @@ index 0000000..36535a7
 + 
 +Only in ospam-0.01: ospam-dotqmail.pl~
 +Common subdirectories: ospam-0.01.orig/sql and ospam-0.01/sql
--- 
-1.5.3.4
-
+diff --git a/source/custom/ospam/spamclam b/source/custom/ospam/spamclam
+new file mode 100755
+index 0000000..dae445b
+--- /dev/null
++++ b/source/custom/ospam/spamclam
+@@ -0,0 +1,97 @@
++#!/bin/sh
++
++[ -f /etc/ospam/spamclam ] && . /etc/ospam/spamclam
++
++# CONFIG
++SPAMC=${SPAMC:-/usr/bin/spamc}
++CLAMDSCAN=${CLAMDSCAN:-/usr/bin/clamdscan}
++FORWARDBIN=${FORWARDBIN:-/var/qmail/bin/forward}
++M822FIELD=${M822FIELD:-/usr/bin/822field}
++FILEPIPE=${FILEPIPE:-/command/seekablepipe} #/usr/bin/filepipe
++VDELIVER=${VDELIVER:-/usr/bin/vdeliver}
++TMP=${TMP:-.}
++
++[ -x $SPAMC -a -x $CLAMDSCAN -a -x $FORWARDBIN -a -x $M822FIELD ] || {
++	echo -e "$0: Required programs do not exist"
++	cat | $FILEPIPE $VDELIVER
++	exit 0
++}
++
++ADDR_QUARANTINE="$1"
++DELIVER_VIRUS="$2"
++ADDR_SPAM="$3"
++DELIVER_SPAM="$4"
++MAILUSER="$5"
++
++if [ -z "$ADDR_QUARANTINE" -o -z "$ADDR_SPAM" -o -z "$DELIVER_VIRUS" -o -z "$DELIVER_SPAM" ]; then
++	echo -e "Usage: $0 quarantine_address deliver_virus_to_recipient(0/1) spam_address deliver_spam_to_recipient(0/1) [mailuser address]"
++	echo -e "address may be: _ignore_ -> checking of that feature is ignored"
++	echo -e "                _noaddr_  -> if infected, do not forward"
++	cat
++	exit 0
++fi
++
++MAILFILE="$TMP/mail.tmp.$$"
++
++cat >$MAILFILE
++
++VIRUS=0
++SPAM=0
++STATUS=0
++
++spam_flags=""
++
++if [ "$ADDR_QUARANTINE" != "_ignore_" ]; then
++	virus=`$CLAMDSCAN --disable-summary --stdout $MAILFILE | grep FOUND`
++	if [ ! "$virus" = "" ]; then
++		VIRUS=1
++		cat $MAILFILE | sed -e 's/^Subject:/Subject: [virus]/' > $MAILFILE.1
++	fi
++fi
++
++if [ $VIRUS -eq 0 -a "$ADDR_SPAM" != "_ignore_" ]; then
++	if [ ! -z $MAILUSER ]; then
++		spam_flags="-u $MAILUSER"
++	fi
++	$SPAMC $spam_flags < $MAILFILE > $MAILFILE.1
++	isspam=`$M822FIELD X-Spam-Flag < $MAILFILE.1 | grep YES | wc -l`
++	if [ $isspam -ne 0 ]; then
++		SPAM=1
++	fi
++fi
++
++
++if [ $VIRUS -eq 1 ]; then
++	STATUS=99
++	if [ $DELIVER_VIRUS -eq 1 ]; then
++		cat $MAILFILE.1 | $FILEPIPE $VDELIVER
++	fi
++	if [ "$ADDR_QUARANTINE" != "_noaddr_" ]; then
++		$FORWARDBIN $ADDR_QUARANTINE < $MAILFILE.1
++		if [ $? -ne 0 ]; then
++			STATUS=111
++		fi
++	fi
++else 
++if [ $SPAM -eq 1 ]; then
++	STATUS=99
++	if [ $DELIVER_SPAM -eq 1 ]; then
++		cat $MAILFILE.1 | $FILEPIPE $VDELIVER
++	fi
++	if [ "$ADDR_SPAM" != "_noaddr_" ]; then
++		$FORWARDBIN $ADDR_SPAM < $MAILFILE.1
++		if [ $? -ne 0 ]; then
++			STATUS=111
++		fi
++	fi
++fi
++fi
++
++if [ $VIRUS -eq 0 -a $SPAM -eq 0 ]; then
++	cat $MAILFILE | $FILEPIPE $VDELIVER
++fi
++
++rm -f $MAILFILE $MAILFILE.1
++
++exit $STATUS
++
