@@ -1,0 +1,67 @@
+haskel-x11
+
+diff --git a/source/custom/haskel-x11/FrugalBuild b/source/custom/haskel-x11/FrugalBuild
+new file mode 100644
+index 0000000..035cba9
+--- /dev/null
++++ b/source/custom/haskel-x11/FrugalBuild
+@@ -0,0 +1,31 @@
++pkgname=haskell-x11
++pkgver=1.4.2
++pkgrel=1
++pkgdesc="A Haskell binding to the X11 graphics library."
++arch=(i686 x86_64)
++url="http://hackage.haskell.org/cgi-bin/hackage-scripts/package/X11"
++license=('BSD')
++makedepends=('ghc')
++conflicts=(haskell-x11-extras)
++install=hsmod.install
++source=(http://hackage.haskell.org/packages/archive/X11/$pkgver/X11-$pkgver.tar.gz)
++archs=(i686)
++sha1sums=('28f5a257b9f601538822f47c9731b6e20618fbcf')
++
++build() {
++  cd $Fsrcdir/X11-$pkgver || Fdie
++
++  runhaskell Setup.hs configure --ghc --prefix=/usr \
++             --libsubdir=\$compiler/site-local/\$pkgid || return 1
++
++  runhaskell Setup.hs build || return 1
++
++  runhaskell Setup.hs register --gen-script
++  runhaskell Setup.hs unregister --gen-script
++  
++  install -D -m744 register.sh $Fdestdir/usr/share/haskell/$pkgname/register.sh
++  install -m744 unregister.sh $Fdestdir/usr/share/haskell/$pkgname/unregister.sh
++  runhaskell Setup.hs copy --destdir=$Fdestdir || Fdie
++
++  install -D -m644 LICENSE $Fdestdir/usr/share/licenses/$pkgname/BSD3
++}
+diff --git a/source/custom/haskel-x11/hsmod.install b/source/custom/haskel-x11/hsmod.install
+new file mode 100644
+index 0000000..e417f26
+--- /dev/null
++++ b/source/custom/haskel-x11/hsmod.install
+@@ -0,0 +1,22 @@
++HS_DIR=/usr/share/haskell/haskell-x11
++
++post_install() {
++  ${HS_DIR}/register.sh
++}
++
++pre_upgrade() {
++  ${HS_DIR}/unregister.sh
++}
++
++post_upgrade() {
++  ${HS_DIR}/register.sh
++}
++
++pre_remove() {
++  ${HS_DIR}/unregister.sh
++}
++
++op=$1
++shift
++
++$op $*
