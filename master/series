@@ -46,3 +46,4 @@ getmail.patch
 firehol.patch
 vim.patch
 haskel-x11.patch
+xmonad.patch
