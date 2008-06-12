@@ -1,10 +1,10 @@
 haskel-x11
 
-diff --git a/source/custom/haskel-x11/FrugalBuild b/source/custom/haskel-x11/FrugalBuild
+diff --git a/source/custom-x11/haskel-x11/FrugalBuild b/source/custom-x11/haskel-x11/FrugalBuild
 new file mode 100644
 index 0000000..035cba9
 --- /dev/null
-+++ b/source/custom/haskel-x11/FrugalBuild
++++ b/source/custom-x11/haskel-x11/FrugalBuild
 @@ -0,0 +1,31 @@
 +pkgname=haskell-x11
 +pkgver=1.4.2
@@ -37,11 +37,11 @@ index 0000000..035cba9
 +
 +  install -D -m644 LICENSE $Fdestdir/usr/share/licenses/$pkgname/BSD3
 +}
-diff --git a/source/custom/haskel-x11/hsmod.install b/source/custom/haskel-x11/hsmod.install
+diff --git a/source/custom-x11/haskel-x11/hsmod.install b/source/custom-x11/haskel-x11/hsmod.install
 new file mode 100644
 index 0000000..e417f26
 --- /dev/null
-+++ b/source/custom/haskel-x11/hsmod.install
++++ b/source/custom-x11/haskel-x11/hsmod.install
 @@ -0,0 +1,22 @@
 +HS_DIR=/usr/share/haskell/haskell-x11
 +
