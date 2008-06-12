@@ -1,0 +1,65 @@
+xmonad-contrib
+
+diff --git a/source/custom-x11/xmonad-contrib/FrugalBuild b/source/custom-x11/xmonad-contrib/FrugalBuild
+new file mode 100644
+index 0000000..e3fd8c1
+--- /dev/null
++++ b/source/custom-x11/xmonad-contrib/FrugalBuild
+@@ -0,0 +1,30 @@
++pkgname=xmonad-contrib
++pkgver=0.7
++pkgrel=1
++pkgdesc="Add-ons for xmonad"
++arch=(i686 x86_64)
++url="http://xmonad.org/"
++license=('BSD')
++depends=('xmonad')
++makedepends=('ghc' 'haskell-x11')
++install='xmonad-contrib.install'
++source=(http://hackage.haskell.org/packages/archive/$pkgname/$pkgver/$pkgname-$pkgver.tar.gz)
++up2date="lynx -nolist -dump '$url'|grep -A5 'extensions'|grep -m1 '$pkgname'|sed 's/.*$pkgname \([0-9.]*\) .*/\1/'"
++archs=(i686)
++sha1sums=('483886a74b58113e2c313934e982d22e2821dcce')
++
++build() {
++  Fcd
++
++  runhaskell Setup.lhs configure --ghc --prefix=/usr \
++             --libsubdir=\$compiler/site-local/\$pkgid || return 1
++
++  runhaskell Setup.lhs build || return 1
++
++  runhaskell Setup.lhs register --gen-script
++  runhaskell Setup.lhs unregister --gen-script
++  
++  install -D -m744 register.sh $Fdestdir/usr/share/haskell/$pkgname/register.sh
++  install -m744 unregister.sh $Fdestdir/usr/share/haskell/$pkgname/unregister.sh
++  runhaskell Setup.lhs copy --destdir=$Fdestdir
++}
+diff --git a/source/custom-x11/xmonad-contrib/xmonad-contrib.install b/source/custom-x11/xmonad-contrib/xmonad-contrib.install
+new file mode 100644
+index 0000000..16eca85
+--- /dev/null
++++ b/source/custom-x11/xmonad-contrib/xmonad-contrib.install
+@@ -0,0 +1,21 @@
++HS_DIR=/usr/share/haskell/xmonad-contrib
++
++post_install() {
++    ${HS_DIR}/register.sh
++}
++
++pre_upgrade() {
++  ${HS_DIR}/unregister.sh
++}
++
++post_upgrade() {
++  ${HS_DIR}/register.sh
++}
++
++pre_remove() {
++  ${HS_DIR}/unregister.sh
++}
++op=$1
++shift
++
++$op $*
