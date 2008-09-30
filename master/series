@@ -1,5 +1,4 @@
 guilt.patch
-stgit-fix-path.patch
 vpnc.patch
 gitignore.patch
 drbd-module.patch
