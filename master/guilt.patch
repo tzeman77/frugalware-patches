@@ -1,4 +1,4 @@
-guilt-0.28
+guilt
 
 diff --git a/source/custom/guilt/FrugalBuild b/source/custom/guilt/FrugalBuild
 new file mode 100644
@@ -9,7 +9,7 @@ index 0000000..1778ba0
 +# Maintainer: <tzeman@volny.cz>
 +
 +pkgname=guilt
-+pkgver=0.30
++pkgver=0.31.2
 +pkgrel=1
 +pkgdesc="A Quilt-like interface on top of Git"
 +url="http://www.kernel.org/pub/linux/kernel/people/jsipek/guilt/"
@@ -19,7 +19,7 @@ index 0000000..1778ba0
 +archs=('i686' 'x86_64')
 +up2date="lynx -dump $url|Flasttar"
 +source=($url/$pkgname-$pkgver.tar.gz)
-+sha1sums=('8526ba777a784f89d5892ce3009260207313a1fc')
++sha1sums=('b19f0a32c80e895dbb938fff1cb4520291eb52b5')
 +
 +build() {
 +	Fcd
