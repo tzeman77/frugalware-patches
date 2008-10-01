@@ -44,6 +44,8 @@ perl-template-toolkit.patch
 getmail.patch
 firehol.patch
 vim.patch
+dmraid.patch
+perl-netaddr-ip.patch
 haskel-x11.patch
 xmonad.patch
 xmonad-contrib.patch
