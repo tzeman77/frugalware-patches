@@ -1,28 +1,28 @@
 vim: cscope
 
 diff --git a/source/apps/vim/FrugalBuild b/source/apps/vim/FrugalBuild
-index 7fc0f07..3b7940c 100644
+index 011e484..9630e1f 100644
 --- a/source/apps/vim/FrugalBuild
 +++ b/source/apps/vim/FrugalBuild
-@@ -20,7 +20,7 @@ sha1sums=('981e1acecc4d8f15680b6e160de84aed038d857d' \
+@@ -19,7 +19,7 @@ up2date="lynx -dump $url/sources.php|grep bz2$|sed 's/.*-\(.*\)\.t.*/\1/;q'"
+ source=(ftp://ftp.vim.org/pub/vim/unix/$pkgname-$pkgver.tar.bz2 \
+ 	gvim.xpm README.Frugalware \
+         vim-vimrc.diff frugalware.diff)
+-sha1sums=('76f6a5a97746db06bd4786984a116793a16e3e10' \
++sha1sums=('a4b6641ca528fada71ea77c998a441495ed4984c' \
            'f7262c7429c42b7c1ef9cf1eaa6aa12292933525' \
            '50e139d94557b2ca361fed2130af103c47a8d654' \
-           'b9e10d7c38b57798929bc184431cc79c21b7af75' \
--          '8a695e1126830bc5318232d6eaddedf28aaa5b66' \
-+          '8b1320d4344b93c66b3d66bb546113c5cd97c143' \
-           '87ee68d607022d1dea8496c9a6a88185040d292e')
- 
- subpkgs=('gvim')
-@@ -36,7 +36,7 @@ build()
- 	Fpatch 7.1.039
+           '985911e5902d495897105cdd1570dfe47adfa254' \
+@@ -40,7 +40,7 @@ build()
  	cd src
- 	# first build gvim
--	Fmake --with-x --enable-gui=gtk2 --enable-multibyte
-+	Fmake --with-x --enable-gui=gtk2 --enable-multibyte --enable-cscope
- 	make DESTDIR=$Fdestdir VIMRTDIR= installvimbin
- 	Fmv /usr/bin/vim /usr/bin/gvim
- 	Fln /usr/bin/gvim /usr/bin/gview
-@@ -46,7 +46,7 @@ build()
+ 	if Fuse $USE_GUI; then
+ 		# first build gvim
+-		Fmake --with-x --enable-gui=gtk2 --enable-multibyte
++		Fmake --with-x --enable-gui=gtk2 --enable-multibyte --enable-cscope
+ 		make DESTDIR=$Fdestdir VIMRTDIR= installvimbin
+ 		Fmv /usr/bin/vim /usr/bin/gvim
+ 		Fln /usr/bin/gvim /usr/bin/gview
+@@ -51,7 +51,7 @@ build()
  
  	# now vim
  	Fmake --localstatedir=/var/lib/$pkgname --disable-gpm --with-x=no \
