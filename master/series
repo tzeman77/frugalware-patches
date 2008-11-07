@@ -50,3 +50,4 @@ haskel-x11.patch
 xmonad.patch
 ion-3.patch
 xmonad-contrib.patch
+upgrade-0.9.patch

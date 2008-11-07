@@ -1,0 +1,143 @@
+Upgrade for Frugalware 0.9
+
+diff --git a/source/dietlibc/conn-tools/FrugalBuild b/source/dietlibc/conn-tools/FrugalBuild
+index 04e4891..bc4f6a1 100644
+--- a/source/dietlibc/conn-tools/FrugalBuild
++++ b/source/dietlibc/conn-tools/FrugalBuild
+@@ -2,7 +2,7 @@
+ 
+ pkgname=conn-tools
+ pkgver=0.21
+-pkgrel=1
++pkgrel=2
+ pkgdesc="collection of miscellaneous utilities designed to help managing connections and communication between processes"
+ url="http://www.skarnet.org/software/conn-tools/"
+ depends=('execline>=1.06' 'skaembutils>=0.17')
+diff --git a/source/dietlibc/diet-bglibs/FrugalBuild b/source/dietlibc/diet-bglibs/FrugalBuild
+index 25d303d..592f564 100644
+--- a/source/dietlibc/diet-bglibs/FrugalBuild
++++ b/source/dietlibc/diet-bglibs/FrugalBuild
+@@ -4,7 +4,7 @@ branch=diet
+ pkgorig=bglibs
+ pkgname=$branch-$pkgorig
+ pkgver=1.104
+-pkgrel=1
++pkgrel=2
+ pkgdesc="One stop library package"
+ makedepends=(dietlibc gcc)
+ url="http://untroubled.org/bglibs/"
+diff --git a/source/dietlibc/diet-daemontools/FrugalBuild b/source/dietlibc/diet-daemontools/FrugalBuild
+index 3322f94..6bfe8fd 100644
+--- a/source/dietlibc/diet-daemontools/FrugalBuild
++++ b/source/dietlibc/diet-daemontools/FrugalBuild
+@@ -4,7 +4,7 @@ branch=diet
+ pkgorig=daemontools
+ pkgname=$branch-$pkgorig
+ pkgver=0.76
+-pkgrel=1
++pkgrel=2
+ pkgdesc="A collection of tools for managing UNIX services."
+ makedepends=(dietlibc)
+ license="public domain"
+diff --git a/source/dietlibc/diet-openssl/FrugalBuild b/source/dietlibc/diet-openssl/FrugalBuild
+index b3ce39c..0bdacd1 100644
+--- a/source/dietlibc/diet-openssl/FrugalBuild
++++ b/source/dietlibc/diet-openssl/FrugalBuild
+@@ -4,7 +4,7 @@ branch=diet
+ pkgorig=openssl
+ pkgname=$branch-$pkgorig
+ pkgver=0.9.8h
+-pkgrel=1
++pkgrel=2
+ pkgdesc="The Open Source toolkit for Secure Sockets Layer and Transport Layer Security; dietlibc version"
+ makedepends=(dietlibc gcc sed)
+ url="http://www.openssl.org"
+diff --git a/source/dietlibc/diet-runit/FrugalBuild b/source/dietlibc/diet-runit/FrugalBuild
+index c207822..625c173 100644
+--- a/source/dietlibc/diet-runit/FrugalBuild
++++ b/source/dietlibc/diet-runit/FrugalBuild
+@@ -3,7 +3,7 @@
+ branch=diet
+ pkgorig=runit
+ pkgname=$branch-$pkgorig
+-pkgver=1.9.0
++pkgver=2.0.0
+ pkgrel=1
+ pkgdesc="init replacement"
+ url="http://smarden.org/runit/"
+@@ -12,7 +12,7 @@ up2date='lynx -dump -nolist $url/install.html|grep $pkgorig|grep tar.gz|head -1|
+ makedepends=(dietlibc)
+ source=($url/$pkgorig-$pkgver.tar.gz)
+ provides=(runit)
+-sha1sums=('a5f6974ba2f5571e1d18eefb659140451840943c')
++sha1sums=('a48d8579478fbcef37c347c3aa986f23fe528241')
+ 
+ build() {
+ 	mkdir -p $Fdestdir/package/admin
+diff --git a/source/dietlibc/execline/FrugalBuild b/source/dietlibc/execline/FrugalBuild
+index ea37b63..52867dc 100644
+--- a/source/dietlibc/execline/FrugalBuild
++++ b/source/dietlibc/execline/FrugalBuild
+@@ -1,15 +1,15 @@
+ # Maintainer: Tomas Zeman <tzeman@volny.cz>
+ 
+ pkgname=execline
+-pkgver=1.07
++pkgver=1.08
+ pkgrel=1
+ pkgdesc="scripting language"
+ url="http://www.skarnet.org/software/execline/"
+-makedepends=(dietlibc 'skalibs>=0.46')
++makedepends=(dietlibc 'skalibs>=0.47')
+ archs=(i686)
+ up2date='lynx -dump -nolist $url/install.html|grep $pkgname|grep tar.gz|head -1|sed -e "s/.*$pkgname-\(.*\)\.tar.gz.*$/\1/"'
+ source=($url/$pkgname-$pkgver.tar.gz)
+-sha1sums=('339761a2a018ec2e3821cb863cf1e7d7919038ac')
++sha1sums=('dc8f1ad268f7dfc0bad80f112f42e9479b4464e3')
+ 
+ build() {
+ 	Fmkdir package/admin
+diff --git a/source/dietlibc/ipsvd/FrugalBuild b/source/dietlibc/ipsvd/FrugalBuild
+index f5b382b..2abb74c 100644
+--- a/source/dietlibc/ipsvd/FrugalBuild
++++ b/source/dietlibc/ipsvd/FrugalBuild
+@@ -1,7 +1,7 @@
+ # Maintainer: Tomas Zeman <tzeman@volny.cz>
+ 
+ pkgname=ipsvd
+-pkgver=0.14.0
++pkgver=1.0.0
+ pkgrel=1
+ pkgdesc="internet protocol service daemons"
+ url="http://smarden.org/$pkgname/"
+@@ -9,7 +9,7 @@ archs=(i686)
+ up2date='lynx -dump -nolist $url/install.html|grep $pkgname|grep tar.gz|head -1|sed -e "s/.*$pkgname-\(.*\)\.tar.gz.*$/\1/"'
+ makedepends=(dietlibc)
+ source=($url/$pkgname-$pkgver.tar.gz)
+-sha1sums=('b43fe1c8ed6d75c6e143ef7e667cf37b54ec3d47')
++sha1sums=('1762c0e756adc46ff8f69bacc3a57943d08add35')
+ 
+ build() {
+ 	mkdir -p $Fdestdir/package/net
+diff --git a/source/dietlibc/skalibs/FrugalBuild b/source/dietlibc/skalibs/FrugalBuild
+index c55ce00..d9949d0 100644
+--- a/source/dietlibc/skalibs/FrugalBuild
++++ b/source/dietlibc/skalibs/FrugalBuild
+@@ -1,7 +1,7 @@
+ # Maintainer: Tomas Zeman <tzeman@volny.cz>
+ 
+ pkgname=skalibs
+-pkgver=0.46
++pkgver=0.47
+ pkgrel=1
+ pkgdesc="package centralizing the public-domain C development files"
+ url="http://www.skarnet.org/software/skalibs/"
+@@ -9,7 +9,7 @@ makedepends=(dietlibc)
+ archs=(i686)
+ up2date='lynx -dump -nolist $url/install.html|grep $pkgname|grep tar.gz|head -1|sed -e "s/.*$pkgname-\(.*\)\.tar.gz.*$/\1/"'
+ source=($url/$pkgname-$pkgver.tar.gz)
+-sha1sums=('57647785f3c0564f1fe67aa4a002eea983f379b2')
++sha1sums=('5dc7c9106445d83690fd6c08c63e2419f1ada2fb')
+ 
+ build() {
+ 	Fmkdir package/prog
