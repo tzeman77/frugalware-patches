@@ -26,6 +26,19 @@ index 25d303d..592f564 100644
  pkgdesc="One stop library package"
  makedepends=(dietlibc gcc)
  url="http://untroubled.org/bglibs/"
+diff --git a/source/dietlibc/diet-cvm/FrugalBuild b/source/dietlibc/diet-cvm/FrugalBuild
+index 2697441..119cd8f 100644
+--- a/source/dietlibc/diet-cvm/FrugalBuild
++++ b/source/dietlibc/diet-cvm/FrugalBuild
+@@ -4,7 +4,7 @@ branch=diet
+ pkgorig=cvm
+ pkgname=$branch-$pkgorig
+ pkgver=0.90
+-pkgrel=1
++pkgrel=2
+ pkgdesc="Credential Validation Modules"
+ makedepends=(dietlibc gcc 'diet-bglibs>=1.100')
+ url="http://untroubled.org/cvm/"
 diff --git a/source/dietlibc/diet-daemontools/FrugalBuild b/source/dietlibc/diet-daemontools/FrugalBuild
 index 3322f94..6bfe8fd 100644
 --- a/source/dietlibc/diet-daemontools/FrugalBuild
@@ -39,6 +52,34 @@ index 3322f94..6bfe8fd 100644
  pkgdesc="A collection of tools for managing UNIX services."
  makedepends=(dietlibc)
  license="public domain"
+diff --git a/source/dietlibc/diet-djbdns/FrugalBuild b/source/dietlibc/diet-djbdns/FrugalBuild
+index eca28f5..0302de4 100644
+--- a/source/dietlibc/diet-djbdns/FrugalBuild
++++ b/source/dietlibc/diet-djbdns/FrugalBuild
+@@ -4,7 +4,7 @@ branch=diet
+ pkgorig=djbdns
+ pkgname=$branch-$pkgorig
+ pkgver=1.05
+-pkgrel=1
++pkgrel=2
+ pkgdesc="High-performant & secure DNS services."
+ url="http://cr.yp.to/djbdns.html"
+ archs=(i686)
+diff --git a/source/dietlibc/diet-mess822/FrugalBuild b/source/dietlibc/diet-mess822/FrugalBuild
+index abd9ee9..e2c10d0 100644
+--- a/source/dietlibc/diet-mess822/FrugalBuild
++++ b/source/dietlibc/diet-mess822/FrugalBuild
+@@ -4,8 +4,8 @@ branch=diet
+ pkgorig=mess822
+ pkgname=$branch-$pkgorig
+ pkgver=0.58
+-pkgrel=1
+-pkgdesc=""
++pkgrel=2
++pkgdesc="Library for parsing internet mail messages"
+ makedepends=(dietlibc)
+ url="http://cr.yp.to/mess822.html"
+ archs=(i686)
 diff --git a/source/dietlibc/diet-openssl/FrugalBuild b/source/dietlibc/diet-openssl/FrugalBuild
 index b3ce39c..0bdacd1 100644
 --- a/source/dietlibc/diet-openssl/FrugalBuild
@@ -52,6 +93,60 @@ index b3ce39c..0bdacd1 100644
  pkgdesc="The Open Source toolkit for Secure Sockets Layer and Transport Layer Security; dietlibc version"
  makedepends=(dietlibc gcc sed)
  url="http://www.openssl.org"
+diff --git a/source/dietlibc/diet-pure-ftpd/FrugalBuild b/source/dietlibc/diet-pure-ftpd/FrugalBuild
+index 0165876..a3f2eb3 100644
+--- a/source/dietlibc/diet-pure-ftpd/FrugalBuild
++++ b/source/dietlibc/diet-pure-ftpd/FrugalBuild
+@@ -4,7 +4,7 @@ branch=diet
+ pkgorig=pure-ftpd
+ pkgname=$branch-$pkgorig
+ pkgver=1.0.21
+-pkgrel=1
++pkgrel=2
+ pkgdesc="A free, secure, production-quality and standard-conformant FTP server"
+ url="http://www.pureftpd.org/"
+ depends=('perl')
+diff --git a/source/dietlibc/diet-qmail-autoresponder/FrugalBuild b/source/dietlibc/diet-qmail-autoresponder/FrugalBuild
+index 3042e9c..af7926e 100644
+--- a/source/dietlibc/diet-qmail-autoresponder/FrugalBuild
++++ b/source/dietlibc/diet-qmail-autoresponder/FrugalBuild
+@@ -4,7 +4,7 @@ branch=diet
+ pkgorig=qmail-autoresponder
+ pkgname=$branch-$pkgorig
+ pkgver=0.97
+-pkgrel=1
++pkgrel=2
+ pkgdesc="simple program to automatically respond to emails"
+ makedepends=(dietlibc diet-bglibs)
+ url="http://untroubled.org/qmail-autoresponder/"
+diff --git a/source/dietlibc/diet-qmail/FrugalBuild b/source/dietlibc/diet-qmail/FrugalBuild
+index c973246..99ee747 100644
+--- a/source/dietlibc/diet-qmail/FrugalBuild
++++ b/source/dietlibc/diet-qmail/FrugalBuild
+@@ -14,7 +14,7 @@ branch=diet
+ pkgorig=qmail
+ pkgname=$branch-$pkgorig
+ pkgver=1.03
+-pkgrel=1
++pkgrel=2
+ pkgdesc="A secure, reliable, efficient, SMTP/POP3 server."
+ url="http://cr.yp.to/qmail.html"
+ depends=('daemontools' 'ucspi-tcp' 'openssl')
+diff --git a/source/dietlibc/diet-qmailanalog/FrugalBuild b/source/dietlibc/diet-qmailanalog/FrugalBuild
+index 27908f9..4c27fb1 100644
+--- a/source/dietlibc/diet-qmailanalog/FrugalBuild
++++ b/source/dietlibc/diet-qmailanalog/FrugalBuild
+@@ -6,8 +6,8 @@ branch=diet
+ pkgorig=qmailanalog
+ pkgname=$branch-$pkgorig
+ pkgver=0.70
+-pkgrel=1
+-pkgdesc=""
++pkgrel=2
++pkgdesc="collection of tools to help you analyze qmail's activity record"
+ makedepends=(dietlibc)
+ url="http://cr.yp.to/qmailanalog.html"
+ archs=(i686)
 diff --git a/source/dietlibc/diet-runit/FrugalBuild b/source/dietlibc/diet-runit/FrugalBuild
 index c207822..625c173 100644
 --- a/source/dietlibc/diet-runit/FrugalBuild
@@ -74,6 +169,71 @@ index c207822..625c173 100644
  
  build() {
  	mkdir -p $Fdestdir/package/admin
+diff --git a/source/dietlibc/diet-ucspi-ipc/FrugalBuild b/source/dietlibc/diet-ucspi-ipc/FrugalBuild
+index 5271af3..d242d6b 100644
+--- a/source/dietlibc/diet-ucspi-ipc/FrugalBuild
++++ b/source/dietlibc/diet-ucspi-ipc/FrugalBuild
+@@ -4,7 +4,7 @@ branch=diet
+ pkgorig=ucspi-ipc
+ pkgname=$branch-$pkgorig
+ pkgver=0.67
+-pkgrel=1
++pkgrel=2
+ pkgdesc="command-line tools for building local-domain client-server applications"
+ makedepends=(dietlibc)
+ url="http://www.superscript.com/ucspi-ipc/intro.html"
+diff --git a/source/dietlibc/diet-ucspi-proxy/FrugalBuild b/source/dietlibc/diet-ucspi-proxy/FrugalBuild
+index c310b9e..b71fd47 100644
+--- a/source/dietlibc/diet-ucspi-proxy/FrugalBuild
++++ b/source/dietlibc/diet-ucspi-proxy/FrugalBuild
+@@ -4,7 +4,7 @@ branch=diet
+ pkgorig=ucspi-proxy
+ pkgname=$branch-$pkgorig
+ pkgver=0.97
+-pkgrel=1
++pkgrel=2
+ pkgdesc="Connection proxy for UCSPI tools"
+ makedepends=(dietlibc 'diet-bglibs>=1.025')
+ url="http://untroubled.org/ucspi-proxy"
+diff --git a/source/dietlibc/diet-ucspi-ssl/FrugalBuild b/source/dietlibc/diet-ucspi-ssl/FrugalBuild
+index 8181e54..9b8f423 100644
+--- a/source/dietlibc/diet-ucspi-ssl/FrugalBuild
++++ b/source/dietlibc/diet-ucspi-ssl/FrugalBuild
+@@ -4,7 +4,7 @@ branch=diet
+ pkgorig=ucspi-ssl
+ pkgname=$branch-$pkgorig
+ pkgver=0.70
+-pkgrel=1
++pkgrel=2
+ pkgdesc="command-line tools for building SSL client-server applications"
+ makedepends=(dietlibc diet-openssl)
+ url="http://www.superscript.com/$pkgorig/intro.html"
+diff --git a/source/dietlibc/diet-ucspi-tcp/FrugalBuild b/source/dietlibc/diet-ucspi-tcp/FrugalBuild
+index e368e1e..e2d9fc4 100644
+--- a/source/dietlibc/diet-ucspi-tcp/FrugalBuild
++++ b/source/dietlibc/diet-ucspi-tcp/FrugalBuild
+@@ -4,7 +4,7 @@ branch=diet
+ pkgorig=ucspi-tcp
+ pkgname=$branch-$pkgorig
+ pkgver=0.88
+-pkgrel=1
++pkgrel=2
+ pkgdesc="command-line tools for building TCP client-server applications"
+ makedepends=(dietlibc)
+ url="http://cr.yp.to/ucspi-tcp.html"
+diff --git a/source/dietlibc/embutils/FrugalBuild b/source/dietlibc/embutils/FrugalBuild
+index cea4126..82b7005 100644
+--- a/source/dietlibc/embutils/FrugalBuild
++++ b/source/dietlibc/embutils/FrugalBuild
+@@ -2,7 +2,7 @@
+ 
+ pkgname=embutils
+ pkgver=0.19
+-pkgrel=1
++pkgrel=2
+ pkgdesc="small system utilities for embedded systems"
+ url="http://www.fefe.de/embutils/"
+ makedepends=(dietlibc)
 diff --git a/source/dietlibc/execline/FrugalBuild b/source/dietlibc/execline/FrugalBuild
 index ea37b63..52867dc 100644
 --- a/source/dietlibc/execline/FrugalBuild
@@ -97,6 +257,19 @@ index ea37b63..52867dc 100644
  
  build() {
  	Fmkdir package/admin
+diff --git a/source/dietlibc/fgetty/FrugalBuild b/source/dietlibc/fgetty/FrugalBuild
+index 13a5cda..3bceddc 100644
+--- a/source/dietlibc/fgetty/FrugalBuild
++++ b/source/dietlibc/fgetty/FrugalBuild
+@@ -2,7 +2,7 @@
+ 
+ pkgname=fgetty
+ pkgver=0.6
+-pkgrel=1
++pkgrel=2
+ pkgdesc="a very small getty for Linux"
+ url="http://www.fefe.de/fgetty/"
+ makedepends=(dietlibc)
 diff --git a/source/dietlibc/ipsvd/FrugalBuild b/source/dietlibc/ipsvd/FrugalBuild
 index f5b382b..2abb74c 100644
 --- a/source/dietlibc/ipsvd/FrugalBuild
@@ -119,6 +292,45 @@ index f5b382b..2abb74c 100644
  
  build() {
  	mkdir -p $Fdestdir/package/net
+diff --git a/source/dietlibc/libowfat/FrugalBuild b/source/dietlibc/libowfat/FrugalBuild
+index 83885a2..9ad116e 100644
+--- a/source/dietlibc/libowfat/FrugalBuild
++++ b/source/dietlibc/libowfat/FrugalBuild
+@@ -2,7 +2,7 @@
+ 
+ pkgname=libowfat
+ pkgver=0.27
+-pkgrel=1
++pkgrel=2
+ pkgdesc="reimplement libdjb under GPL"
+ depends=(dietlibc)
+ url="http://www.fefe.de/libowfat/"
+diff --git a/source/dietlibc/minit/FrugalBuild b/source/dietlibc/minit/FrugalBuild
+index a733f3c..1f3fbec 100644
+--- a/source/dietlibc/minit/FrugalBuild
++++ b/source/dietlibc/minit/FrugalBuild
+@@ -2,7 +2,7 @@
+ 
+ pkgname=minit
+ pkgver=0.10
+-pkgrel=2
++pkgrel=3
+ pkgdesc="a small yet feature-complete init"
+ url="http://www.fefe.de/minit/"
+ makedepends=(dietlibc)
+diff --git a/source/dietlibc/skaembutils/FrugalBuild b/source/dietlibc/skaembutils/FrugalBuild
+index 3846171..8d18051 100644
+--- a/source/dietlibc/skaembutils/FrugalBuild
++++ b/source/dietlibc/skaembutils/FrugalBuild
+@@ -2,7 +2,7 @@
+ 
+ pkgname=skaembutils
+ pkgver=0.18
+-pkgrel=1
++pkgrel=2
+ pkgdesc="Tiny portable utilities"
+ url="http://www.skarnet.org/software/skaembutils/"
+ makedepends=(dietlibc 'skalibs>=0.45')
 diff --git a/source/dietlibc/skalibs/FrugalBuild b/source/dietlibc/skalibs/FrugalBuild
 index c55ce00..d9949d0 100644
 --- a/source/dietlibc/skalibs/FrugalBuild
@@ -141,3 +353,16 @@ index c55ce00..d9949d0 100644
  
  build() {
  	Fmkdir package/prog
+diff --git a/source/dietlibc/socklog/FrugalBuild b/source/dietlibc/socklog/FrugalBuild
+index 1f9a58b..204bbd0 100644
+--- a/source/dietlibc/socklog/FrugalBuild
++++ b/source/dietlibc/socklog/FrugalBuild
+@@ -2,7 +2,7 @@
+ 
+ pkgname=socklog
+ pkgver=2.1.0
+-pkgrel=1
++pkgrel=2
+ pkgdesc="System and kernel logging services"
+ url="http://smarden.org/socklog/"
+ archs=(i686)
