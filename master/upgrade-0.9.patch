@@ -203,6 +203,21 @@ index c57644a..10ebcd9 100644
  pkgdesc="Mail server network protocol front-ends"
  depends=('bglibs>=1.101' 'cvm>=0.81')
  url="http://untroubled.org/$pkgname/"
+diff --git a/source/custom/ospam/FrugalBuild b/source/custom/ospam/FrugalBuild
+index d1191b7..3814a06 100644
+--- a/source/custom/ospam/FrugalBuild
++++ b/source/custom/ospam/FrugalBuild
+@@ -2,8 +2,8 @@
+ 
+ pkgname=ospam
+ pkgver=0.01
+-pkgrel=1
+-pkgdesc=""
++pkgrel=2
++pkgdesc="system-wide anti-spam solution for qmail and vmailmgr"
+ url="http://omail.omnis.ch/ospam/"
+ archs=(i686)
+ up2date="lynx $url?M=D -dump -nolist|grep 'tar.gz'|head -1|sed -e 's/.*$pkgname-\(.*\)\.tar\.gz.*$/\1/'"
 diff --git a/source/dietlibc/conn-tools/FrugalBuild b/source/dietlibc/conn-tools/FrugalBuild
 index 04e4891..bc4f6a1 100644
 --- a/source/dietlibc/conn-tools/FrugalBuild
