@@ -1,8 +1,6 @@
 guilt.patch
 vpnc.patch
 gitignore.patch
-drbd-module.patch
-drbd-tools.patch
 vmailmgr.patch
 diet-bglibs
 diet-cvm
@@ -38,13 +36,11 @@ bincimap.patch
 ospam.patch
 diet-pure-ftpd.patch
 vegadns.patch
-omail-admin.patch
 perl-appconfig.patch
 perl-template-toolkit.patch
 getmail.patch
 firehol.patch
 vim.patch
-dmraid.patch
 perl-netaddr-ip.patch
 haskel-x11.patch
 xmonad.patch
