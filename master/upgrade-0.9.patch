@@ -177,6 +177,19 @@ index 1edf8ad..646c85b 100644
            'dde9238bddd77af0941109d438a8b357cd8a33c2')
  
  #build()
+diff --git a/source/custom/guilt/FrugalBuild b/source/custom/guilt/FrugalBuild
+index 8566da1..a51a965 100644
+--- a/source/custom/guilt/FrugalBuild
++++ b/source/custom/guilt/FrugalBuild
+@@ -2,7 +2,7 @@
+ 
+ pkgname=guilt
+ pkgver=0.31.2
+-pkgrel=1
++pkgrel=2
+ pkgdesc="A Quilt-like interface on top of Git"
+ url="http://www.kernel.org/pub/linux/kernel/people/jsipek/guilt/"
+ depends=('git')
 diff --git a/source/dietlibc/conn-tools/FrugalBuild b/source/dietlibc/conn-tools/FrugalBuild
 index 04e4891..bc4f6a1 100644
 --- a/source/dietlibc/conn-tools/FrugalBuild
