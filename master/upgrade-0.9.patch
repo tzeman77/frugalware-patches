@@ -113,6 +113,19 @@ index 0000000..76cb3a9
 + 
 + //------------------------------------------------------------------------
 + Tools::Tools(void)
+diff --git a/source/custom/cvm/FrugalBuild b/source/custom/cvm/FrugalBuild
+index a9dee8b..a642c78 100644
+--- a/source/custom/cvm/FrugalBuild
++++ b/source/custom/cvm/FrugalBuild
+@@ -2,7 +2,7 @@
+ 
+ pkgname=cvm
+ pkgver=0.90
+-pkgrel=1
++pkgrel=2
+ pkgdesc="Credential Validation Modules"
+ depends=('bglibs>=1.100')
+ url="http://untroubled.org/cvm/"
 diff --git a/source/dietlibc/conn-tools/FrugalBuild b/source/dietlibc/conn-tools/FrugalBuild
 index 04e4891..bc4f6a1 100644
 --- a/source/dietlibc/conn-tools/FrugalBuild
