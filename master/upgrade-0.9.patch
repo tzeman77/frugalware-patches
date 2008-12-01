@@ -257,6 +257,19 @@ index 5574128..9da2e34 100644
  pkgdesc="tinydns administration tool"
  _F_sourceforge_dirname="vegadns"
  _F_sourceforge_ext=".tgz"
+diff --git a/source/custom/vmailmgr/FrugalBuild b/source/custom/vmailmgr/FrugalBuild
+index 6e076d3..1bc31af 100644
+--- a/source/custom/vmailmgr/FrugalBuild
++++ b/source/custom/vmailmgr/FrugalBuild
+@@ -2,7 +2,7 @@
+ 
+ pkgname=vmailmgr
+ pkgver=0.96.9
+-pkgrel=1
++pkgrel=2
+ pkgdesc="Virtual e-mail domains/users management programs."
+ url="http://www.vmailmgr.org"
+ makedepends=('python' 'sed' 'linuxdoc-tools' 'texi2html')
 diff --git a/source/dietlibc/conn-tools/FrugalBuild b/source/dietlibc/conn-tools/FrugalBuild
 index 04e4891..bc4f6a1 100644
 --- a/source/dietlibc/conn-tools/FrugalBuild
