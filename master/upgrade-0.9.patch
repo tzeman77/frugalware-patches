@@ -190,6 +190,19 @@ index 8566da1..a51a965 100644
  pkgdesc="A Quilt-like interface on top of Git"
  url="http://www.kernel.org/pub/linux/kernel/people/jsipek/guilt/"
  depends=('git')
+diff --git a/source/custom/mailfront/FrugalBuild b/source/custom/mailfront/FrugalBuild
+index c57644a..10ebcd9 100644
+--- a/source/custom/mailfront/FrugalBuild
++++ b/source/custom/mailfront/FrugalBuild
+@@ -2,7 +2,7 @@
+ 
+ pkgname=mailfront
+ pkgver=1.11
+-pkgrel=1
++pkgrel=2
+ pkgdesc="Mail server network protocol front-ends"
+ depends=('bglibs>=1.101' 'cvm>=0.81')
+ url="http://untroubled.org/$pkgname/"
 diff --git a/source/dietlibc/conn-tools/FrugalBuild b/source/dietlibc/conn-tools/FrugalBuild
 index 04e4891..bc4f6a1 100644
 --- a/source/dietlibc/conn-tools/FrugalBuild
