@@ -244,6 +244,19 @@ index 9b27634..6878a85 100644
  pkgdesc="Template processing system"
  Finclude perl
  archs=('i686' 'x86_64')
+diff --git a/source/custom/vegadns/FrugalBuild b/source/custom/vegadns/FrugalBuild
+index 5574128..9da2e34 100644
+--- a/source/custom/vegadns/FrugalBuild
++++ b/source/custom/vegadns/FrugalBuild
+@@ -2,7 +2,7 @@
+ 
+ pkgname=vegadns
+ pkgver=0.9.10
+-pkgrel=1
++pkgrel=2
+ pkgdesc="tinydns administration tool"
+ _F_sourceforge_dirname="vegadns"
+ _F_sourceforge_ext=".tgz"
 diff --git a/source/dietlibc/conn-tools/FrugalBuild b/source/dietlibc/conn-tools/FrugalBuild
 index 04e4891..bc4f6a1 100644
 --- a/source/dietlibc/conn-tools/FrugalBuild
