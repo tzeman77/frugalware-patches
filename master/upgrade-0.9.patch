@@ -126,6 +126,35 @@ index a9dee8b..a642c78 100644
  pkgdesc="Credential Validation Modules"
  depends=('bglibs>=1.100')
  url="http://untroubled.org/cvm/"
+diff --git a/source/custom/firehol/FrugalBuild b/source/custom/firehol/FrugalBuild
+index 4cddcec..e418d06 100644
+--- a/source/custom/firehol/FrugalBuild
++++ b/source/custom/firehol/FrugalBuild
+@@ -3,13 +3,13 @@
+ # 	http://aur.archlinux.org/packages/firehol/firehol/PKGBUILD
+ # 	Contributor: Filip Dvorak <fila@pruda.com>
+ pkgname=firehol
+-pkgver=1.256
++pkgver=1.273
+ pkgrel=1
+ pkgdesc="The iptables stateful packet filtering firewall builder."
+ _F_sourceforge_dirname="firehol"
+ Finclude sourceforge
+ url="http://firehol.sourceforge.net"
+-purl="http://sourceforge.net/project/showfiles.php?group_id=58425"
++purl="http://sourceforge.net/project/showfiles.php?group_id=58425&package_id=54268"
+ archs=('i686' 'x86_64')
+ license=('GPL')
+ groups=('custom')
+@@ -21,7 +21,7 @@ backup=('etc/firehol/firehol.conf')
+ install=('firehol.install')
+ up2date="lynx -dump '$purl'|grep tar.bz2|grep -m1 '$pkgname-'|sed 's/.*-\(.*\).tar.bz2 .*/\1/'"
+ source=(http://dl.sourceforge.net/sourceforge/firehol/$pkgname-$pkgver.tar.bz2)
+-sha1sums=('1fc4adb067d0d0ad4d79149710b9db003ffbbf31')
++sha1sums=('09433f7fbb3cbb7e33e9c601008191bfe3b388a8')
+ 
+ build() {
+   cd $startdir/src/$pkgname-$pkgver
 diff --git a/source/dietlibc/conn-tools/FrugalBuild b/source/dietlibc/conn-tools/FrugalBuild
 index 04e4891..bc4f6a1 100644
 --- a/source/dietlibc/conn-tools/FrugalBuild
