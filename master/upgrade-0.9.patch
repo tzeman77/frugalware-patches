@@ -155,6 +155,28 @@ index 4cddcec..e418d06 100644
  
  build() {
    cd $startdir/src/$pkgname-$pkgver
+diff --git a/source/custom/getmail/FrugalBuild b/source/custom/getmail/FrugalBuild
+index 1edf8ad..646c85b 100644
+--- a/source/custom/getmail/FrugalBuild
++++ b/source/custom/getmail/FrugalBuild
+@@ -1,7 +1,7 @@
+ # Maintainer: Tomas Zeman <tzeman@volny.cz>
+ 
+ pkgname=getmail
+-pkgver=4.8.1
++pkgver=4.8.4
+ pkgrel=1
+ pkgdesc="Email retriever (POP3, IMAP)"
+ url="http://pyropus.ca/software/getmail"
+@@ -13,7 +13,7 @@ archs=('i686' 'x86_64')
+ up2date="lynx -dump $url |grep tar.gz$ |Fsort |Flasttar"
+ source=(http://pyropus.ca/software/$pkgname/old-versions/$pkgname-$pkgver.tar.gz
+ 	$pkgname.patch)
+-sha1sums=('fd2bd324831977b22dddf96d373279a87c9b15b0' \
++sha1sums=('44ea0da0835f9e06ef9cea769dc9293f2d6ba512' \
+           'dde9238bddd77af0941109d438a8b357cd8a33c2')
+ 
+ #build()
 diff --git a/source/dietlibc/conn-tools/FrugalBuild b/source/dietlibc/conn-tools/FrugalBuild
 index 04e4891..bc4f6a1 100644
 --- a/source/dietlibc/conn-tools/FrugalBuild
