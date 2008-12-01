@@ -1,5 +1,118 @@
 Upgrade for Frugalware 0.9
 
+diff --git a/source/custom/bglibs/FrugalBuild b/source/custom/bglibs/FrugalBuild
+index 4170a5f..04d3010 100644
+--- a/source/custom/bglibs/FrugalBuild
++++ b/source/custom/bglibs/FrugalBuild
+@@ -2,7 +2,7 @@
+ 
+ pkgname=bglibs
+ pkgver=1.104
+-pkgrel=1
++pkgrel=2
+ pkgdesc="One stop library package"
+ url="http://untroubled.org/bglibs/"
+ archs=(i686)
+diff --git a/source/custom/bincimap/FrugalBuild b/source/custom/bincimap/FrugalBuild
+index 74900bf..99eaac6 100644
+--- a/source/custom/bincimap/FrugalBuild
++++ b/source/custom/bincimap/FrugalBuild
+@@ -2,7 +2,7 @@
+ 
+ pkgname=bincimap
+ pkgver=1.2.13
+-pkgrel=1
++pkgrel=2
+ pkgdesc="A well designed, modular IMAP server for Maildir."
+ url="http://www.bincimap.org"
+ archs=(i686)
+@@ -10,12 +10,14 @@ up2date="lynx $url -dump -nolist|grep 'latest stable'|head -1|sed -e 's/.*is \([
+ depends=('openssl')
+ install="$pkgname.install"
+ backup=(etc/bincimap/bincimap.conf)
+-source=($url/dl/tarballs/1.2/$pkgname-${pkgver}final.tar.bz2)
+-sha1sums=('cdbc1bf95decbe76e0a218025c351b8174b4b485')
++source=($url/dl/tarballs/1.2/$pkgname-${pkgver}final.tar.bz2 bincimap-1.2.13-gcc43.patch)
++sha1sums=('cdbc1bf95decbe76e0a218025c351b8174b4b485' \
++          'ec98f1d1b30688e237bc1682a960fc02a0f4888b')
+ provides=('imap-server')
+ 
+ build() {
+ 	Fcd $pkgname-${pkgver}final
++	Fpatchall
+ 	./configure --prefix=/usr --sysconfdir=/etc/bincimap \
+ 		--localstatedir=/var --with-ssl
+ 	make || Fdie
+diff --git a/source/custom/bincimap/bincimap-1.2.13-gcc43.patch b/source/custom/bincimap/bincimap-1.2.13-gcc43.patch
+new file mode 100644
+index 0000000..76cb3a9
+--- /dev/null
++++ b/source/custom/bincimap/bincimap-1.2.13-gcc43.patch
+@@ -0,0 +1,64 @@
++diff -NrU5 bincimap-1.2.13final.orig/src/convert.cc bincimap-1.2.13final/src/convert.cc
++--- bincimap-1.2.13final.orig/src/convert.cc	2005-01-08 11:20:48.000000000 +0100
+++++ bincimap-1.2.13final/src/convert.cc	2008-05-07 12:32:33.000000000 +0200
++@@ -37,10 +37,12 @@
++ 
++ #include "convert.h"
++ #include "io.h"
++ #include <string>
++ 
+++#include <cstring>
+++
++ using namespace ::std;
++ using namespace Binc;
++ 
++ //------------------------------------------------------------------------
++ BincStream::BincStream(void)
++diff -NrU5 bincimap-1.2.13final.orig/src/convert.h bincimap-1.2.13final/src/convert.h
++--- bincimap-1.2.13final.orig/src/convert.h	2005-02-08 21:30:22.000000000 +0100
+++++ bincimap-1.2.13final/src/convert.h	2008-05-07 12:32:33.000000000 +0200
++@@ -35,10 +35,11 @@
++ #include <config.h>
++ #endif
++ 
++ #ifndef convert_h_included
++ #define convert_h_included
+++#include <cstdlib>
++ #include <string>
++ #include <vector>
++ #include <iomanip>
++ #include <iostream>
++ 
++@@ -46,10 +47,12 @@
++ #include <sys/stat.h>
++ 
++ #include "address.h"
++ #include "depot.h"
++ 
+++#include <cstring>
+++
++ namespace Binc {
++ 
++   //----------------------------------------------------------------------
++   inline std::string toString(int i_in)
++   {
++diff -NrU5 bincimap-1.2.13final.orig/src/tools.cc bincimap-1.2.13final/src/tools.cc
++--- bincimap-1.2.13final.orig/src/tools.cc	2005-01-08 11:20:48.000000000 +0100
+++++ bincimap-1.2.13final/src/tools.cc	2008-05-07 12:32:33.000000000 +0200
++@@ -33,13 +33,16 @@
++  */
++ #ifdef HAVE_CONFIG_H
++ #include <config.h>
++ #endif
++ #include <errno.h>
+++#include <cstdlib>
++ 
++ #include "tools.h"
++ 
+++#include <cstring>
+++
++ using namespace ::std;
++ using namespace Binc;
++ 
++ //------------------------------------------------------------------------
++ Tools::Tools(void)
 diff --git a/source/dietlibc/conn-tools/FrugalBuild b/source/dietlibc/conn-tools/FrugalBuild
 index 04e4891..bc4f6a1 100644
 --- a/source/dietlibc/conn-tools/FrugalBuild
