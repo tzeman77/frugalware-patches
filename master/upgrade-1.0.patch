@@ -1,0 +1,24 @@
+Upgrade for Frugalware 1.0
+
+diff --git a/source/custom/guilt/FrugalBuild b/source/custom/guilt/FrugalBuild
+index a51a965..b75ab72 100644
+--- a/source/custom/guilt/FrugalBuild
++++ b/source/custom/guilt/FrugalBuild
+@@ -1,7 +1,7 @@
+ # Maintainer: <tzeman@volny.cz>
+ 
+ pkgname=guilt
+-pkgver=0.31.2
++pkgver=0.32.1
+ pkgrel=2
+ pkgdesc="A Quilt-like interface on top of Git"
+ url="http://www.kernel.org/pub/linux/kernel/people/jsipek/guilt/"
+@@ -11,7 +11,7 @@ groups=('custom')
+ archs=('i686' 'x86_64')
+ up2date="lynx -dump $url|Flasttar"
+ source=($url/$pkgname-$pkgver.tar.gz)
+-sha1sums=('b19f0a32c80e895dbb938fff1cb4520291eb52b5')
++sha1sums=('d5d6b995100b239ca49d47fc4d40eb5a5c39ef73')
+ 
+ build() {
+ 	Fcd
