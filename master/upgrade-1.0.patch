@@ -22,3 +22,25 @@ index a51a965..b75ab72 100644
  
  build() {
  	Fcd
+diff --git a/source/network-extra/vpnc/FrugalBuild b/source/network-extra/vpnc/FrugalBuild
+index 833169a..0f22f9d 100644
+--- a/source/network-extra/vpnc/FrugalBuild
++++ b/source/network-extra/vpnc/FrugalBuild
+@@ -3,7 +3,7 @@
+ # Maintainer: Tomas Zeman <tzeman@volny.cz>
+ 
+ pkgname=vpnc
+-pkgver=0.5.1
++pkgver=0.5.3
+ pkgrel=1
+ pkgdesc="vpnc - client for cisco vpn concentrator"
+ url="http://www.unix-ag.uni-kl.de/~massar/vpnc"
+@@ -13,7 +13,7 @@ depends=('libgcrypt')
+ backup=('etc/vpnc/default.conf')
+ source=($url/$pkgname-$pkgver.tar.gz)
+ up2date="lynx -dump $url|grep 'vpnc-.*tar.gz'|head -1|sed 's/.*-\(.*\).t.*/\1/'"
+-sha1sums=('efc71dba03aa40945af35e4b074d99f922ff7ffd')
++sha1sums=('321527194e937371c83b5e7c38e46fca4f109304')
+ 
+ build() {
+ 	Fmake PREFIX=/usr
