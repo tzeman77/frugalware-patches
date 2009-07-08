@@ -35,6 +35,53 @@ index 1bc31af..2cf3711 100644
  pkgdesc="Virtual e-mail domains/users management programs."
  url="http://www.vmailmgr.org"
  makedepends=('python' 'sed' 'linuxdoc-tools' 'texi2html')
+diff --git a/source/dietlibc/diet-bglibs/FrugalBuild b/source/dietlibc/diet-bglibs/FrugalBuild
+index 592f564..ffbfb08 100644
+--- a/source/dietlibc/diet-bglibs/FrugalBuild
++++ b/source/dietlibc/diet-bglibs/FrugalBuild
+@@ -3,21 +3,19 @@
+ branch=diet
+ pkgorig=bglibs
+ pkgname=$branch-$pkgorig
+-pkgver=1.104
+-pkgrel=2
++pkgver=1.106
++pkgrel=1
+ pkgdesc="One stop library package"
+ makedepends=(dietlibc gcc)
+ url="http://untroubled.org/bglibs/"
+ archs=(i686)
+ up2date='lynx -dump -nolist $url|grep $pkgorig|grep .tar.gz|head -1|sed -e "s/.*$pkgorig-\(.*\)\.tar.gz.*$/\1/"'
+-source=($url/$pkgorig-$pkgver.tar.gz libtool-tag.patch)
+-sha1sums=('2286c5540e160ffbf79765c35f06c0651eecc777' \
+-          '63bbea48243e7e442e54701e90adcd5e89cb76bf')
++source=($url/$pkgorig-$pkgver.tar.gz)
++sha1sums=('5f1914299c0f91a3d5c83bf6c8c1d0b824ffe624')
+ 
+ build() {
+ 	DDIR=/usr/lib/diet
+ 	Fcd $pkgorig-$pkgver
+-	patch -p0 < $Fsrcdir/libtool-tag.patch || Fdie
+ 	echo "diet gcc $CFLAGS" > conf-cc
+ 	echo "diet gcc -s -static" > conf-ld
+ 	echo "$DDIR/include/bglibs" > conf-include
+diff --git a/source/dietlibc/diet-bglibs/libtool-tag.patch b/source/dietlibc/diet-bglibs/libtool-tag.patch
+deleted file mode 100644
+index 2172023..0000000
+--- a/source/dietlibc/diet-bglibs/libtool-tag.patch
++++ /dev/null
+@@ -1,11 +0,0 @@
+---- Makefile.orig	2006-10-30 22:11:21.000000000 +0100
+-+++ Makefile	2007-10-25 00:00:46.000000000 +0200
+-@@ -991,7 +991,7 @@
+- 	  echo '#!/bin/sh'; \
+- 	  echo 'source=$$1; shift'; \
+- 	  echo 'base=`echo "$$source" | sed -e s:\\\\.c$$::`'; \
+--	  echo exec libtool --mode=compile --silent `head -n 1 conf-cc` -I.  '-o $${base}.lo -c $$source $${1+"$$@"}'; \
+-+	  echo exec libtool --mode=compile --tag=CC --silent `head -n 1 conf-cc` -I.  '-o $${base}.lo -c $$source $${1+"$$@"}'; \
+- 	) >libcompile
+- 	chmod 755 libcompile
+- 
 diff --git a/source/network-extra/vpnc/FrugalBuild b/source/network-extra/vpnc/FrugalBuild
 index 833169a..0f22f9d 100644
 --- a/source/network-extra/vpnc/FrugalBuild
