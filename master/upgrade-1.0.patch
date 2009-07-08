@@ -22,6 +22,19 @@ index a51a965..b75ab72 100644
  
  build() {
  	Fcd
+diff --git a/source/custom/vmailmgr/FrugalBuild b/source/custom/vmailmgr/FrugalBuild
+index 1bc31af..2cf3711 100644
+--- a/source/custom/vmailmgr/FrugalBuild
++++ b/source/custom/vmailmgr/FrugalBuild
+@@ -2,7 +2,7 @@
+ 
+ pkgname=vmailmgr
+ pkgver=0.96.9
+-pkgrel=2
++pkgrel=3
+ pkgdesc="Virtual e-mail domains/users management programs."
+ url="http://www.vmailmgr.org"
+ makedepends=('python' 'sed' 'linuxdoc-tools' 'texi2html')
 diff --git a/source/network-extra/vpnc/FrugalBuild b/source/network-extra/vpnc/FrugalBuild
 index 833169a..0f22f9d 100644
 --- a/source/network-extra/vpnc/FrugalBuild
