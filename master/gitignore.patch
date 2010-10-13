@@ -3,20 +3,12 @@ From: Tomas Zeman <tzeman@volny.cz>
 Date: Tue, 25 Sep 2007 22:50:58 +0200
 Subject: [PATCH] .gitignore: ignore vim swap+backup files
 
----
- .gitignore |    2 ++
- 1 files changed, 2 insertions(+), 0 deletions(-)
-
 diff --git a/.gitignore b/.gitignore
-index 8fec23a..ecc256f 100644
+index 0b551d6..e18fc85 100644
 --- a/.gitignore
 +++ b/.gitignore
-@@ -23,3 +23,5 @@ pkg
+@@ -31,3 +31,4 @@ frugalware-*
+ pkg
+ pkg.*
  src
- frugalware-i686
- frugalware-x86_64
-+*~
 +.*.swp
--- 
-1.5.3.4
-
