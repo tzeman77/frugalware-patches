@@ -1,24 +1,26 @@
 vim: cscope
 
 diff --git a/source/apps/vim/FrugalBuild b/source/apps/vim/FrugalBuild
-index 5a4a03e..ee5a166 100644
+index ca6ccbb..7be96de 100644
 --- a/source/apps/vim/FrugalBuild
 +++ b/source/apps/vim/FrugalBuild
-@@ -39,7 +39,7 @@ build()
- 	cd src
+@@ -51,7 +51,8 @@ build()
+ 
  	if Fuse $USE_GUI; then
  		# first build gvim
--		Fmake --prefix=/usr --with-x --enable-gui=gtk2 --enable-multibyte
-+		Fmake --prefix=/usr --with-x --enable-gui=gtk2 --enable-multibyte --enable-cscope
+-		Fmake --prefix=/usr --with-x --enable-gui=gtk2 --enable-multibyte --enable-pythoninterp
++		Fmake --prefix=/usr --with-x --enable-gui=gtk2 --enable-multibyte --enable-pythoninterp \
++		--enable-cscope
  		make DESTDIR=$Fdestdir VIMRTDIR= installvimbin
  		Fmv /usr/bin/vim /usr/bin/gvim
  		Fln /usr/bin/gvim /usr/bin/gview
-@@ -50,7 +50,7 @@ build()
+@@ -62,7 +63,8 @@ build()
  
  	# now vim
- 	Fmake --localstatedir=/var/lib/$pkgname --disable-gpm --with-x=no \
--		--prefix=/usr --enable-gui=no --enable-multibyte
-+		--prefix=/usr --enable-gui=no --enable-multibyte --enable-cscope
+ 	Fmake --localstatedir=/var/lib/$pkgname --disable-gpm --without-x \
+-		--prefix=/usr --enable-gui=no --enable-multibyte --enable-pythoninterp
++		--prefix=/usr --enable-gui=no --enable-multibyte --enable-pythoninterp \
++		--enable-cscope
  	make DESTDIR=$Fdestdir VIMRTDIR= install || return 1
  	Fln vim /usr/bin/vi
  	Fcp /usr/share/vim/vimrc_example.vim /usr/share/vim/vimrc
